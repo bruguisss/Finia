@@ -6,7 +6,7 @@ App de finanzas personales para importar y analizar tus extractos de Revolut con
 
 - **Frontend:** React + Vite + Tailwind CSS + Recharts
 - **Backend:** Node.js + Express
-- **Base de datos:** SQLite (better-sqlite3)
+- **Base de datos:** PostgreSQL (pg)
 - **IA:** Claude Haiku (Anthropic) para categorización automática
 
 ---
@@ -34,15 +34,18 @@ cd client && npm install && cd ..
 cp .env.example .env
 ```
 
-Edita `.env` y añade tu API key de Anthropic:
+Edita `.env` y añade tu API key de Anthropic y la conexión a PostgreSQL:
 
 ```
 ANTHROPIC_API_KEY=sk-ant-api03-...
 PORT=3001
 NODE_ENV=development
+DATABASE_URL=postgresql://user:password@localhost:5432/finia
 ```
 
 Obtén tu clave en: https://console.anthropic.com/
+
+Necesitas una base de datos PostgreSQL local (o remota) accesible mediante `DATABASE_URL`. Las tablas se crean automáticamente al arrancar el servidor.
 
 ### 4. Arrancar en desarrollo
 
@@ -79,9 +82,9 @@ Esto lanza:
    - En el dashboard de Render, ve a "Environment"
    - Añade `ANTHROPIC_API_KEY` con tu clave
 
-4. **Persistent disk:**
-   - El `render.yaml` ya configura un disco de 1 GB para la base de datos SQLite
-   - La base de datos se guardará en `/opt/render/project/src/server/data/finia.db`
+4. **Base de datos PostgreSQL:**
+   - El `render.yaml` ya define una base de datos PostgreSQL gratuita (`finia-db`) y conecta `DATABASE_URL` automáticamente al servicio web
+   - Las tablas se crean automáticamente al arrancar el servidor (`server/db-migrate.js`)
 
 5. **Deploy automático** — Render redesplegará con cada push a `main`.
 
@@ -105,7 +108,8 @@ Las transacciones se categorizarán automáticamente con IA. Puedes editar cualq
 finia/
 ├── server/             Backend Express
 │   ├── index.js        Entrada
-│   ├── db.js           SQLite + migraciones
+│   ├── db.js           Conexión PostgreSQL (pg Pool)
+│   ├── db-migrate.js   Creación de tablas
 │   ├── routes/         API endpoints
 │   └── services/       CSV parser + IA
 └── client/             Frontend React

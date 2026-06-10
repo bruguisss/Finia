@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const router = express.Router();
-const db = require('../db');
+const pool = require('../db');
 const { parseCSV } = require('../services/csvParser');
 const { categorizeTransactions } = require('../services/aiCategorizer');
 
@@ -21,17 +21,16 @@ router.post('/', upload.single('file'), async (req, res) => {
     }
 
     // Identify duplicates
-    const checkDuplicate = db.prepare(
-      'SELECT id FROM transactions WHERE date = ? AND description = ? AND amount = ? LIMIT 1'
-    );
-
     const debitsToCateg = [];
     const debitsToCategIdx = []; // index in `toInsert`
     const toInsert = [];
 
     for (const t of parsed) {
-      const exists = checkDuplicate.get(t.date, t.description, t.amount);
-      if (exists) continue;
+      const exists = await pool.query(
+        'SELECT id FROM transactions WHERE date = $1 AND description = $2 AND amount = $3 LIMIT 1',
+        [t.date, t.description, t.amount]
+      );
+      if (exists.rows.length > 0) continue;
 
       const insertIdx = toInsert.length;
       toInsert.push(t);
@@ -59,27 +58,32 @@ router.post('/', upload.single('file'), async (req, res) => {
       }
     }
 
-    // Insert all non-duplicate transactions
-    const insertStmt = db.prepare(`
-      INSERT INTO transactions (date, description, amount, currency, type, category, subcategory, balance, raw_description)
-      VALUES (@date, @description, @amount, @currency, @type, @category, @subcategory, @balance, @raw_description)
-    `);
-
-    const insertAll = db.transaction((rows) => {
-      const inserted = [];
-      for (let i = 0; i < rows.length; i++) {
-        const t = { ...rows[i] };
+    // Insert all non-duplicate transactions in a single transaction
+    const client = await pool.connect();
+    const inserted = [];
+    try {
+      await client.query('BEGIN');
+      for (let i = 0; i < toInsert.length; i++) {
+        const t = { ...toInsert[i] };
         if (categResults[i]) {
           t.category = categResults[i].category;
           t.subcategory = categResults[i].subcategory;
         }
-        const info = insertStmt.run(t);
-        inserted.push({ ...t, id: info.lastInsertRowid });
+        const result = await client.query(`
+          INSERT INTO transactions (date, description, amount, currency, type, category, subcategory, balance, raw_description)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+          RETURNING id
+        `, [t.date, t.description, t.amount, t.currency, t.type, t.category, t.subcategory, t.balance, t.raw_description]);
+        inserted.push({ ...t, id: result.rows[0].id });
       }
-      return inserted;
-    });
+      await client.query('COMMIT');
+    } catch (err) {
+      await client.query('ROLLBACK');
+      throw err;
+    } finally {
+      client.release();
+    }
 
-    const inserted = insertAll(toInsert);
     const skipped = parsed.length - toInsert.length;
 
     res.json({

@@ -4,8 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
-// Init DB (runs migrations)
-require('./db');
+const migrate = require('./db-migrate');
 
 const transactionsRouter = require('./routes/transactions');
 const budgetsRouter = require('./routes/budgets');
@@ -36,6 +35,13 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-app.listen(PORT, () => {
-  console.log(`Finia server running on port ${PORT}`);
-});
+migrate()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Finia server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Database migration failed:', err);
+    process.exit(1);
+  });
