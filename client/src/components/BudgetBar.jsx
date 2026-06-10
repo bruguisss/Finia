@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Pencil, Trash2 } from 'lucide-react';
 import { CATEGORY_EMOJIS, CATEGORY_COLORS } from './CategoryBadge.jsx';
 import { updateBudget, deleteBudget } from '../api.js';
 
@@ -57,11 +58,11 @@ export default function BudgetBar({ budget, onUpdate, onDelete }) {
           >
             {percentage}%
           </span>
-          <button onClick={() => setEditing(!editing)} className="text-secondary hover:text-primary text-xs transition-colors">
-            ✏️
+          <button onClick={() => setEditing(!editing)} className="text-secondary hover:text-primary transition-colors">
+            <Pencil size={13} strokeWidth={2} />
           </button>
-          <button onClick={handleDelete} className="text-secondary hover:text-danger text-xs transition-colors">
-            🗑️
+          <button onClick={handleDelete} className="text-secondary hover:text-danger transition-colors">
+            <Trash2 size={13} strokeWidth={2} />
           </button>
         </div>
       </div>

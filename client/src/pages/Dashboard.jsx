@@ -3,6 +3,7 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
 } from 'recharts';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import StatCard from '../components/StatCard.jsx';
 import CategoryBadge, { CATEGORY_COLORS } from '../components/CategoryBadge.jsx';
 import { getSummary } from '../api.js';
@@ -92,7 +93,7 @@ export default function Dashboard() {
             onClick={() => setMonth(addMonths(month, -1))}
             className="w-8 h-8 rounded-lg bg-elevated border border-border text-secondary hover:text-primary hover:border-accent/50 transition-colors flex items-center justify-center"
           >
-            ‹
+            <ChevronLeft size={15} strokeWidth={2} />
           </button>
           <span className="text-sm text-primary font-medium px-2 capitalize">
             {formatMonth(month)}
@@ -102,7 +103,7 @@ export default function Dashboard() {
             disabled={month >= getCurrentMonth()}
             className="w-8 h-8 rounded-lg bg-elevated border border-border text-secondary hover:text-primary hover:border-accent/50 transition-colors flex items-center justify-center disabled:opacity-30"
           >
-            ›
+            <ChevronRight size={15} strokeWidth={2} />
           </button>
         </div>
       </div>
@@ -156,9 +157,9 @@ export default function Dashboard() {
                     <stop offset="95%" stopColor="#6ee7b7" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#2e3147" />
-                <XAxis dataKey="date" tickFormatter={formatDayLabel} tick={{ fill: '#8b90a7', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: '#8b90a7', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#26262b" />
+                <XAxis dataKey="date" tickFormatter={formatDayLabel} tick={{ fill: '#9494a0', fontSize: 11 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: '#9494a0', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} />
                 <Tooltip content={<CustomTooltip />} />
                 <Area type="monotone" dataKey="expenses" stroke="#f87171" fill="url(#expGrad)" strokeWidth={2} name="expenses" />
                 <Area type="monotone" dataKey="income" stroke="#6ee7b7" fill="url(#incGrad)" strokeWidth={2} name="income" />
@@ -194,10 +195,10 @@ export default function Dashboard() {
                 </Pie>
                 <Tooltip
                   formatter={(value, name) => [formatEur(value), name]}
-                  contentStyle={{ backgroundColor: '#222536', border: '1px solid #2e3147', borderRadius: 8, fontSize: 12 }}
+                  contentStyle={{ backgroundColor: '#1a1a1e', border: '1px solid #26262b', borderRadius: 8, fontSize: 12 }}
                 />
                 <Legend
-                  formatter={(value) => <span style={{ color: '#8b90a7', fontSize: 11 }}>{value}</span>}
+                  formatter={(value) => <span style={{ color: '#9494a0', fontSize: 11 }}>{value}</span>}
                 />
               </PieChart>
             </ResponsiveContainer>

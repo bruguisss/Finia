@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import BudgetBar from '../components/BudgetBar.jsx';
 import AlertBanner from '../components/AlertBanner.jsx';
 import { ALL_CATEGORIES, CATEGORY_EMOJIS } from '../components/CategoryBadge.jsx';
@@ -89,13 +90,13 @@ export default function Budgets() {
             <button
               onClick={() => setMonth(addMonths(month, -1))}
               className="w-8 h-8 text-secondary hover:text-primary transition-colors flex items-center justify-center"
-            >‹</button>
+            ><ChevronLeft size={15} strokeWidth={2} /></button>
             <span className="text-sm text-primary px-2 capitalize whitespace-nowrap">{formatMonth(month)}</span>
             <button
               onClick={() => setMonth(addMonths(month, 1))}
               disabled={month >= getCurrentMonth()}
               className="w-8 h-8 text-secondary hover:text-primary transition-colors flex items-center justify-center disabled:opacity-30"
-            >›</button>
+            ><ChevronRight size={15} strokeWidth={2} /></button>
           </div>
 
           <button
@@ -154,7 +155,7 @@ export default function Budgets() {
           <div className="bg-surface border border-border rounded-xl w-full max-w-sm shadow-2xl">
             <div className="flex items-center justify-between p-5 border-b border-border">
               <h3 className="text-base font-semibold text-primary">Nuevo presupuesto</h3>
-              <button onClick={() => setModalOpen(false)} className="text-secondary hover:text-primary text-xl leading-none">×</button>
+              <button onClick={() => setModalOpen(false)} className="text-secondary hover:text-primary"><X size={18} strokeWidth={2} /></button>
             </div>
             <form onSubmit={handleCreate} className="p-5 space-y-4">
               <div>

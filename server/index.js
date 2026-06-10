@@ -10,6 +10,7 @@ require('./db');
 const transactionsRouter = require('./routes/transactions');
 const budgetsRouter = require('./routes/budgets');
 const uploadRouter = require('./routes/upload');
+const debtsRouter = require('./routes/debts');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use('/api/upload', uploadRouter);
 app.use('/api/transactions', transactionsRouter);
 app.use('/api/budgets', budgetsRouter);
+app.use('/api/debts', debtsRouter);
 
 // Summary endpoint
 app.get('/api/summary', require('./routes/summary'));

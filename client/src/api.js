@@ -50,6 +50,33 @@ export const updateBudget = (id, data) =>
 export const deleteBudget = (id) =>
   request(`/budgets/${id}`, { method: 'DELETE' });
 
+// Debts
+export const getDebts = (params = {}) => {
+  const qs = new URLSearchParams(
+    Object.fromEntries(Object.entries(params).filter(([, v]) => v !== undefined && v !== ''))
+  ).toString();
+  return request(`/debts${qs ? `?${qs}` : ''}`);
+};
+
+export const getDebtsSummary = () => request('/debts/summary');
+
+export const createDebt = (data) =>
+  request('/debts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+export const updateDebt = (id, data) =>
+  request(`/debts/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+export const deleteDebt = (id) =>
+  request(`/debts/${id}`, { method: 'DELETE' });
+
 // Upload
 export const uploadCSV = (file) => {
   const formData = new FormData();

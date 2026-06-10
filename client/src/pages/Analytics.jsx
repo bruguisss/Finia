@@ -16,8 +16,8 @@ function shortMonth(monthStr) {
 }
 
 const CHART_TOOLTIP_STYLE = {
-  backgroundColor: '#222536',
-  border: '1px solid #2e3147',
+  backgroundColor: '#1a1a1e',
+  border: '1px solid #26262b',
   borderRadius: 8,
   fontSize: 12,
 };
@@ -88,11 +88,11 @@ export default function Analytics() {
         ) : (
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={barData} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#2e3147" />
-              <XAxis dataKey="month" tick={{ fill: '#8b90a7', fontSize: 12 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#8b90a7', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#26262b" />
+              <XAxis dataKey="month" tick={{ fill: '#9494a0', fontSize: 12 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: '#9494a0', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} />
               <Tooltip contentStyle={CHART_TOOLTIP_STYLE} formatter={(v) => formatEur(v)} />
-              <Legend formatter={(v) => <span style={{ color: '#8b90a7', fontSize: 12 }}>{v}</span>} />
+              <Legend formatter={(v) => <span style={{ color: '#9494a0', fontSize: 12 }}>{v}</span>} />
               <Bar dataKey="Ingresos" fill="#6ee7b7" radius={[4, 4, 0, 0]} />
               <Bar dataKey="Gastos" fill="#f87171" radius={[4, 4, 0, 0]} />
             </BarChart>
@@ -108,11 +108,11 @@ export default function Analytics() {
         ) : (
           <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={stackedData} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#2e3147" />
-              <XAxis dataKey="month" tick={{ fill: '#8b90a7', fontSize: 12 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#8b90a7', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#26262b" />
+              <XAxis dataKey="month" tick={{ fill: '#9494a0', fontSize: 12 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: '#9494a0', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} />
               <Tooltip contentStyle={CHART_TOOLTIP_STYLE} formatter={(v) => formatEur(v)} />
-              <Legend formatter={(v) => <span style={{ color: '#8b90a7', fontSize: 12 }}>{v}</span>} />
+              <Legend formatter={(v) => <span style={{ color: '#9494a0', fontSize: 12 }}>{v}</span>} />
               {TOP_CATEGORIES.map((c) => (
                 <Area
                   key={c}

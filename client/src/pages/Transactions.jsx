@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import TransactionRow from '../components/TransactionRow.jsx';
 import { ALL_CATEGORIES } from '../components/CategoryBadge.jsx';
 import { getTransactions } from '../api.js';
@@ -92,13 +93,13 @@ export default function Transactions() {
           <button
             onClick={() => { setMonth(addMonths(month, -1)); handleFilterChange(); }}
             className="w-8 h-8 text-secondary hover:text-primary transition-colors flex items-center justify-center"
-          >‹</button>
+          ><ChevronLeft size={15} strokeWidth={2} /></button>
           <span className="text-sm text-primary px-2 capitalize whitespace-nowrap">{formatMonth(month)}</span>
           <button
             onClick={() => { setMonth(addMonths(month, 1)); handleFilterChange(); }}
             disabled={month >= getCurrentMonth()}
             className="w-8 h-8 text-secondary hover:text-primary transition-colors flex items-center justify-center disabled:opacity-30"
-          >›</button>
+          ><ChevronRight size={15} strokeWidth={2} /></button>
         </div>
 
         {/* Category filter */}
@@ -113,7 +114,7 @@ export default function Transactions() {
 
         {/* Search */}
         <div className="relative flex-1 min-w-40">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-sm">🔍</span>
+          <Search size={14} strokeWidth={2} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
           <input
             type="text"
             value={search}

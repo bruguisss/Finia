@@ -34,6 +34,21 @@ db.exec(`
     color TEXT DEFAULT '#10b981',
     created_at TEXT DEFAULT (datetime('now'))
   );
+
+  CREATE TABLE IF NOT EXISTS debts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    type TEXT CHECK(type IN ('owed_by_me','owed_to_me')) NOT NULL,
+    person TEXT NOT NULL,
+    description TEXT,
+    amount REAL NOT NULL,
+    currency TEXT DEFAULT 'EUR',
+    date_created TEXT NOT NULL,
+    date_due TEXT,
+    status TEXT CHECK(status IN ('pending','partial','paid')) DEFAULT 'pending',
+    amount_paid REAL DEFAULT 0,
+    notes TEXT,
+    created_at TEXT DEFAULT (datetime('now'))
+  );
 `);
 
 module.exports = db;

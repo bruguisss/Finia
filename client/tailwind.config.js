@@ -4,12 +4,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        base: '#0f1117',
-        surface: '#1a1d27',
-        elevated: '#222536',
-        border: '#2e3147',
-        primary: '#f0f2ff',
-        secondary: '#8b90a7',
+        base: '#09090b',
+        surface: '#0f0f12',
+        elevated: '#1a1a1e',
+        border: '#26262b',
+        primary: '#f5f5f6',
+        secondary: '#9494a0',
         accent: '#6ee7b7',
         'accent-dim': '#10b981',
         danger: '#f87171',

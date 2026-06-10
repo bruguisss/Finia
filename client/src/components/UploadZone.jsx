@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { X, ChevronDown, ChevronUp, Loader2, FolderOpen, CheckCircle2 } from 'lucide-react';
 import { uploadCSV } from '../api.js';
 
 export default function UploadZone({ onClose }) {
@@ -41,7 +42,7 @@ export default function UploadZone({ onClose }) {
       <div className="bg-surface border border-border rounded-xl w-full max-w-lg shadow-2xl">
         <div className="flex items-center justify-between p-5 border-b border-border">
           <h2 className="text-base font-semibold text-primary">Importar extracto CSV</h2>
-          <button onClick={onClose} className="text-secondary hover:text-primary transition-colors text-xl leading-none">×</button>
+          <button onClick={onClose} className="text-secondary hover:text-primary transition-colors"><X size={18} strokeWidth={2} /></button>
         </div>
 
         <div className="p-5 space-y-4">
@@ -66,12 +67,12 @@ export default function UploadZone({ onClose }) {
                 />
                 {uploading ? (
                   <>
-                    <div className="w-10 h-10 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+                    <Loader2 size={28} strokeWidth={2} className="text-accent animate-spin" />
                     <p className="text-sm text-secondary">Procesando y categorizando con IA...</p>
                   </>
                 ) : (
                   <>
-                    <span className="text-4xl">📂</span>
+                    <FolderOpen size={32} strokeWidth={1.5} className="text-secondary" />
                     <div className="text-center">
                       <p className="text-sm font-medium text-primary">Arrastra tu CSV aquí</p>
                       <p className="text-xs text-secondary mt-1">o haz click para seleccionar</p>
@@ -93,7 +94,7 @@ export default function UploadZone({ onClose }) {
                   onClick={() => setInstructionsOpen(!instructionsOpen)}
                 >
                   <span>¿Cómo exportar desde Revolut?</span>
-                  <span>{instructionsOpen ? '▲' : '▼'}</span>
+                  {instructionsOpen ? <ChevronUp size={14} strokeWidth={2} /> : <ChevronDown size={14} strokeWidth={2} />}
                 </button>
                 {instructionsOpen && (
                   <div className="px-4 pb-4 text-xs text-secondary space-y-1.5 border-t border-border pt-3">
@@ -109,7 +110,7 @@ export default function UploadZone({ onClose }) {
           ) : (
             /* Success screen */
             <div className="text-center py-6 space-y-4">
-              <div className="text-5xl">✅</div>
+              <CheckCircle2 size={40} strokeWidth={1.5} className="text-accent mx-auto" />
               <div>
                 <p className="text-lg font-semibold text-primary">
                   {result.imported} transacciones importadas

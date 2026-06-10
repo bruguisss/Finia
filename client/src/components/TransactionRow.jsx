@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Trash2 } from 'lucide-react';
 import CategoryBadge, { ALL_CATEGORIES } from './CategoryBadge.jsx';
 import { updateTransactionCategory, deleteTransaction } from '../api.js';
 
@@ -77,9 +78,9 @@ export default function TransactionRow({ transaction, onUpdate, onDelete }) {
       <td className="py-3 px-4 text-right">
         <button
           onClick={handleDelete}
-          className="opacity-0 group-hover:opacity-100 text-secondary hover:text-danger transition-all text-xs px-2 py-1"
+          className="opacity-0 group-hover:opacity-100 text-secondary hover:text-danger transition-all p-1.5 rounded-md hover:bg-elevated"
         >
-          Eliminar
+          <Trash2 size={14} strokeWidth={2} />
         </button>
       </td>
     </tr>

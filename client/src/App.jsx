@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard.jsx';
 import Transactions from './pages/Transactions.jsx';
 import Analytics from './pages/Analytics.jsx';
 import Budgets from './pages/Budgets.jsx';
+import Debts from './pages/Debts.jsx';
 
 export default function App() {
   const [page, setPage] = useState('dashboard');
@@ -13,6 +14,7 @@ export default function App() {
     transactions: <Transactions />,
     analytics: <Analytics />,
     budgets: <Budgets />,
+    debts: <Debts />,
   };
 
   return (
