@@ -81,33 +81,51 @@ export default function Analytics() {
       <h2 className="text-xl font-semibold text-primary">Análisis</h2>
 
       {/* Income vs Expenses bar chart */}
-      <div className="bg-surface border border-border rounded-lg p-5">
+      <div className="bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent/20">
         <h3 className="text-sm font-medium text-primary mb-4">Ingresos vs Gastos (últimos 6 meses)</h3>
         {loading ? (
           <div className="skeleton h-52" />
         ) : (
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={barData} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
+              <defs>
+                <filter id="neonGlowBar" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="4" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#26262b" />
               <XAxis dataKey="month" tick={{ fill: '#9494a0', fontSize: 12 }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fill: '#9494a0', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} />
               <Tooltip contentStyle={CHART_TOOLTIP_STYLE} formatter={(v) => formatEur(v)} />
               <Legend formatter={(v) => <span style={{ color: '#9494a0', fontSize: 12 }}>{v}</span>} />
-              <Bar dataKey="Ingresos" fill="#6ee7b7" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="Gastos" fill="#f87171" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="Ingresos" fill="#6ee7b7" radius={[4, 4, 0, 0]} style={{ filter: 'url(#neonGlowBar)' }} />
+              <Bar dataKey="Gastos" fill="#f87171" radius={[4, 4, 0, 0]} style={{ filter: 'url(#neonGlowBar)' }} />
             </BarChart>
           </ResponsiveContainer>
         )}
       </div>
 
       {/* Category evolution stacked area */}
-      <div className="bg-surface border border-border rounded-lg p-5">
+      <div className="bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent/20">
         <h3 className="text-sm font-medium text-primary mb-4">Evolución por categoría</h3>
         {loading ? (
           <div className="skeleton h-52" />
         ) : (
           <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={stackedData} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
+              <defs>
+                <filter id="neonGlowArea" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="2.5" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#26262b" />
               <XAxis dataKey="month" tick={{ fill: '#9494a0', fontSize: 12 }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fill: '#9494a0', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} />
@@ -120,8 +138,10 @@ export default function Analytics() {
                   dataKey={c}
                   stackId="1"
                   stroke={CATEGORY_COLORS[c]}
+                  strokeWidth={1.5}
                   fill={CATEGORY_COLORS[c]}
                   fillOpacity={0.6}
+                  style={{ filter: 'url(#neonGlowArea)' }}
                 />
               ))}
             </AreaChart>
@@ -130,7 +150,7 @@ export default function Analytics() {
       </div>
 
       {/* Top merchants */}
-      <div className="bg-surface border border-border rounded-lg">
+      <div className="bg-surface border border-border rounded-lg transition-all duration-200 hover:border-accent/20">
         <div className="px-5 py-4 border-b border-border">
           <h3 className="text-sm font-medium text-primary">Top comercios por gasto total</h3>
         </div>

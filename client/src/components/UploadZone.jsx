@@ -36,10 +36,10 @@ export default function UploadZone({ onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-surface border border-border rounded-xl w-full max-w-lg shadow-2xl">
+      <div className="bg-surface border border-border rounded-xl w-full max-w-lg shadow-2xl animate-scale-in">
         <div className="flex items-center justify-between p-5 border-b border-border">
           <h2 className="text-base font-semibold text-primary">Importar extracto CSV</h2>
           <button onClick={onClose} className="text-secondary hover:text-primary transition-colors"><X size={18} strokeWidth={2} /></button>

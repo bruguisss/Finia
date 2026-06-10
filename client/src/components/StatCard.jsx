@@ -12,7 +12,7 @@ export default function StatCard({ label, value, sub, trend, loading }) {
   }
 
   return (
-    <div className="bg-surface border border-border rounded-lg p-4 hover:border-accent/30 transition-colors">
+    <div className="bg-surface border border-border rounded-lg p-4 transition-all duration-200 hover:border-accent/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20">
       <p className="text-[11px] text-secondary uppercase tracking-wider mb-2">{label}</p>
       <p className="text-xl font-semibold tabular-nums text-primary">{value}</p>
       {(sub || trend !== undefined) && (

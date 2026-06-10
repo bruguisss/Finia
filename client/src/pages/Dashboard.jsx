@@ -140,7 +140,7 @@ export default function Dashboard() {
       {/* Charts row */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
         {/* Daily spending chart */}
-        <div className="lg:col-span-3 bg-surface border border-border rounded-lg p-5">
+        <div className="lg:col-span-3 bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent/20">
           <h3 className="text-sm font-medium text-primary mb-4">Gasto diario</h3>
           {loading ? (
             <div className="skeleton h-48" />
@@ -156,13 +156,20 @@ export default function Dashboard() {
                     <stop offset="5%" stopColor="#6ee7b7" stopOpacity={0.3} />
                     <stop offset="95%" stopColor="#6ee7b7" stopOpacity={0} />
                   </linearGradient>
+                  <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="3.5" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#26262b" />
                 <XAxis dataKey="date" tickFormatter={formatDayLabel} tick={{ fill: '#9494a0', fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: '#9494a0', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} />
                 <Tooltip content={<CustomTooltip />} />
-                <Area type="monotone" dataKey="expenses" stroke="#f87171" fill="url(#expGrad)" strokeWidth={2} name="expenses" />
-                <Area type="monotone" dataKey="income" stroke="#6ee7b7" fill="url(#incGrad)" strokeWidth={2} name="income" />
+                <Area type="monotone" dataKey="expenses" stroke="#f87171" fill="url(#expGrad)" strokeWidth={2.5} name="expenses" style={{ filter: 'url(#neonGlow)' }} />
+                <Area type="monotone" dataKey="income" stroke="#6ee7b7" fill="url(#incGrad)" strokeWidth={2.5} name="income" style={{ filter: 'url(#neonGlow)' }} />
               </AreaChart>
             </ResponsiveContainer>
           ) : (
@@ -173,13 +180,22 @@ export default function Dashboard() {
         </div>
 
         {/* Category donut */}
-        <div className="lg:col-span-2 bg-surface border border-border rounded-lg p-5">
+        <div className="lg:col-span-2 bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent/20">
           <h3 className="text-sm font-medium text-primary mb-4">Top categorías</h3>
           {loading ? (
             <div className="skeleton h-48" />
           ) : pieData.length > 0 ? (
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
+                <defs>
+                  <filter id="neonGlowPie" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
                 <Pie
                   data={pieData}
                   cx="50%"
@@ -188,9 +204,10 @@ export default function Dashboard() {
                   outerRadius={75}
                   dataKey="total"
                   nameKey="category"
+                  style={{ filter: 'url(#neonGlowPie)' }}
                 >
                   {pieData.map((entry) => (
-                    <Cell key={entry.category} fill={CATEGORY_COLORS[entry.category] || '#4b5563'} />
+                    <Cell key={entry.category} fill={CATEGORY_COLORS[entry.category] || '#4b5563'} stroke="transparent" />
                   ))}
                 </Pie>
                 <Tooltip
@@ -211,7 +228,7 @@ export default function Dashboard() {
       </div>
 
       {/* Recent transactions */}
-      <div className="bg-surface border border-border rounded-lg">
+      <div className="bg-surface border border-border rounded-lg transition-all duration-200 hover:border-accent/20">
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <h3 className="text-sm font-medium text-primary">Últimas transacciones</h3>
         </div>

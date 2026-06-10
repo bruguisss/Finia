@@ -32,9 +32,9 @@ export default function Sidebar({ currentPage, onNavigate, onUpload }) {
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`w-full flex items-center gap-2.5 px-2.5 py-[7px] rounded-md text-[13px] font-medium transition-colors ${
+              className={`w-full flex items-center gap-2.5 px-2.5 py-[7px] rounded-md text-[13px] font-medium transition-all duration-200 ${
                 active
-                  ? 'bg-elevated text-primary'
+                  ? 'bg-elevated text-primary shadow-[0_0_16px_-4px_rgba(110,231,183,0.3)]'
                   : 'text-secondary hover:text-primary hover:bg-elevated/60'
               }`}
             >

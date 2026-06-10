@@ -42,7 +42,7 @@ export default function BudgetBar({ budget, onUpdate, onDelete }) {
   }
 
   return (
-    <div className="bg-surface border border-border rounded-lg p-5 hover:border-accent/30 transition-colors">
+    <div className="bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
           <span className="text-xl">{emoji}</span>

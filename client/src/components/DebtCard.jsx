@@ -55,7 +55,7 @@ export default function DebtCard({ debt, onEdit, onUpdate, onDelete }) {
   }
 
   return (
-    <div className="bg-surface border border-border rounded-lg p-5 hover:border-accent/30 transition-colors">
+    <div className="bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20">
       <div className="flex items-start justify-between mb-2">
         <div className="min-w-0">
           <p className="text-sm font-medium text-primary truncate">{debt.person}</p>

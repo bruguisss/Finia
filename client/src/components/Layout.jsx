@@ -26,8 +26,8 @@ export default function Layout({ children, currentPage, onNavigate }) {
 
   return (
     <div className="flex h-screen overflow-hidden bg-base text-primary">
-      {/* Desktop sidebar */}
-      <div className="hidden md:flex flex-col w-60 shrink-0 border-r border-border bg-surface">
+      {/* Desktop sidebar - floating panel */}
+      <div className="hidden md:flex flex-col w-60 shrink-0 m-2 rounded-2xl border border-border bg-surface shadow-xl shadow-black/20">
         <Sidebar currentPage={currentPage} onNavigate={onNavigate} onUpload={() => setUploadOpen(true)} />
       </div>
 
@@ -50,7 +50,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
 
         {/* Main content */}
         <main className="flex-1 overflow-y-auto">
-          <div className="max-w-6xl mx-auto px-5 py-6 pb-20 md:pb-6">
+          <div key={currentPage} className="max-w-6xl mx-auto px-5 py-6 pb-20 md:pb-6 animate-fade-in-up">
             {children}
           </div>
         </main>
