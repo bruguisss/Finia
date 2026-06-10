@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: finia
+    runtime: node
+    buildCommand: npm run build
+    startCommand: node server/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ANTHROPIC_API_KEY
+        sync: false  # Mark as secret — fill in Render dashboard
+    disk:
+      name: finia-data
+      mountPath: /opt/render/project/src/server/data
+      sizeGB: 1
