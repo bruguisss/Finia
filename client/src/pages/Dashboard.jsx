@@ -49,7 +49,7 @@ const CustomTooltip = ({ active, payload, label, isMobile }) => {
   if (!active || !payload?.length) return null;
   const fmt = isMobile ? formatEurCompact : formatEur;
   return (
-    <div className={`bg-elevated border border-border rounded-lg shadow-lg ${isMobile ? 'p-2 text-[11px]' : 'p-3 text-xs'}`}>
+    <div className={`bg-elevated border border-white/10 rounded-md ${isMobile ? 'p-2 text-[11px]' : 'p-3 text-xs'}`}>
       <p className="text-secondary mb-1">{label}</p>
       {payload.map((p) => (
         <p key={p.name} style={{ color: p.color }}>
@@ -94,13 +94,13 @@ export default function Dashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-semibold text-primary">{getGreeting()} 👋</h2>
+          <h2 className="text-xl font-semibold text-primary tracking-tight">{getGreeting()} 👋</h2>
           <p className="text-sm text-secondary capitalize">{formatMonth(month)}</p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setMonth(addMonths(month, -1))}
-            className="w-8 h-8 rounded-lg bg-elevated border border-border text-secondary hover:text-primary hover:border-accent/50 transition-colors flex items-center justify-center"
+            className="w-8 h-8 rounded-md bg-white/[0.06] border border-white/10 text-secondary hover:text-primary transition-colors duration-150 flex items-center justify-center"
           >
             <ChevronLeft size={15} strokeWidth={2} />
           </button>
@@ -110,7 +110,7 @@ export default function Dashboard() {
           <button
             onClick={() => setMonth(addMonths(month, 1))}
             disabled={month >= getCurrentMonth()}
-            className="w-8 h-8 rounded-lg bg-elevated border border-border text-secondary hover:text-primary hover:border-accent/50 transition-colors flex items-center justify-center disabled:opacity-30"
+            className="w-8 h-8 rounded-md bg-white/[0.06] border border-white/10 text-secondary hover:text-primary transition-colors duration-150 flex items-center justify-center disabled:opacity-30"
           >
             <ChevronRight size={15} strokeWidth={2} />
           </button>
@@ -149,7 +149,7 @@ export default function Dashboard() {
       {/* Charts row */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
         {/* Daily spending chart */}
-        <div className="lg:col-span-3 bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent/20 will-change-transform">
+        <div className="lg:col-span-3 bg-surface border border-border rounded-lg p-5 transition-colors duration-150 hover:border-border-hover will-change-transform">
           <h3 className="text-sm font-medium text-primary mb-4">Gasto diario</h3>
           {loading ? (
             <div className="skeleton h-48" />
@@ -158,27 +158,20 @@ export default function Dashboard() {
               <AreaChart data={data.dailyTotals} margin={{ top: 5, right: 5, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="expGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#f87171" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#f87171" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#ef4444" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="incGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#6ee7b7" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#6ee7b7" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#22c55e" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
                   </linearGradient>
-                  <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="3.5" result="blur" />
-                    <feMerge>
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#26262b" />
-                <XAxis dataKey="date" tickFormatter={formatDayLabel} tick={{ fill: '#9494a0', fontSize: 11 }} axisLine={false} tickLine={false} interval={isMobile ? 4 : 0} />
-                <YAxis tick={{ fill: '#9494a0', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} tickCount={isMobile ? 3 : 5} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+                <XAxis dataKey="date" tickFormatter={formatDayLabel} tick={{ fill: '#6b6b7b', fontSize: 11 }} axisLine={false} tickLine={false} interval={isMobile ? 4 : 0} />
+                <YAxis tick={{ fill: '#6b6b7b', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} tickCount={isMobile ? 3 : 5} />
                 <Tooltip content={<CustomTooltip isMobile={isMobile} />} />
-                <Area type="monotone" dataKey="expenses" stroke="#f87171" fill="url(#expGrad)" strokeWidth={2.5} name="expenses" dot={false} isAnimationActive={!isMobile} style={{ filter: 'url(#neonGlow)' }} />
-                <Area type="monotone" dataKey="income" stroke="#6ee7b7" fill="url(#incGrad)" strokeWidth={2.5} name="income" dot={false} isAnimationActive={!isMobile} style={{ filter: 'url(#neonGlow)' }} />
+                <Area type="monotone" dataKey="expenses" stroke="#ef4444" fill="url(#expGrad)" strokeWidth={2} name="expenses" dot={false} isAnimationActive={!isMobile} />
+                <Area type="monotone" dataKey="income" stroke="#22c55e" fill="url(#incGrad)" strokeWidth={2} name="income" dot={false} isAnimationActive={!isMobile} />
               </AreaChart>
             </ResponsiveContainer>
           ) : (
@@ -189,22 +182,13 @@ export default function Dashboard() {
         </div>
 
         {/* Category donut */}
-        <div className="lg:col-span-2 bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent/20 will-change-transform">
+        <div className="lg:col-span-2 bg-surface border border-border rounded-lg p-5 transition-colors duration-150 hover:border-border-hover will-change-transform">
           <h3 className="text-sm font-medium text-primary mb-4">Top categorías</h3>
           {loading ? (
             <div className="skeleton h-48" />
           ) : pieData.length > 0 ? (
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
-                <defs>
-                  <filter id="neonGlowPie" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="3" result="blur" />
-                    <feMerge>
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                </defs>
                 <Pie
                   data={pieData}
                   cx="50%"
@@ -214,7 +198,6 @@ export default function Dashboard() {
                   dataKey="total"
                   nameKey="category"
                   isAnimationActive={!isMobile}
-                  style={{ filter: 'url(#neonGlowPie)' }}
                 >
                   {pieData.map((entry) => (
                     <Cell key={entry.category} fill={getCategory(entry.category)?.color || DEFAULT_COLOR} stroke="transparent" />
@@ -222,10 +205,10 @@ export default function Dashboard() {
                 </Pie>
                 <Tooltip
                   formatter={(value, name) => [isMobile ? formatEurCompact(value) : formatEur(value), name]}
-                  contentStyle={{ backgroundColor: '#1a1a1e', border: '1px solid #26262b', borderRadius: 8, fontSize: isMobile ? 11 : 12 }}
+                  contentStyle={{ backgroundColor: '#1a1a1f', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, fontSize: isMobile ? 11 : 12 }}
                 />
                 <Legend
-                  formatter={(value) => <span style={{ color: '#9494a0', fontSize: 11 }}>{value}</span>}
+                  formatter={(value) => <span style={{ color: '#6b6b7b', fontSize: 11 }}>{value}</span>}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -238,14 +221,14 @@ export default function Dashboard() {
       </div>
 
       {/* Recent transactions */}
-      <div className="bg-surface border border-border rounded-lg transition-all duration-200 hover:border-accent/20">
+      <div className="bg-surface border border-border rounded-lg transition-colors duration-150 hover:border-border-hover">
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <h3 className="text-sm font-medium text-primary">Últimas transacciones</h3>
         </div>
         {loading ? (
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-white/[0.04]">
             {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="flex items-center gap-4 px-5 py-3">
+              <div key={i} className="flex items-center gap-4 px-5 h-10">
                 <div className="skeleton h-3 w-12" />
                 <div className="skeleton h-3 flex-1" />
                 <div className="skeleton h-5 w-20 rounded" />
@@ -254,15 +237,15 @@ export default function Dashboard() {
             ))}
           </div>
         ) : data?.recentTransactions?.length > 0 ? (
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-white/[0.04]">
             {data.recentTransactions.map((t) => (
-              <div key={t.id} className="flex items-center gap-4 px-5 py-3 hover:bg-elevated/50 transition-colors">
-                <span className="text-xs text-secondary w-12 shrink-0">
+              <div key={t.id} className="flex items-center gap-4 px-5 h-10 hover:bg-white/[0.03] transition-colors duration-150">
+                <span className="text-[13px] text-secondary w-12 shrink-0">
                   {new Date(t.date + 'T00:00:00').toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })}
                 </span>
-                <span className="text-sm text-primary flex-1 truncate">{t.description}</span>
+                <span className="text-[13px] text-primary flex-1 truncate">{t.description}</span>
                 <CategoryBadge category={t.category} />
-                <span className={`text-sm font-medium tabular-nums ml-2 ${t.type === 'debit' ? 'text-danger' : 'text-accent'}`}>
+                <span className={`text-[13px] font-medium font-mono tabular-nums ml-2 ${t.type === 'debit' ? 'text-danger' : 'text-success'}`}>
                   {t.type === 'debit' ? '-' : '+'}{new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2 }).format(t.amount)} €
                 </span>
               </div>

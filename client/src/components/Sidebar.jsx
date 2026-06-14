@@ -19,7 +19,7 @@ export default function Sidebar({ currentPage, onNavigate, onUpload }) {
           F
         </div>
         <div className="min-w-0">
-          <p className="text-sm font-medium text-primary leading-tight truncate">Finia</p>
+          <p className="text-sm font-semibold text-primary leading-tight tracking-tight truncate">Finia</p>
           <p className="text-[11px] text-secondary leading-tight truncate">Finanzas personales</p>
         </div>
       </div>
@@ -33,13 +33,14 @@ export default function Sidebar({ currentPage, onNavigate, onUpload }) {
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`w-full flex items-center gap-2.5 px-2.5 py-[7px] rounded-md text-[13px] font-medium transition-all duration-200 ${
-                active
-                  ? 'bg-elevated text-primary shadow-[0_0_16px_-4px_rgba(110,231,183,0.3)]'
-                  : 'text-secondary hover:text-primary hover:bg-elevated/60'
+              className={`relative w-full flex items-center gap-2.5 pl-3.5 pr-2.5 py-[7px] rounded-md text-[13px] font-medium transition-colors duration-150 ${
+                active ? 'text-primary' : 'text-secondary hover:text-primary'
               }`}
             >
-              <Icon size={15} strokeWidth={2} className={active ? 'text-accent' : ''} />
+              {active && (
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-0.5 rounded-full bg-accent" />
+              )}
+              <Icon size={16} strokeWidth={2} className={active ? 'text-accent' : ''} />
               {item.label}
             </button>
           );
@@ -50,7 +51,7 @@ export default function Sidebar({ currentPage, onNavigate, onUpload }) {
       <div className="px-2 mt-2">
         <button
           onClick={onUpload}
-          className="w-full flex items-center justify-center gap-2 px-2.5 py-[7px] rounded-md text-[13px] font-medium text-secondary hover:text-primary border border-border hover:border-accent/30 transition-colors"
+          className="w-full flex items-center justify-center gap-2 px-2.5 py-[7px] rounded-md text-[13px] font-medium bg-white/[0.06] border border-white/10 text-secondary hover:text-primary transition-colors duration-150"
         >
           <Upload size={14} strokeWidth={2} />
           Importar CSV

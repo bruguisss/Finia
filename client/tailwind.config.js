@@ -4,20 +4,25 @@ export default {
   theme: {
     extend: {
       colors: {
-        base: '#09090b',
-        surface: '#0f0f12',
-        elevated: '#1a1a1e',
-        border: '#26262b',
-        primary: '#f5f5f6',
-        secondary: '#9494a0',
-        accent: '#6ee7b7',
-        'accent-dim': '#10b981',
-        danger: '#f87171',
-        warning: '#fbbf24',
-        info: '#60a5fa',
+        base: '#0e0e10',
+        surface: '#141416',
+        elevated: '#1a1a1f',
+        border: 'rgba(255,255,255,0.06)',
+        'border-hover': 'rgba(255,255,255,0.12)',
+        primary: '#e2e2e7',
+        secondary: '#6b6b7b',
+        tertiary: '#3d3d4d',
+        accent: '#5b6af5',
+        'accent-hover': '#6b7aff',
+        success: '#22c55e',
+        danger: '#ef4444',
+        warning: '#f59e0b',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      letterSpacing: {
+        tight: '-0.02em',
       },
       keyframes: {
         fadeInUp: {

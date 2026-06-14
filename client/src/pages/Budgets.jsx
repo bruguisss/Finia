@@ -88,7 +88,7 @@ export default function Budgets() {
     <div className="space-y-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-semibold text-primary">Presupuestos</h2>
+          <h2 className="text-xl font-semibold text-primary tracking-tight">Presupuestos</h2>
           <p className="text-sm text-secondary capitalize">{formatMonth(month)}</p>
         </div>
         <div className="flex items-center gap-3">
@@ -96,20 +96,20 @@ export default function Budgets() {
           <div className="flex items-center gap-1 bg-surface border border-border rounded-lg px-1">
             <button
               onClick={() => setMonth(addMonths(month, -1))}
-              className="w-8 h-8 text-secondary hover:text-primary transition-colors flex items-center justify-center"
+              className="w-8 h-8 text-secondary hover:text-primary transition-colors duration-150 flex items-center justify-center"
             ><ChevronLeft size={15} strokeWidth={2} /></button>
             <span className="text-sm text-primary px-2 capitalize whitespace-nowrap">{formatMonth(month)}</span>
             <button
               onClick={() => setMonth(addMonths(month, 1))}
               disabled={month >= getCurrentMonth()}
-              className="w-8 h-8 text-secondary hover:text-primary transition-colors flex items-center justify-center disabled:opacity-30"
+              className="w-8 h-8 text-secondary hover:text-primary transition-colors duration-150 flex items-center justify-center disabled:opacity-30"
             ><ChevronRight size={15} strokeWidth={2} /></button>
           </div>
 
           <button
             onClick={() => setModalOpen(true)}
             disabled={availableCategories.length === 0}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent text-base text-sm font-medium hover:bg-accent/80 transition-colors disabled:opacity-40"
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-medium hover:bg-accent-hover transition-colors duration-150 disabled:opacity-40"
           >
             + Añadir presupuesto
           </button>
@@ -146,7 +146,7 @@ export default function Budgets() {
           <p className="text-sm mb-4">Añade presupuestos para controlar tus gastos por categoría</p>
           <button
             onClick={() => setModalOpen(true)}
-            className="px-5 py-2.5 rounded-lg bg-accent text-base font-medium text-sm hover:bg-accent/80 transition-colors"
+            className="px-3.5 py-1.5 rounded-md bg-accent text-base font-medium text-[13px] hover:bg-accent-hover transition-colors duration-150"
           >
             + Añadir tu primer presupuesto
           </button>
@@ -159,10 +159,10 @@ export default function Budgets() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
           onClick={(e) => e.target === e.currentTarget && setModalOpen(false)}
         >
-          <div className="bg-surface border border-border rounded-xl w-full max-w-sm shadow-2xl">
+          <div className="bg-surface border border-border rounded-lg w-full max-w-sm shadow-2xl">
             <div className="flex items-center justify-between p-5 border-b border-border">
-              <h3 className="text-base font-semibold text-primary">Nuevo presupuesto</h3>
-              <button onClick={() => setModalOpen(false)} className="text-secondary hover:text-primary"><X size={18} strokeWidth={2} /></button>
+              <h3 className="text-base font-semibold text-primary tracking-tight">Nuevo presupuesto</h3>
+              <button onClick={() => setModalOpen(false)} className="text-secondary hover:text-primary transition-colors duration-150"><X size={18} strokeWidth={2} /></button>
             </div>
             <form onSubmit={handleCreate} className="p-5 space-y-4">
               <div>
@@ -200,14 +200,14 @@ export default function Budgets() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="flex-1 px-4 py-2.5 rounded-lg border border-border text-sm text-secondary hover:text-primary transition-colors"
+                  className="flex-1 px-4 py-2.5 rounded-md bg-white/[0.06] border border-white/10 text-sm font-medium text-secondary hover:text-primary transition-colors duration-150"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex-1 px-4 py-2.5 rounded-lg bg-accent text-base font-medium text-sm hover:bg-accent/80 transition-colors disabled:opacity-50"
+                  className="flex-1 px-4 py-2.5 rounded-md bg-accent text-base font-medium text-sm hover:bg-accent-hover transition-colors duration-150 disabled:opacity-50"
                 >
                   {saving ? 'Guardando...' : 'Crear'}
                 </button>

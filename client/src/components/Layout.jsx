@@ -29,8 +29,8 @@ export default function Layout({ children, currentPage, onNavigate }) {
 
   return (
     <div className="flex h-screen overflow-hidden bg-base text-primary">
-      {/* Desktop sidebar - floating panel */}
-      <div className="hidden md:flex flex-col w-60 shrink-0 m-2 rounded-2xl border border-border bg-surface shadow-xl shadow-black/20">
+      {/* Desktop sidebar - flush panel, separated by subtle shadow only */}
+      <div className="hidden md:flex flex-col w-60 shrink-0 bg-base shadow-[4px_0_24px_-12px_rgba(0,0,0,0.7)]">
         <Sidebar currentPage={currentPage} onNavigate={onNavigate} onUpload={() => setUploadOpen(true)} />
       </div>
 
@@ -40,19 +40,19 @@ export default function Layout({ children, currentPage, onNavigate }) {
         <header className="hidden md:flex items-center justify-between h-12 shrink-0 border-b border-border px-5">
           <div className="flex items-center gap-2 text-sm">
             <PageIcon size={15} strokeWidth={2} className="text-secondary" />
-            <span className="font-medium text-primary">{meta.label}</span>
+            <span className="font-medium text-primary tracking-tight">{meta.label}</span>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setAddTxOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-accent text-base hover:bg-accent/80 transition-colors"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-[13px] font-medium bg-accent text-base hover:bg-accent-hover transition-colors duration-150"
             >
               <Plus size={13} strokeWidth={2.5} />
               Añadir transacción
             </button>
             <button
               onClick={() => setUploadOpen(true)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium text-secondary hover:text-primary hover:bg-elevated transition-colors"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-[13px] font-medium bg-white/[0.06] border border-white/10 text-secondary hover:text-primary hover:bg-white/[0.1] transition-colors duration-150"
             >
               <Upload size={13} strokeWidth={2} />
               Importar CSV
@@ -69,7 +69,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
       </div>
 
       {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-border flex justify-around py-2 z-50">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-base border-t border-white/[0.06] flex justify-around py-2 z-50">
         {MOBILE_NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const active = currentPage === item.id;
@@ -77,7 +77,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`flex flex-col items-center justify-center gap-1 min-w-11 min-h-11 px-2 text-[11px] transition-colors ${
+              className={`flex flex-col items-center justify-center gap-1 min-w-11 min-h-11 px-2 text-[11px] transition-colors duration-150 ${
                 active ? 'text-accent' : 'text-secondary'
               }`}
             >
@@ -88,7 +88,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
         })}
         <button
           onClick={() => setAddTxOpen(true)}
-          className="flex flex-col items-center justify-center -mt-6 w-12 h-12 rounded-full bg-accent text-base shadow-lg shadow-accent/30"
+          className="flex flex-col items-center justify-center -mt-6 w-12 h-12 rounded-full bg-accent text-base hover:bg-accent-hover transition-colors duration-150"
         >
           <Plus size={22} strokeWidth={2.5} />
         </button>

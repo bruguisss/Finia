@@ -10,7 +10,7 @@ export default function Categories() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [name, setName] = useState('');
-  const [color, setColor] = useState('#6ee7b7');
+  const [color, setColor] = useState('#22c55e');
   const [emoji, setEmoji] = useState('🏷️');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -18,7 +18,7 @@ export default function Categories() {
   function openCreate() {
     setEditing(null);
     setName('');
-    setColor('#6ee7b7');
+    setColor('#22c55e');
     setEmoji('🏷️');
     setError(null);
     setModalOpen(true);
@@ -69,10 +69,10 @@ export default function Categories() {
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-primary">Categorías</h2>
+        <h2 className="text-xl font-semibold text-primary tracking-tight">Categorías</h2>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent text-base text-sm font-medium hover:bg-accent/80 transition-colors"
+          className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-medium hover:bg-accent-hover transition-colors duration-150"
         >
           + Nueva categoría
         </button>
@@ -93,12 +93,12 @@ export default function Categories() {
             return (
               <div
                 key={cat.id}
-                className="bg-surface border border-border rounded-lg p-4 flex items-center justify-between gap-3 transition-all duration-200 hover:border-accent/30"
+                className="bg-surface border border-border rounded-lg p-4 flex items-center justify-between gap-3 transition-colors duration-150 hover:border-border-hover"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <span
                     className="w-9 h-9 rounded-lg flex items-center justify-center text-lg shrink-0"
-                    style={{ backgroundColor: `${cat.color}20`, color: cat.color }}
+                    style={{ backgroundColor: `${cat.color}1a`, color: cat.color }}
                   >
                     {cat.emoji}
                   </span>
@@ -110,14 +110,14 @@ export default function Categories() {
                 <div className="flex items-center gap-1 shrink-0">
                   <button
                     onClick={() => openEdit(cat)}
-                    className="text-secondary hover:text-primary transition-colors p-1.5 rounded-md hover:bg-elevated"
+                    className="text-secondary hover:text-primary transition-colors duration-150 p-1.5 rounded-md hover:bg-white/[0.06]"
                   >
                     <Pencil size={14} strokeWidth={2} />
                   </button>
                   {!isProtected && (
                     <button
                       onClick={() => handleDelete(cat)}
-                      className="text-secondary hover:text-danger transition-colors p-1.5 rounded-md hover:bg-elevated"
+                      className="text-secondary hover:text-danger transition-colors duration-150 p-1.5 rounded-md hover:bg-white/[0.06]"
                     >
                       <Trash2 size={14} strokeWidth={2} />
                     </button>
@@ -134,12 +134,12 @@ export default function Categories() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
           onClick={(e) => e.target === e.currentTarget && setModalOpen(false)}
         >
-          <div className="bg-surface border border-border rounded-xl w-full max-w-sm shadow-2xl">
+          <div className="bg-surface border border-border rounded-lg w-full max-w-sm shadow-2xl">
             <div className="flex items-center justify-between p-5 border-b border-border">
-              <h3 className="text-base font-semibold text-primary">
+              <h3 className="text-base font-semibold text-primary tracking-tight">
                 {editing ? 'Editar categoría' : 'Nueva categoría'}
               </h3>
-              <button onClick={() => setModalOpen(false)} className="text-secondary hover:text-primary">
+              <button onClick={() => setModalOpen(false)} className="text-secondary hover:text-primary transition-colors duration-150">
                 <X size={18} strokeWidth={2} />
               </button>
             </div>
@@ -187,14 +187,14 @@ export default function Categories() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="flex-1 px-4 py-2.5 rounded-lg border border-border text-sm text-secondary hover:text-primary transition-colors"
+                  className="flex-1 px-4 py-2.5 rounded-md bg-white/[0.06] border border-white/10 text-sm font-medium text-secondary hover:text-primary transition-colors duration-150"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex-1 px-4 py-2.5 rounded-lg bg-accent text-base font-medium text-sm hover:bg-accent/80 transition-colors disabled:opacity-50"
+                  className="flex-1 px-4 py-2.5 rounded-md bg-accent text-base font-medium text-sm hover:bg-accent-hover transition-colors duration-150 disabled:opacity-50"
                 >
                   {saving ? 'Guardando...' : editing ? 'Guardar' : 'Crear'}
                 </button>

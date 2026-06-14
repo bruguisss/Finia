@@ -49,12 +49,12 @@ export default function DebtModal({ debt, onClose, onSave }) {
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-surface border border-border rounded-xl w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto animate-scale-in">
+      <div className="bg-surface border border-border rounded-lg w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto animate-scale-in">
         <div className="flex items-center justify-between p-5 border-b border-border">
-          <h3 className="text-base font-semibold text-primary">
+          <h3 className="text-base font-semibold text-primary tracking-tight">
             {isEditing ? 'Editar deuda' : 'Nueva deuda'}
           </h3>
-          <button onClick={onClose} className="text-secondary hover:text-primary"><X size={18} strokeWidth={2} /></button>
+          <button onClick={onClose} className="text-secondary hover:text-primary transition-colors duration-150"><X size={18} strokeWidth={2} /></button>
         </div>
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
           <div>
@@ -63,9 +63,9 @@ export default function DebtModal({ debt, onClose, onSave }) {
               <button
                 type="button"
                 onClick={() => setType('owed_to_me')}
-                className={`px-3 py-2.5 rounded-lg text-sm font-medium border transition-colors ${
+                className={`px-3 py-2.5 rounded-md text-sm font-medium border transition-colors duration-150 ${
                   type === 'owed_to_me'
-                    ? 'bg-accent/10 border-accent text-accent'
+                    ? 'bg-success/10 border-success text-success'
                     : 'bg-elevated border-border text-secondary hover:text-primary'
                 }`}
               >
@@ -74,7 +74,7 @@ export default function DebtModal({ debt, onClose, onSave }) {
               <button
                 type="button"
                 onClick={() => setType('owed_by_me')}
-                className={`px-3 py-2.5 rounded-lg text-sm font-medium border transition-colors ${
+                className={`px-3 py-2.5 rounded-md text-sm font-medium border transition-colors duration-150 ${
                   type === 'owed_by_me'
                     ? 'bg-danger/10 border-danger text-danger'
                     : 'bg-elevated border-border text-secondary hover:text-primary'
@@ -161,14 +161,14 @@ export default function DebtModal({ debt, onClose, onSave }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 rounded-lg border border-border text-sm text-secondary hover:text-primary transition-colors"
+              className="flex-1 px-4 py-2.5 rounded-md bg-white/[0.06] border border-white/10 text-sm font-medium text-secondary hover:text-primary transition-colors duration-150"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 px-4 py-2.5 rounded-lg bg-accent text-base font-medium text-sm hover:bg-accent/80 transition-colors disabled:opacity-50"
+              className="flex-1 px-4 py-2.5 rounded-md bg-accent text-base font-medium text-sm hover:bg-accent-hover transition-colors duration-150 disabled:opacity-50"
             >
               {saving ? 'Guardando...' : isEditing ? 'Guardar' : 'Crear'}
             </button>

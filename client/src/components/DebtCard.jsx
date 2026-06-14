@@ -3,7 +3,7 @@ import { Pencil, Trash2 } from 'lucide-react';
 import { updateDebt, deleteDebt } from '../api.js';
 
 const STATUS_LABELS = { pending: 'Pendiente', partial: 'Parcial', paid: 'Pagada' };
-const STATUS_COLORS = { pending: '#fbbf24', partial: '#60a5fa', paid: '#6ee7b7' };
+const STATUS_COLORS = { pending: '#f59e0b', partial: '#5b6af5', paid: '#22c55e' };
 
 function formatEur(n) {
   return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) + ' €';
@@ -55,29 +55,29 @@ export default function DebtCard({ debt, onEdit, onUpdate, onDelete }) {
   }
 
   return (
-    <div className="bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20">
+    <div className="bg-surface border border-border rounded-lg p-5 transition-colors duration-150 hover:border-border-hover">
       <div className="flex items-start justify-between mb-2">
         <div className="min-w-0">
           <p className="text-sm font-medium text-primary truncate">{debt.person}</p>
           {debt.description && <p className="text-xs text-secondary mt-0.5 truncate">{debt.description}</p>}
         </div>
         <div className="flex items-center gap-2 shrink-0 ml-2">
-          <button onClick={() => onEdit(debt)} className="text-secondary hover:text-primary transition-colors">
+          <button onClick={() => onEdit(debt)} className="text-secondary hover:text-primary transition-colors duration-150">
             <Pencil size={13} strokeWidth={2} />
           </button>
-          <button onClick={handleDelete} className="text-secondary hover:text-danger transition-colors">
+          <button onClick={handleDelete} className="text-secondary hover:text-danger transition-colors duration-150">
             <Trash2 size={13} strokeWidth={2} />
           </button>
         </div>
       </div>
 
       <div className="flex flex-wrap items-center gap-2 mb-3">
-        <span className={`text-xs font-medium px-2 py-0.5 rounded ${isOwedByMe ? 'bg-danger/10 text-danger' : 'bg-accent/10 text-accent'}`}>
+        <span className={`text-xs font-medium px-2 py-0.5 rounded ${isOwedByMe ? 'bg-danger/10 text-danger' : 'bg-success/10 text-success'}`}>
           {isOwedByMe ? 'Yo debo' : 'Me deben'}
         </span>
         <span
           className="text-xs font-medium px-2 py-0.5 rounded"
-          style={{ backgroundColor: `${STATUS_COLORS[debt.status]}20`, color: STATUS_COLORS[debt.status] }}
+          style={{ backgroundColor: `${STATUS_COLORS[debt.status]}1a`, color: STATUS_COLORS[debt.status] }}
         >
           {STATUS_LABELS[debt.status]}
         </span>
@@ -90,7 +90,7 @@ export default function DebtCard({ debt, onEdit, onUpdate, onDelete }) {
 
       <div className="flex items-end justify-between mb-2 gap-2">
         <div>
-          <p className={`text-xl font-semibold tabular-nums ${isOwedByMe ? 'text-danger' : 'text-accent'}`}>
+          <p className={`text-xl font-semibold tabular-nums ${isOwedByMe ? 'text-danger' : 'text-success'}`}>
             {formatEur(remaining)}
           </p>
           {debt.amount_paid > 0 && (
@@ -124,7 +124,7 @@ export default function DebtCard({ debt, onEdit, onUpdate, onDelete }) {
           <button
             type="submit"
             disabled={paying || !payAmount}
-            className="px-3 py-1.5 rounded bg-accent text-base text-xs font-medium hover:bg-accent/80 transition-colors disabled:opacity-50"
+            className="px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-medium hover:bg-accent-hover transition-colors duration-150 disabled:opacity-50"
           >
             {paying ? '...' : 'Abonar'}
           </button>

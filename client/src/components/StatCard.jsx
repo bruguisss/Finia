@@ -4,27 +4,24 @@ export default function StatCard({ label, value, sub, trend, loading }) {
   if (loading) {
     return (
       <div className="bg-surface border border-border rounded-lg p-4">
-        <div className="skeleton h-3 w-24 mb-3" />
-        <div className="skeleton h-6 w-32 mb-2" />
+        <div className="skeleton h-7 w-28 mb-3" />
         <div className="skeleton h-3 w-20" />
       </div>
     );
   }
 
   return (
-    <div className="bg-surface border border-border rounded-lg p-4 transition-all duration-200 hover:border-accent/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20">
-      <p className="text-[11px] text-secondary uppercase tracking-wider mb-2">{label}</p>
-      <p className="text-xl font-semibold tabular-nums text-primary">{value}</p>
-      {(sub || trend !== undefined) && (
-        <div className="flex items-center gap-2 mt-1.5">
-          {sub && <span className="text-xs text-secondary">{sub}</span>}
-          {trend !== undefined && (
-            <span className={`text-xs font-medium ${trend > 0 ? 'text-danger' : trend < 0 ? 'text-accent' : 'text-secondary'}`}>
-              {trend > 0 ? `+${trend.toFixed(1)}%` : `${trend.toFixed(1)}%`}
-            </span>
-          )}
-        </div>
-      )}
+    <div className="bg-surface border border-border rounded-lg p-4 transition-colors duration-150 hover:border-border-hover">
+      <p className="text-[28px] font-semibold tabular-nums text-primary tracking-tight leading-tight">{value}</p>
+      <div className="flex items-center gap-2 mt-2">
+        <p className="text-[12px] text-secondary uppercase tracking-wide">{label}</p>
+        {trend !== undefined && (
+          <span className={`text-[11px] font-medium px-1.5 py-0.5 rounded ${trend > 0 ? 'bg-danger/10 text-danger' : trend < 0 ? 'bg-success/10 text-success' : 'bg-white/[0.06] text-secondary'}`}>
+            {trend > 0 ? `+${trend.toFixed(1)}%` : `${trend.toFixed(1)}%`}
+          </span>
+        )}
+      </div>
+      {sub && <p className="text-xs text-secondary mt-0.5">{sub}</p>}
     </div>
   );
 }

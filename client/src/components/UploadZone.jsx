@@ -39,10 +39,10 @@ export default function UploadZone({ onClose }) {
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-surface border border-border rounded-xl w-full max-w-lg shadow-2xl animate-scale-in">
+      <div className="bg-surface border border-border rounded-lg w-full max-w-lg shadow-2xl animate-scale-in">
         <div className="flex items-center justify-between p-5 border-b border-border">
-          <h2 className="text-base font-semibold text-primary">Importar extracto CSV</h2>
-          <button onClick={onClose} className="text-secondary hover:text-primary transition-colors"><X size={18} strokeWidth={2} /></button>
+          <h2 className="text-base font-semibold text-primary tracking-tight">Importar extracto CSV</h2>
+          <button onClick={onClose} className="text-secondary hover:text-primary transition-colors duration-150"><X size={18} strokeWidth={2} /></button>
         </div>
 
         <div className="p-5 space-y-4">
@@ -54,7 +54,7 @@ export default function UploadZone({ onClose }) {
                 onDragLeave={() => setDragging(false)}
                 onDrop={onDrop}
                 onClick={() => !uploading && fileRef.current?.click()}
-                className={`relative flex flex-col items-center justify-center gap-3 p-10 rounded-lg border-2 border-dashed cursor-pointer transition-all ${
+                className={`relative flex flex-col items-center justify-center gap-3 p-10 rounded-lg border-2 border-dashed cursor-pointer transition-colors duration-150 ${
                   dragging ? 'border-accent bg-accent/5' : 'border-border hover:border-accent/50 hover:bg-elevated/50'
                 } ${uploading ? 'pointer-events-none' : ''}`}
               >
@@ -90,7 +90,7 @@ export default function UploadZone({ onClose }) {
               {/* Instructions collapsible */}
               <div className="border border-border rounded-lg overflow-hidden">
                 <button
-                  className="w-full flex items-center justify-between px-4 py-3 text-sm text-secondary hover:text-primary transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 text-sm text-secondary hover:text-primary transition-colors duration-150"
                   onClick={() => setInstructionsOpen(!instructionsOpen)}
                 >
                   <span>¿Cómo exportar desde Revolut?</span>
@@ -121,7 +121,7 @@ export default function UploadZone({ onClose }) {
               </div>
               <button
                 onClick={onClose}
-                className="px-6 py-2.5 rounded-lg bg-accent text-base font-medium text-sm hover:bg-accent/80 transition-colors"
+                className="px-6 py-2.5 rounded-md bg-accent text-base font-medium text-sm hover:bg-accent-hover transition-colors duration-150"
               >
                 Ver transacciones
               </button>

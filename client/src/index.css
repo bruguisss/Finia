@@ -13,10 +13,23 @@
   }
 
   body {
-    background-color: #09090b;
-    color: #f5f5f6;
+    background-color: #0e0e10;
+    color: #e2e2e7;
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+  }
+
+  button, a, [role="button"], summary, select, label[for] {
+    cursor: pointer;
+  }
+
+  button, a, input, select, textarea {
+    transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease, opacity 150ms ease, transform 150ms ease;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgba(91, 106, 245, 0.5);
+    outline-offset: 1px;
   }
 
   ::-webkit-scrollbar {
@@ -24,8 +37,8 @@
     height: 6px;
   }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #26262b; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #38383f; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
 }
 
 @layer utilities {
@@ -34,12 +47,12 @@
   }
 
   .amount-positive {
-    color: #6ee7b7;
+    color: #22c55e;
     font-variant-numeric: tabular-nums;
   }
 
   .amount-negative {
-    color: #f87171;
+    color: #ef4444;
     font-variant-numeric: tabular-nums;
   }
 }
@@ -51,7 +64,7 @@
 }
 
 .skeleton {
-  background-color: #1a1a1e;
+  background-color: #1a1a1f;
   border-radius: 4px;
   animation: skeleton-pulse 1.5s ease-in-out infinite;
 }

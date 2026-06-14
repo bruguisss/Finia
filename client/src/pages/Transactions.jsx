@@ -83,7 +83,7 @@ export default function Transactions() {
   return (
     <div className="space-y-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <h2 className="text-xl font-semibold text-primary">Transacciones</h2>
+        <h2 className="text-xl font-semibold text-primary tracking-tight">Transacciones</h2>
         <span className="text-sm text-secondary">{total} transacciones</span>
       </div>
 
@@ -93,13 +93,13 @@ export default function Transactions() {
         <div className="flex items-center gap-1 bg-surface border border-border rounded-lg px-1">
           <button
             onClick={() => { setMonth(addMonths(month, -1)); handleFilterChange(); }}
-            className="w-8 h-8 text-secondary hover:text-primary transition-colors flex items-center justify-center"
+            className="w-8 h-8 text-secondary hover:text-primary transition-colors duration-150 flex items-center justify-center"
           ><ChevronLeft size={15} strokeWidth={2} /></button>
           <span className="text-sm text-primary px-2 capitalize whitespace-nowrap">{formatMonth(month)}</span>
           <button
             onClick={() => { setMonth(addMonths(month, 1)); handleFilterChange(); }}
             disabled={month >= getCurrentMonth()}
-            className="w-8 h-8 text-secondary hover:text-primary transition-colors flex items-center justify-center disabled:opacity-30"
+            className="w-8 h-8 text-secondary hover:text-primary transition-colors duration-150 flex items-center justify-center disabled:opacity-30"
           ><ChevronRight size={15} strokeWidth={2} /></button>
         </div>
 
@@ -142,12 +142,12 @@ export default function Transactions() {
             <tbody>
               {loading ? (
                 Array.from({ length: 10 }).map((_, i) => (
-                  <tr key={i} className="border-b border-border">
-                    <td className="py-3 px-4"><div className="skeleton h-3 w-16" /></td>
-                    <td className="py-3 px-4"><div className="skeleton h-3 w-48" /></td>
-                    <td className="py-3 px-4"><div className="skeleton h-5 w-24 rounded" /></td>
-                    <td className="py-3 px-4"><div className="skeleton h-3 w-16 ml-auto" /></td>
-                    <td className="py-3 px-4" />
+                  <tr key={i} className="border-b border-white/[0.04] h-10">
+                    <td className="px-4"><div className="skeleton h-3 w-16" /></td>
+                    <td className="px-4"><div className="skeleton h-3 w-48" /></td>
+                    <td className="px-4"><div className="skeleton h-5 w-24 rounded" /></td>
+                    <td className="px-4"><div className="skeleton h-3 w-16 ml-auto" /></td>
+                    <td className="px-4" />
                   </tr>
                 ))
               ) : transactions.length > 0 ? (
@@ -189,14 +189,14 @@ export default function Transactions() {
               <button
                 onClick={() => setOffset(Math.max(0, offset - PAGE_SIZE))}
                 disabled={offset === 0}
-                className="px-3 py-1.5 text-xs rounded-lg bg-elevated border border-border text-secondary hover:text-primary disabled:opacity-30 transition-colors"
+                className="px-3.5 py-1.5 text-[13px] font-medium rounded-md bg-white/[0.06] border border-white/10 text-secondary hover:text-primary disabled:opacity-30 transition-colors duration-150"
               >
                 Anterior
               </button>
               <button
                 onClick={() => setOffset(offset + PAGE_SIZE)}
                 disabled={offset + PAGE_SIZE >= total}
-                className="px-3 py-1.5 text-xs rounded-lg bg-elevated border border-border text-secondary hover:text-primary disabled:opacity-30 transition-colors"
+                className="px-3.5 py-1.5 text-[13px] font-medium rounded-md bg-white/[0.06] border border-white/10 text-secondary hover:text-primary disabled:opacity-30 transition-colors duration-150"
               >
                 Siguiente
               </button>

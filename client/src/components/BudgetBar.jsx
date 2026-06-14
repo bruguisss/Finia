@@ -18,7 +18,7 @@ export default function BudgetBar({ budget, onUpdate, onDelete }) {
   const emoji = cat?.emoji || DEFAULT_EMOJI;
   const color = cat?.color || DEFAULT_COLOR;
 
-  const barColor = percentage >= 100 ? '#f87171' : percentage >= 75 ? '#fbbf24' : '#6ee7b7';
+  const barColor = percentage >= 100 ? '#ef4444' : percentage >= 75 ? '#f59e0b' : '#22c55e';
 
   async function handleSave() {
     setSaving(true);
@@ -44,7 +44,7 @@ export default function BudgetBar({ budget, onUpdate, onDelete }) {
   }
 
   return (
-    <div className="bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20">
+    <div className="bg-surface border border-border rounded-lg p-5 transition-colors duration-150 hover:border-border-hover">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
           <span className="text-xl">{emoji}</span>
@@ -60,10 +60,10 @@ export default function BudgetBar({ budget, onUpdate, onDelete }) {
           >
             {percentage}%
           </span>
-          <button onClick={() => setEditing(!editing)} className="text-secondary hover:text-primary transition-colors">
+          <button onClick={() => setEditing(!editing)} className="text-secondary hover:text-primary transition-colors duration-150">
             <Pencil size={13} strokeWidth={2} />
           </button>
-          <button onClick={handleDelete} className="text-secondary hover:text-danger transition-colors">
+          <button onClick={handleDelete} className="text-secondary hover:text-danger transition-colors duration-150">
             <Trash2 size={13} strokeWidth={2} />
           </button>
         </div>
@@ -92,7 +92,7 @@ export default function BudgetBar({ budget, onUpdate, onDelete }) {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="px-3 py-1.5 rounded bg-accent text-base text-sm font-medium hover:bg-accent/80 transition-colors disabled:opacity-50"
+            className="px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-medium hover:bg-accent-hover transition-colors duration-150 disabled:opacity-50"
           >
             {saving ? '...' : 'Guardar'}
           </button>

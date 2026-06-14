@@ -45,16 +45,16 @@ export default function TransactionRow({ transaction, onUpdate, onDelete }) {
   const isDebit = transaction.type === 'debit';
 
   return (
-    <tr className="border-b border-border hover:bg-elevated/50 transition-colors group">
-      <td className="py-3 px-4 text-sm text-secondary whitespace-nowrap">
+    <tr className="border-b border-white/[0.04] hover:bg-white/[0.03] transition-colors duration-150 group h-10">
+      <td className="px-4 text-[13px] text-secondary whitespace-nowrap">
         {formatDate(transaction.date)}
       </td>
-      <td className="py-3 px-4 text-sm max-w-xs">
+      <td className="px-4 text-[13px] max-w-xs">
         <span className="truncate block" title={transaction.description}>
           {transaction.description}
         </span>
       </td>
-      <td className="py-3 px-4">
+      <td className="px-4">
         {editing ? (
           <select
             autoFocus
@@ -74,13 +74,13 @@ export default function TransactionRow({ transaction, onUpdate, onDelete }) {
           </button>
         )}
       </td>
-      <td className={`py-3 px-4 text-sm font-medium tabular-nums text-right ${isDebit ? 'text-danger' : 'text-accent'}`}>
+      <td className={`px-4 text-[13px] font-medium font-mono tabular-nums text-right ${isDebit ? 'text-danger' : 'text-success'}`}>
         {formatAmount(transaction.amount, transaction.type)}
       </td>
-      <td className="py-3 px-4 text-right">
+      <td className="px-4 text-right">
         <button
           onClick={handleDelete}
-          className="opacity-0 group-hover:opacity-100 text-secondary hover:text-danger transition-all p-1.5 rounded-md hover:bg-elevated"
+          className="opacity-0 group-hover:opacity-100 text-secondary hover:text-danger transition-all duration-150 p-1.5 rounded-md hover:bg-white/[0.06]"
         >
           <Trash2 size={14} strokeWidth={2} />
         </button>
