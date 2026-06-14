@@ -27,8 +27,10 @@ app.use('/api/debts', debtsRouter);
 // Summary endpoint
 app.get('/api/summary', require('./routes/summary'));
 
-// MCP (Model Context Protocol) server
-app.use('/mcp', mcpRouter);
+// MCP (Model Context Protocol) server — mounted at /mcp/<MCP_API_KEY>
+// (the secret lives in the URL path since claude.ai custom connectors don't
+// support sending a custom x-api-key header)
+app.use('/mcp/:secret', mcpRouter);
 
 // Serve built React app in production
 if (process.env.NODE_ENV === 'production') {

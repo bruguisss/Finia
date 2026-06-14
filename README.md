@@ -93,7 +93,7 @@ Esto lanza:
 
 ## Servidor MCP (Model Context Protocol)
 
-Finia expone un servidor MCP en `/mcp` que permite a un asistente de IA (como Claude) consultar y modificar tus finanzas mediante herramientas:
+Finia expone un servidor MCP que permite a un asistente de IA (como Claude) consultar y modificar tus finanzas mediante herramientas:
 
 - `add_transaction` — añade una transacción manual (ingreso o gasto)
 - `get_summary` — resumen financiero del mes actual o de un mes concreto
@@ -104,14 +104,20 @@ Finia expone un servidor MCP en `/mcp` que permite a un asistente de IA (como Cl
 
 ### Configuración
 
-Define `MCP_API_KEY` en tu `.env` (o en las variables de entorno de Render) con una clave secreta de tu elección. Todas las peticiones a `/mcp` deben incluir la cabecera `x-api-key` con ese valor; si falta o no coincide, el servidor responde `401`.
+Define `MCP_API_KEY` en tu `.env` (o en las variables de entorno de Render) con una cadena larga y aleatoria. El servidor MCP se monta en `/mcp/<MCP_API_KEY>` — esa ruta actúa como el secreto (claude.ai no permite enviar cabeceras personalizadas como `x-api-key` en sus conectores personalizados, así que la autenticación va en la propia URL). Cualquier petición a `/mcp/<valor incorrecto>` responde `404`.
+
+Genera una clave aleatoria, por ejemplo:
+```bash
+openssl rand -hex 32
+```
 
 ### Conectar con claude.ai
 
 1. En claude.ai, ve a **Configuración → Conectores → Añadir conector personalizado**.
-2. Introduce la URL de tu servidor: `https://tu-app.onrender.com/mcp` (o `http://localhost:3001/mcp` en local).
-3. Añade la cabecera `x-api-key` con el valor de tu `MCP_API_KEY`.
-4. Guarda y activa el conector — las herramientas de Finia aparecerán disponibles en tus conversaciones.
+2. Introduce la URL completa incluyendo tu clave: `https://tu-app.onrender.com/mcp/<MCP_API_KEY>` (o `http://localhost:3001/mcp/<MCP_API_KEY>` en local).
+3. Guarda y activa el conector — las herramientas de Finia aparecerán disponibles en tus conversaciones.
+
+No compartas esa URL: quien la tenga puede usar las herramientas (añadir transacciones, deudas, etc.).
 
 ---
 
