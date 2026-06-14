@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, Legend,
+  AreaChart, Area, ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  PieChart, Pie, Cell, Legend, ReferenceLine, ReferenceArea,
 } from 'recharts';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import StatCard from '../components/StatCard.jsx';
 import CategoryBadge from '../components/CategoryBadge.jsx';
 import { useCategories, DEFAULT_COLOR } from '../context/CategoriesContext.jsx';
 import { useIsMobile } from '../hooks/useIsMobile.js';
-import { getSummary } from '../api.js';
+import { getSummary, getBudgets } from '../api.js';
 
 function formatEur(n) {
   return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) + ' €';
@@ -60,18 +60,75 @@ const CustomTooltip = ({ active, payload, label, isMobile }) => {
   );
 };
 
+const ProgressTooltip = ({ active, payload, label, isMobile }) => {
+  if (!active || !payload?.length) return null;
+  const fmt = isMobile ? formatEurCompact : formatEur;
+  const actual = payload.find((p) => p.dataKey === 'actual' && p.value != null);
+  const projected = payload.find((p) => p.dataKey === 'projected' && p.value != null);
+  const budget = payload.find((p) => p.dataKey === 'budget' && p.value != null);
+  return (
+    <div className={`bg-elevated border border-white/10 rounded-md ${isMobile ? 'p-2 text-[11px]' : 'p-3 text-xs'}`}>
+      <p className="text-secondary mb-1">Día {label}</p>
+      {actual && <p style={{ color: '#5b6af5' }}>Gastado: {fmt(actual.value)}</p>}
+      {projected && <p style={{ color: '#6b6b7b' }}>Proyección: {fmt(projected.value)}</p>}
+      {budget && <p style={{ color: '#6b6b7b' }}>Presupuesto: {fmt(budget.value)}</p>}
+    </div>
+  );
+};
+
+function buildSpendingProgress(month, dailyTotals, totalBudget) {
+  const [y, m] = month.split('-').map(Number);
+  const daysInMonth = new Date(y, m, 0).getDate();
+  const isCurrentMonth = month === getCurrentMonth();
+  const currentDay = isCurrentMonth ? new Date().getDate() : daysInMonth;
+
+  const expenseByDay = {};
+  (dailyTotals || []).forEach((d) => {
+    const day = parseInt(d.date.slice(8, 10), 10);
+    expenseByDay[day] = (expenseByDay[day] || 0) + d.expenses;
+  });
+
+  let cumulative = 0;
+  let cumulativeAtToday = 0;
+  const data = [];
+  for (let day = 1; day <= daysInMonth; day++) {
+    cumulative += expenseByDay[day] || 0;
+    if (day <= currentDay) cumulativeAtToday = cumulative;
+    data.push({
+      day,
+      actual: day <= currentDay ? cumulative : null,
+      budget: totalBudget > 0 ? totalBudget : null,
+    });
+  }
+
+  let projectedTotal = null;
+  if (currentDay < daysInMonth && currentDay > 0) {
+    const avgPerDay = cumulativeAtToday / currentDay;
+    projectedTotal = avgPerDay * daysInMonth;
+    data.forEach((d) => {
+      if (d.day >= currentDay) {
+        d.projected = cumulativeAtToday + avgPerDay * (d.day - currentDay);
+      }
+    });
+  }
+
+  return { data, daysInMonth, currentDay, cumulativeAtToday, projectedTotal };
+}
+
 export default function Dashboard() {
   const { getCategory } = useCategories();
   const isMobile = useIsMobile();
   const [month, setMonth] = useState(getCurrentMonth());
   const [data, setData] = useState(null);
+  const [budgets, setBudgets] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const summary = await getSummary(month);
+      const [summary, budgetsData] = await Promise.all([getSummary(month), getBudgets(month)]);
       setData(summary);
+      setBudgets(budgetsData);
     } catch (err) {
       console.error(err);
     } finally {
@@ -88,6 +145,10 @@ export default function Dashboard() {
   const pieData = (data?.categoryBreakdown || [])
     .filter((c) => c.category !== 'Sin categoría')
     .slice(0, 5);
+
+  const totalBudget = budgets.reduce((sum, b) => sum + parseFloat(b.monthly_limit || 0), 0);
+  const progress = data ? buildSpendingProgress(month, data.dailyTotals, totalBudget) : null;
+  const overBudget = progress?.projectedTotal != null && totalBudget > 0 && progress.projectedTotal > totalBudget;
 
   return (
     <div className="space-y-6">
@@ -115,6 +176,78 @@ export default function Dashboard() {
             <ChevronRight size={15} strokeWidth={2} />
           </button>
         </div>
+      </div>
+
+      {/* Monthly spending progress */}
+      <div className="bg-surface border border-border rounded-lg p-5 transition-colors duration-150 hover:border-border-hover">
+        <h3 className="text-sm font-medium text-primary mb-4">Progreso de gasto mensual</h3>
+        {loading ? (
+          <div className="skeleton h-64" />
+        ) : (
+          <>
+            {/* Key numbers */}
+            <div className="flex flex-wrap gap-x-8 gap-y-3 mb-5">
+              {totalBudget > 0 && (
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-secondary/40 shrink-0" />
+                  <div>
+                    <p className="text-[11px] text-secondary uppercase tracking-wider">Presupuesto</p>
+                    <p className="text-lg font-semibold text-primary font-mono tabular-nums">{formatEur(totalBudget)}</p>
+                  </div>
+                </div>
+              )}
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-sm bg-accent shrink-0" />
+                <div>
+                  <p className="text-[11px] text-secondary uppercase tracking-wider">Gastado</p>
+                  <p className="text-lg font-semibold text-primary font-mono tabular-nums">{formatEur(progress.cumulativeAtToday)}</p>
+                </div>
+              </div>
+              {progress.projectedTotal != null && (
+                <div className="flex items-center gap-2">
+                  <span className={`w-2.5 h-2.5 rounded-sm shrink-0 ${overBudget ? 'bg-danger' : 'bg-success'}`} />
+                  <div>
+                    <p className="text-[11px] text-secondary uppercase tracking-wider">Proyección fin de mes</p>
+                    <p className={`text-lg font-semibold font-mono tabular-nums ${overBudget ? 'text-danger' : 'text-primary'}`}>{formatEur(progress.projectedTotal)}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Chart */}
+            <ResponsiveContainer width="100%" height={isMobile ? 220 : 260}>
+              <ComposedChart data={progress.data} margin={{ top: 5, right: 5, left: 0, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="spendGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#5b6af5" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="#5b6af5" stopOpacity={0} />
+                  </linearGradient>
+                  <pattern id="projectionHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                    <rect width="6" height="6" fill="transparent" />
+                    <line x1="0" y1="0" x2="0" y2="6" stroke={overBudget ? '#ef4444' : '#6b6b7b'} strokeWidth="1" strokeOpacity="0.25" />
+                  </pattern>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+                <XAxis dataKey="day" tick={{ fill: '#6b6b7b', fontSize: 11 }} axisLine={false} tickLine={false} interval={isMobile ? 6 : 2} />
+                <YAxis tick={{ fill: '#6b6b7b', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v)}€`} tickCount={5} />
+                <Tooltip content={<ProgressTooltip isMobile={isMobile} />} />
+                {progress.currentDay < progress.daysInMonth && (
+                  <ReferenceArea x1={progress.currentDay} x2={progress.daysInMonth} fill="url(#projectionHatch)" stroke="none" />
+                )}
+                {totalBudget > 0 && (
+                  <Line type="monotone" dataKey="budget" stroke="#6b6b7b" strokeWidth={1.5} strokeDasharray="4 4" dot={false} isAnimationActive={!isMobile} />
+                )}
+                <Area type="monotone" dataKey="actual" stroke="#5b6af5" fill="url(#spendGrad)" strokeWidth={2} dot={false} connectNulls isAnimationActive={!isMobile} />
+                {progress.currentDay < progress.daysInMonth && (
+                  <Line type="monotone" dataKey="projected" stroke={overBudget ? '#ef4444' : '#6b6b7b'} strokeWidth={1.5} strokeDasharray="4 4" dot={false} connectNulls isAnimationActive={!isMobile} />
+                )}
+                {progress.currentDay < progress.daysInMonth && (
+                  <ReferenceLine x={progress.currentDay} stroke="rgba(255,255,255,0.2)" strokeDasharray="3 3" label={{ value: 'Hoy', position: 'top', fill: '#6b6b7b', fontSize: 11 }} />
+                )}
+              </ComposedChart>
+            </ResponsiveContainer>
+          </>
+        )}
       </div>
 
       {/* Stat cards */}
