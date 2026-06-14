@@ -7,10 +7,15 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import StatCard from '../components/StatCard.jsx';
 import CategoryBadge from '../components/CategoryBadge.jsx';
 import { useCategories, DEFAULT_COLOR } from '../context/CategoriesContext.jsx';
+import { useIsMobile } from '../hooks/useIsMobile.js';
 import { getSummary } from '../api.js';
 
 function formatEur(n) {
   return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) + ' €';
+}
+
+function formatEurCompact(n) {
+  return `${Math.round(n)} €`;
 }
 
 function getGreeting() {
@@ -40,14 +45,15 @@ function formatDayLabel(dateStr) {
   return String(d.getDate());
 }
 
-const CustomTooltip = ({ active, payload, label }) => {
+const CustomTooltip = ({ active, payload, label, isMobile }) => {
   if (!active || !payload?.length) return null;
+  const fmt = isMobile ? formatEurCompact : formatEur;
   return (
-    <div className="bg-elevated border border-border rounded-lg p-3 text-xs shadow-lg">
+    <div className={`bg-elevated border border-border rounded-lg shadow-lg ${isMobile ? 'p-2 text-[11px]' : 'p-3 text-xs'}`}>
       <p className="text-secondary mb-1">{label}</p>
       {payload.map((p) => (
         <p key={p.name} style={{ color: p.color }}>
-          {p.name === 'expenses' ? 'Gastos' : 'Ingresos'}: {formatEur(p.value)}
+          {p.name === 'expenses' ? 'Gastos' : 'Ingresos'}: {fmt(p.value)}
         </p>
       ))}
     </div>
@@ -56,6 +62,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 export default function Dashboard() {
   const { getCategory } = useCategories();
+  const isMobile = useIsMobile();
   const [month, setMonth] = useState(getCurrentMonth());
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -142,7 +149,7 @@ export default function Dashboard() {
       {/* Charts row */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
         {/* Daily spending chart */}
-        <div className="lg:col-span-3 bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent/20">
+        <div className="lg:col-span-3 bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent/20 will-change-transform">
           <h3 className="text-sm font-medium text-primary mb-4">Gasto diario</h3>
           {loading ? (
             <div className="skeleton h-48" />
@@ -167,11 +174,11 @@ export default function Dashboard() {
                   </filter>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#26262b" />
-                <XAxis dataKey="date" tickFormatter={formatDayLabel} tick={{ fill: '#9494a0', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: '#9494a0', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} />
-                <Tooltip content={<CustomTooltip />} />
-                <Area type="monotone" dataKey="expenses" stroke="#f87171" fill="url(#expGrad)" strokeWidth={2.5} name="expenses" style={{ filter: 'url(#neonGlow)' }} />
-                <Area type="monotone" dataKey="income" stroke="#6ee7b7" fill="url(#incGrad)" strokeWidth={2.5} name="income" style={{ filter: 'url(#neonGlow)' }} />
+                <XAxis dataKey="date" tickFormatter={formatDayLabel} tick={{ fill: '#9494a0', fontSize: 11 }} axisLine={false} tickLine={false} interval={isMobile ? 4 : 0} />
+                <YAxis tick={{ fill: '#9494a0', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} tickCount={isMobile ? 3 : 5} />
+                <Tooltip content={<CustomTooltip isMobile={isMobile} />} />
+                <Area type="monotone" dataKey="expenses" stroke="#f87171" fill="url(#expGrad)" strokeWidth={2.5} name="expenses" dot={false} isAnimationActive={!isMobile} style={{ filter: 'url(#neonGlow)' }} />
+                <Area type="monotone" dataKey="income" stroke="#6ee7b7" fill="url(#incGrad)" strokeWidth={2.5} name="income" dot={false} isAnimationActive={!isMobile} style={{ filter: 'url(#neonGlow)' }} />
               </AreaChart>
             </ResponsiveContainer>
           ) : (
@@ -182,7 +189,7 @@ export default function Dashboard() {
         </div>
 
         {/* Category donut */}
-        <div className="lg:col-span-2 bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent/20">
+        <div className="lg:col-span-2 bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent/20 will-change-transform">
           <h3 className="text-sm font-medium text-primary mb-4">Top categorías</h3>
           {loading ? (
             <div className="skeleton h-48" />
@@ -206,6 +213,7 @@ export default function Dashboard() {
                   outerRadius={75}
                   dataKey="total"
                   nameKey="category"
+                  isAnimationActive={!isMobile}
                   style={{ filter: 'url(#neonGlowPie)' }}
                 >
                   {pieData.map((entry) => (
@@ -213,8 +221,8 @@ export default function Dashboard() {
                   ))}
                 </Pie>
                 <Tooltip
-                  formatter={(value, name) => [formatEur(value), name]}
-                  contentStyle={{ backgroundColor: '#1a1a1e', border: '1px solid #26262b', borderRadius: 8, fontSize: 12 }}
+                  formatter={(value, name) => [isMobile ? formatEurCompact(value) : formatEur(value), name]}
+                  contentStyle={{ backgroundColor: '#1a1a1e', border: '1px solid #26262b', borderRadius: 8, fontSize: isMobile ? 11 : 12 }}
                 />
                 <Legend
                   formatter={(value) => <span style={{ color: '#9494a0', fontSize: 11 }}>{value}</span>}

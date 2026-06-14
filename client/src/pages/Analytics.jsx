@@ -5,9 +5,14 @@ import {
 } from 'recharts';
 import { useCategories, DEFAULT_COLOR } from '../context/CategoriesContext.jsx';
 import { getMonthlyTrend, getTransactions } from '../api.js';
+import { useIsMobile } from '../hooks/useIsMobile.js';
 
 function formatEur(n) {
   return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) + ' €';
+}
+
+function formatEurCompact(n) {
+  return `${Math.round(n)} €`;
 }
 
 function shortMonth(monthStr) {
@@ -26,6 +31,7 @@ const TOP_CATEGORIES = ['Alimentación', 'Transporte', 'Ocio', 'Hogar', 'Compras
 
 export default function Analytics() {
   const { getCategory } = useCategories();
+  const isMobile = useIsMobile();
   const [trend, setTrend] = useState(null);
   const [topMerchants, setTopMerchants] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -82,7 +88,7 @@ export default function Analytics() {
       <h2 className="text-xl font-semibold text-primary">Análisis</h2>
 
       {/* Income vs Expenses bar chart */}
-      <div className="bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent/20">
+      <div className="bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent/20 will-change-transform">
         <h3 className="text-sm font-medium text-primary mb-4">Ingresos vs Gastos (últimos 6 meses)</h3>
         {loading ? (
           <div className="skeleton h-52" />
@@ -99,19 +105,22 @@ export default function Analytics() {
                 </filter>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#26262b" />
-              <XAxis dataKey="month" tick={{ fill: '#9494a0', fontSize: 12 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#9494a0', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} />
-              <Tooltip contentStyle={CHART_TOOLTIP_STYLE} formatter={(v) => formatEur(v)} />
+              <XAxis dataKey="month" tick={{ fill: '#9494a0', fontSize: 12 }} axisLine={false} tickLine={false} interval={isMobile ? 1 : 0} />
+              <YAxis tick={{ fill: '#9494a0', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} tickCount={isMobile ? 3 : 5} />
+              <Tooltip
+                contentStyle={{ ...CHART_TOOLTIP_STYLE, fontSize: isMobile ? 11 : 12 }}
+                formatter={(v) => isMobile ? formatEurCompact(v) : formatEur(v)}
+              />
               <Legend formatter={(v) => <span style={{ color: '#9494a0', fontSize: 12 }}>{v}</span>} />
-              <Bar dataKey="Ingresos" fill="#6ee7b7" radius={[4, 4, 0, 0]} style={{ filter: 'url(#neonGlowBar)' }} />
-              <Bar dataKey="Gastos" fill="#f87171" radius={[4, 4, 0, 0]} style={{ filter: 'url(#neonGlowBar)' }} />
+              <Bar dataKey="Ingresos" fill="#6ee7b7" radius={[4, 4, 0, 0]} style={{ filter: 'url(#neonGlowBar)' }} isAnimationActive={!isMobile} />
+              <Bar dataKey="Gastos" fill="#f87171" radius={[4, 4, 0, 0]} style={{ filter: 'url(#neonGlowBar)' }} isAnimationActive={!isMobile} />
             </BarChart>
           </ResponsiveContainer>
         )}
       </div>
 
       {/* Category evolution stacked area */}
-      <div className="bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent/20">
+      <div className="bg-surface border border-border rounded-lg p-5 transition-all duration-200 hover:border-accent/20 will-change-transform">
         <h3 className="text-sm font-medium text-primary mb-4">Evolución por categoría</h3>
         {loading ? (
           <div className="skeleton h-52" />
@@ -128,9 +137,12 @@ export default function Analytics() {
                 </filter>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#26262b" />
-              <XAxis dataKey="month" tick={{ fill: '#9494a0', fontSize: 12 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#9494a0', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} />
-              <Tooltip contentStyle={CHART_TOOLTIP_STYLE} formatter={(v) => formatEur(v)} />
+              <XAxis dataKey="month" tick={{ fill: '#9494a0', fontSize: 12 }} axisLine={false} tickLine={false} interval={isMobile ? 1 : 0} />
+              <YAxis tick={{ fill: '#9494a0', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} tickCount={isMobile ? 3 : 5} />
+              <Tooltip
+                contentStyle={{ ...CHART_TOOLTIP_STYLE, fontSize: isMobile ? 11 : 12 }}
+                formatter={(v) => isMobile ? formatEurCompact(v) : formatEur(v)}
+              />
               <Legend formatter={(v) => <span style={{ color: '#9494a0', fontSize: 12 }}>{v}</span>} />
               {TOP_CATEGORIES.map((c) => (
                 <Area
@@ -142,6 +154,8 @@ export default function Analytics() {
                   strokeWidth={1.5}
                   fill={getCategory(c)?.color || DEFAULT_COLOR}
                   fillOpacity={0.6}
+                  dot={false}
+                  isAnimationActive={!isMobile}
                   style={{ filter: 'url(#neonGlowArea)' }}
                 />
               ))}
