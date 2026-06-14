@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Target } from 'lucide-react';
 import BudgetBar from '../components/BudgetBar.jsx';
 import AlertBanner from '../components/AlertBanner.jsx';
 import { useCategories } from '../context/CategoriesContext.jsx';
@@ -141,7 +141,7 @@ export default function Budgets() {
         </div>
       ) : (
         <div className="py-20 text-center text-secondary">
-          <p className="text-4xl mb-3">🎯</p>
+          <Target size={28} strokeWidth={1.5} className="mx-auto mb-3 text-tertiary" />
           <p className="font-medium text-primary mb-1">No hay presupuestos configurados</p>
           <p className="text-sm mb-4">Añade presupuestos para controlar tus gastos por categoría</p>
           <button

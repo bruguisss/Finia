@@ -162,7 +162,7 @@ export default function Transactions() {
               ) : (
                 <tr>
                   <td colSpan={5} className="py-16 text-center text-secondary">
-                    <p className="text-3xl mb-2">🔍</p>
+                    <Search size={28} strokeWidth={1.5} className="mx-auto mb-3 text-tertiary" />
                     <p>No se encontraron transacciones</p>
                     {(search || category) && (
                       <button

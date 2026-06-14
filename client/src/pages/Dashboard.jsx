@@ -3,7 +3,7 @@ import {
   AreaChart, Area, ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend, ReferenceLine, ReferenceArea,
 } from 'recharts';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Receipt } from 'lucide-react';
 import StatCard from '../components/StatCard.jsx';
 import CategoryBadge from '../components/CategoryBadge.jsx';
 import { useCategories, DEFAULT_COLOR } from '../context/CategoriesContext.jsx';
@@ -69,14 +69,14 @@ const ProgressTooltip = ({ active, payload, label, isMobile }) => {
   return (
     <div className={`bg-elevated border border-white/10 rounded-md ${isMobile ? 'p-2 text-[11px]' : 'p-3 text-xs'}`}>
       <p className="text-secondary mb-1">Día {label}</p>
-      {actual && <p style={{ color: '#5b6af5' }}>Gastado: {fmt(actual.value)}</p>}
+      {actual && <p style={{ color: '#ef4444' }}>Gastado: {fmt(actual.value)}</p>}
       {projected && <p style={{ color: '#6b6b7b' }}>Proyección: {fmt(projected.value)}</p>}
       {budget && <p style={{ color: '#6b6b7b' }}>Presupuesto: {fmt(budget.value)}</p>}
     </div>
   );
 };
 
-function buildSpendingProgress(month, dailyTotals, totalBudget) {
+function buildSpendingProgress(month, dailyTotals, totalBudget, prevMonthDailyTotals) {
   const [y, m] = month.split('-').map(Number);
   const daysInMonth = new Date(y, m, 0).getDate();
   const isCurrentMonth = month === getCurrentMonth();
@@ -103,13 +103,38 @@ function buildSpendingProgress(month, dailyTotals, totalBudget) {
 
   let projectedTotal = null;
   if (currentDay < daysInMonth && currentDay > 0) {
-    const avgPerDay = cumulativeAtToday / currentDay;
-    projectedTotal = avgPerDay * daysInMonth;
-    data.forEach((d) => {
-      if (d.day >= currentDay) {
-        d.projected = cumulativeAtToday + avgPerDay * (d.day - currentDay);
-      }
+    // Shape the projection after last month's cumulative spending curve,
+    // scaled so it matches today's actual cumulative spend.
+    const [py, pm] = addMonths(month, -1).split('-').map(Number);
+    const prevDaysInMonth = new Date(py, pm, 0).getDate();
+    const prevExpenseByDay = {};
+    (prevMonthDailyTotals || []).forEach((d) => {
+      const day = parseInt(d.date.slice(8, 10), 10);
+      prevExpenseByDay[day] = (prevExpenseByDay[day] || 0) + d.expenses;
     });
+    let prevCumulative = 0;
+    const prevCumByDay = [0];
+    for (let day = 1; day <= prevDaysInMonth; day++) {
+      prevCumulative += prevExpenseByDay[day] || 0;
+      prevCumByDay[day] = prevCumulative;
+    }
+    const prevAtCurrentDay = prevCumByDay[Math.min(currentDay, prevDaysInMonth)];
+
+    if (prevAtCurrentDay > 0) {
+      const ratio = cumulativeAtToday / prevAtCurrentDay;
+      for (let day = currentDay; day <= daysInMonth; day++) {
+        const prevDay = Math.min(day, prevDaysInMonth);
+        data[day - 1].projected = prevCumByDay[prevDay] * ratio;
+      }
+      projectedTotal = prevCumByDay[Math.min(daysInMonth, prevDaysInMonth)] * ratio;
+    } else {
+      // No previous month data: fall back to a linear projection.
+      const avgPerDay = cumulativeAtToday / currentDay;
+      projectedTotal = avgPerDay * daysInMonth;
+      for (let day = currentDay; day <= daysInMonth; day++) {
+        data[day - 1].projected = cumulativeAtToday + avgPerDay * (day - currentDay);
+      }
+    }
   }
 
   return { data, daysInMonth, currentDay, cumulativeAtToday, projectedTotal };
@@ -121,14 +146,20 @@ export default function Dashboard() {
   const [month, setMonth] = useState(getCurrentMonth());
   const [data, setData] = useState(null);
   const [budgets, setBudgets] = useState([]);
+  const [prevDailyTotals, setPrevDailyTotals] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [summary, budgetsData] = await Promise.all([getSummary(month), getBudgets(month)]);
+      const [summary, budgetsData, prevSummary] = await Promise.all([
+        getSummary(month),
+        getBudgets(month),
+        getSummary(addMonths(month, -1)),
+      ]);
       setData(summary);
       setBudgets(budgetsData);
+      setPrevDailyTotals(prevSummary.dailyTotals);
     } catch (err) {
       console.error(err);
     } finally {
@@ -147,7 +178,7 @@ export default function Dashboard() {
     .slice(0, 5);
 
   const totalBudget = budgets.reduce((sum, b) => sum + parseFloat(b.monthly_limit || 0), 0);
-  const progress = data ? buildSpendingProgress(month, data.dailyTotals, totalBudget) : null;
+  const progress = data ? buildSpendingProgress(month, data.dailyTotals, totalBudget, prevDailyTotals) : null;
   const overBudget = progress?.projectedTotal != null && totalBudget > 0 && progress.projectedTotal > totalBudget;
 
   return (
@@ -155,7 +186,7 @@ export default function Dashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-semibold text-primary tracking-tight">{getGreeting()} 👋</h2>
+          <h2 className="text-xl font-semibold text-primary tracking-tight">{getGreeting()}</h2>
           <p className="text-sm text-secondary capitalize">{formatMonth(month)}</p>
         </div>
         <div className="flex items-center gap-2">
@@ -197,7 +228,7 @@ export default function Dashboard() {
                 </div>
               )}
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-sm bg-accent shrink-0" />
+                <span className="w-2.5 h-2.5 rounded-sm bg-danger shrink-0" />
                 <div>
                   <p className="text-[11px] text-secondary uppercase tracking-wider">Gastado</p>
                   <p className="text-lg font-semibold text-primary font-mono tabular-nums">{formatEur(progress.cumulativeAtToday)}</p>
@@ -219,8 +250,8 @@ export default function Dashboard() {
               <ComposedChart data={progress.data} margin={{ top: 5, right: 5, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="spendGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#5b6af5" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#5b6af5" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#ef4444" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
                   </linearGradient>
                   <pattern id="projectionHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
                     <rect width="6" height="6" fill="transparent" />
@@ -237,7 +268,7 @@ export default function Dashboard() {
                 {totalBudget > 0 && (
                   <Line type="monotone" dataKey="budget" stroke="#6b6b7b" strokeWidth={1.5} strokeDasharray="4 4" dot={false} isAnimationActive={!isMobile} />
                 )}
-                <Area type="monotone" dataKey="actual" stroke="#5b6af5" fill="url(#spendGrad)" strokeWidth={2} dot={false} connectNulls isAnimationActive={!isMobile} />
+                <Area type="monotone" dataKey="actual" stroke="#ef4444" fill="url(#spendGrad)" strokeWidth={2} dot={false} connectNulls isAnimationActive={!isMobile} />
                 {progress.currentDay < progress.daysInMonth && (
                   <Line type="monotone" dataKey="projected" stroke={overBudget ? '#ef4444' : '#6b6b7b'} strokeWidth={1.5} strokeDasharray="4 4" dot={false} connectNulls isAnimationActive={!isMobile} />
                 )}
@@ -386,7 +417,7 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="px-5 py-10 text-center text-secondary text-sm">
-            <p className="text-3xl mb-2">💳</p>
+            <Receipt size={28} strokeWidth={1.5} className="mx-auto mb-3 text-tertiary" />
             <p>No hay transacciones este mes.</p>
             <p className="mt-1">Importa tu extracto CSV de Revolut para empezar.</p>
           </div>

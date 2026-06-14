@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Handshake } from 'lucide-react';
 import StatCard from '../components/StatCard.jsx';
 import DebtCard from '../components/DebtCard.jsx';
 import DebtModal from '../components/DebtModal.jsx';
@@ -144,7 +145,7 @@ export default function Debts() {
         </div>
       ) : (
         <div className="py-20 text-center text-secondary">
-          <p className="text-4xl mb-3">🤝</p>
+          <Handshake size={28} strokeWidth={1.5} className="mx-auto mb-3 text-tertiary" />
           <p className="font-medium text-primary mb-1">No hay deudas registradas</p>
           <p className="text-sm mb-4">Lleva el control del dinero que debes o que te deben</p>
           <button
