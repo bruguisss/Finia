@@ -224,7 +224,9 @@ export default function Dashboard() {
               </div>
               {progress.projectedTotal != null && (
                 <div className="flex items-center gap-2">
-                  <span className={`w-2.5 h-2.5 rounded-sm shrink-0 ${overBudget ? 'bg-danger' : 'bg-success'}`} />
+                  <svg width="14" height="10" viewBox="0 0 14 10" className="shrink-0" aria-hidden="true">
+                    <line x1="0" y1="5" x2="14" y2="5" stroke={overBudget ? '#ef4444' : '#71717a'} strokeWidth="1.5" strokeDasharray="4 4" />
+                  </svg>
                   <div>
                     <p className="text-[11px] font-medium text-secondary uppercase tracking-wider">Proyección fin de mes</p>
                     <p className={`text-lg font-semibold font-mono tabular-nums ${overBudget ? 'text-danger' : 'text-primary'}`}>{formatEur(progress.projectedTotal)}</p>
