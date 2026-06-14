@@ -46,17 +46,17 @@ export default function DebtModal({ debt, onClose, onSave }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in"
+      className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/60 backdrop-blur-sm md:p-4 animate-fade-in"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-surface border border-border rounded-lg w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto animate-scale-in">
+      <div className="bg-surface border border-border rounded-t-2xl md:rounded-lg w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto animate-slide-up md:animate-scale-in">
         <div className="flex items-center justify-between p-5 border-b border-border">
           <h3 className="text-base font-semibold text-primary tracking-tight">
             {isEditing ? 'Editar deuda' : 'Nueva deuda'}
           </h3>
           <button onClick={onClose} className="text-secondary hover:text-primary transition-colors duration-150"><X size={18} strokeWidth={2} /></button>
         </div>
-        <form onSubmit={handleSubmit} className="p-5 space-y-4">
+        <form onSubmit={handleSubmit} className="p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] space-y-4">
           <div>
             <label className="block text-xs text-secondary mb-1.5">Tipo</label>
             <div className="grid grid-cols-2 gap-2">
