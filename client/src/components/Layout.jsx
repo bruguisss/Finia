@@ -77,7 +77,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`flex flex-col items-center gap-1 px-2 py-1 text-[11px] transition-colors ${
+              className={`flex flex-col items-center justify-center gap-1 min-w-11 min-h-11 px-2 text-[11px] transition-colors ${
                 active ? 'text-accent' : 'text-secondary'
               }`}
             >
