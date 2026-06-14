@@ -134,8 +134,8 @@ export default function Transactions() {
               <tr className="border-b border-border">
                 <th className="text-left py-3 px-4 text-xs font-medium text-secondary uppercase tracking-wider">Fecha</th>
                 <th className="text-left py-3 px-4 text-xs font-medium text-secondary uppercase tracking-wider">Descripción</th>
-                <th className="text-left py-3 px-4 text-xs font-medium text-secondary uppercase tracking-wider">Categoría</th>
                 <th className="text-right py-3 px-4 text-xs font-medium text-secondary uppercase tracking-wider">Importe</th>
+                <th className="text-left py-3 px-4 text-xs font-medium text-secondary uppercase tracking-wider">Categoría</th>
                 <th className="py-3 px-4" />
               </tr>
             </thead>
@@ -145,8 +145,8 @@ export default function Transactions() {
                   <tr key={i} className="border-b border-white/[0.04] h-10">
                     <td className="px-4"><div className="skeleton h-3 w-16" /></td>
                     <td className="px-4"><div className="skeleton h-3 w-48" /></td>
-                    <td className="px-4"><div className="skeleton h-5 w-24 rounded" /></td>
                     <td className="px-4"><div className="skeleton h-3 w-16 ml-auto" /></td>
+                    <td className="px-4"><div className="skeleton h-5 w-24 rounded" /></td>
                     <td className="px-4" />
                   </tr>
                 ))

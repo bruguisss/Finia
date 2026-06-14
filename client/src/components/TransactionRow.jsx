@@ -54,6 +54,9 @@ export default function TransactionRow({ transaction, onUpdate, onDelete }) {
           {transaction.description}
         </span>
       </td>
+      <td className={`px-4 text-[13px] font-medium font-mono tabular-nums text-right ${isDebit ? 'text-danger' : 'text-success'}`}>
+        {formatAmount(transaction.amount, transaction.type)}
+      </td>
       <td className="px-4">
         {editing ? (
           <select
@@ -73,9 +76,6 @@ export default function TransactionRow({ transaction, onUpdate, onDelete }) {
             <CategoryBadge category={transaction.category} />
           </button>
         )}
-      </td>
-      <td className={`px-4 text-[13px] font-medium font-mono tabular-nums text-right ${isDebit ? 'text-danger' : 'text-success'}`}>
-        {formatAmount(transaction.amount, transaction.type)}
       </td>
       <td className="px-4 text-right">
         <button
