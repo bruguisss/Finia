@@ -157,7 +157,7 @@ function createMcpServer() {
 
     const lines = result.rows.map((t) => {
       const sign = t.type === 'credit' ? '+' : '-';
-      return `- ${t.date} | ${t.description} | ${sign}${parseFloat(t.amount).toFixed(2)}€ | ${t.category}`;
+      return `- ID ${t.id} | ${t.date} | ${t.description} | ${sign}${parseFloat(t.amount).toFixed(2)}€ | ${t.category}`;
     });
 
     return { content: [{ type: 'text', text: `Transacciones encontradas:\n${lines.join('\n')}` }] };
