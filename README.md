@@ -41,6 +41,7 @@ ANTHROPIC_API_KEY=sk-ant-api03-...
 PORT=3001
 NODE_ENV=development
 DATABASE_URL=postgresql://user:password@localhost:5432/finia
+MCP_API_KEY=elige-una-clave-secreta-larga
 ```
 
 Obtén tu clave en: https://console.anthropic.com/
@@ -90,6 +91,30 @@ Esto lanza:
 
 ---
 
+## Servidor MCP (Model Context Protocol)
+
+Finia expone un servidor MCP en `/mcp` que permite a un asistente de IA (como Claude) consultar y modificar tus finanzas mediante herramientas:
+
+- `add_transaction` — añade una transacción manual (ingreso o gasto)
+- `get_summary` — resumen financiero del mes actual o de un mes concreto
+- `get_transactions` — lista las transacciones recientes (con filtros opcionales)
+- `add_debt` — registra una deuda (dinero que debes o que te deben)
+- `get_debts` — lista las deudas pendientes
+- `update_budget` — crea o actualiza el presupuesto mensual de una categoría
+
+### Configuración
+
+Define `MCP_API_KEY` en tu `.env` (o en las variables de entorno de Render) con una clave secreta de tu elección. Todas las peticiones a `/mcp` deben incluir la cabecera `x-api-key` con ese valor; si falta o no coincide, el servidor responde `401`.
+
+### Conectar con claude.ai
+
+1. En claude.ai, ve a **Configuración → Conectores → Añadir conector personalizado**.
+2. Introduce la URL de tu servidor: `https://tu-app.onrender.com/mcp` (o `http://localhost:3001/mcp` en local).
+3. Añade la cabecera `x-api-key` con el valor de tu `MCP_API_KEY`.
+4. Guarda y activa el conector — las herramientas de Finia aparecerán disponibles en tus conversaciones.
+
+---
+
 ## Importar extracto de Revolut
 
 1. Abre Revolut (app o web)
@@ -110,7 +135,8 @@ finia/
 │   ├── index.js        Entrada
 │   ├── db.js           Conexión PostgreSQL (pg Pool)
 │   ├── db-migrate.js   Creación de tablas
-│   ├── routes/         API endpoints
+│   ├── routes/         API endpoints (incluye /mcp)
+│   ├── mcp/            Servidor MCP (herramientas para asistentes IA)
 │   └── services/       CSV parser + IA
 └── client/             Frontend React
     └── src/
