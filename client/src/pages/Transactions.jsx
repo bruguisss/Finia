@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import TransactionRow from '../components/TransactionRow.jsx';
+import TransactionCard from '../components/TransactionCard.jsx';
 import { useCategories } from '../context/CategoriesContext.jsx';
 import { getTransactions } from '../api.js';
 
@@ -128,7 +129,7 @@ export default function Transactions() {
 
       {/* Table */}
       <div className="bg-surface border border-border rounded-lg overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b border-border">
@@ -177,6 +178,49 @@ export default function Transactions() {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile cards */}
+        <div className="md:hidden">
+          {loading ? (
+            <div className="divide-y divide-white/[0.04]">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="flex items-center gap-3 px-4 py-3">
+                  <div className="skeleton w-9 h-9 rounded-full shrink-0" />
+                  <div className="flex-1 space-y-1.5">
+                    <div className="skeleton h-3 w-32" />
+                    <div className="skeleton h-2.5 w-20" />
+                  </div>
+                  <div className="skeleton h-3 w-14" />
+                </div>
+              ))}
+            </div>
+          ) : transactions.length > 0 ? (
+            <div className="divide-y divide-white/[0.04]">
+              {transactions.map((t, i) => (
+                <TransactionCard
+                  key={t.id}
+                  transaction={t}
+                  index={i}
+                  onUpdate={handleUpdate}
+                  onDelete={handleDelete}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="py-12 px-6 text-center text-secondary">
+              <Search size={28} strokeWidth={1.5} className="mx-auto mb-3 text-tertiary" />
+              <p>No se encontraron transacciones</p>
+              {(search || category) && (
+                <button
+                  onClick={() => { setSearch(''); setDebouncedSearch(''); setCategory(''); setOffset(0); }}
+                  className="mt-2 text-accent text-sm hover:underline"
+                >
+                  Limpiar filtros
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Pagination */}

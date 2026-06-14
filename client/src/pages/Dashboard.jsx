@@ -5,7 +5,7 @@ import {
 } from 'recharts';
 import { ChevronLeft, ChevronRight, Receipt } from 'lucide-react';
 import StatCard from '../components/StatCard.jsx';
-import CategoryBadge from '../components/CategoryBadge.jsx';
+import TransactionCard from '../components/TransactionCard.jsx';
 import { useIsMobile } from '../hooks/useIsMobile.js';
 import { getSummary, getBudgets, getPlannedExpenseOccurrences } from '../api.js';
 
@@ -320,27 +320,20 @@ export default function Dashboard() {
         {loading ? (
           <div className="divide-y divide-white/[0.04]">
             {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="flex items-center gap-4 px-5 h-10">
-                <div className="skeleton h-3 w-12" />
-                <div className="skeleton h-3 flex-1" />
-                <div className="skeleton h-5 w-20 rounded" />
-                <div className="skeleton h-3 w-16" />
+              <div key={i} className="flex items-center gap-3 px-5 py-3">
+                <div className="skeleton w-9 h-9 rounded-full shrink-0" />
+                <div className="flex-1 space-y-1.5">
+                  <div className="skeleton h-3 w-32" />
+                  <div className="skeleton h-2.5 w-20" />
+                </div>
+                <div className="skeleton h-3 w-14" />
               </div>
             ))}
           </div>
         ) : data?.recentTransactions?.length > 0 ? (
           <div className="divide-y divide-white/[0.04]">
-            {data.recentTransactions.map((t) => (
-              <div key={t.id} className="flex items-center gap-4 px-5 h-10 hover:bg-white/[0.03] transition-colors duration-150">
-                <span className="text-[13px] text-secondary w-12 shrink-0">
-                  {new Date(t.date + 'T00:00:00').toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })}
-                </span>
-                <span className="text-[13px] text-primary flex-1 truncate">{t.description}</span>
-                <CategoryBadge category={t.category} />
-                <span className={`text-[13px] font-medium font-mono tabular-nums ml-2 ${t.type === 'debit' ? 'text-danger' : 'text-success'}`}>
-                  {t.type === 'debit' ? '-' : '+'}{new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2 }).format(t.amount)} €
-                </span>
-              </div>
+            {data.recentTransactions.map((t, i) => (
+              <TransactionCard key={t.id} transaction={t} index={i} />
             ))}
           </div>
         ) : (

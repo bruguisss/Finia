@@ -3,6 +3,7 @@ import { Target, CalendarClock } from 'lucide-react';
 import GoalCard from '../components/GoalCard.jsx';
 import GoalModal from '../components/GoalModal.jsx';
 import PlannedExpenseRow from '../components/PlannedExpenseRow.jsx';
+import PlannedExpenseCard from '../components/PlannedExpenseCard.jsx';
 import PlannedExpenseModal from '../components/PlannedExpenseModal.jsx';
 import { getGoals, getPlannedExpenses } from '../api.js';
 
@@ -78,12 +79,14 @@ export default function Planning() {
       <div className="space-y-4">
         <div className="flex items-center justify-between gap-3">
           <h3 className="text-sm font-medium tracking-heading text-primary">Objetivos</h3>
-          <button
-            onClick={() => setGoalModalOpen(true)}
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-medium hover:bg-accent-hover transition-colors duration-150"
-          >
-            + Nuevo objetivo
-          </button>
+          {(loading || goals.length > 0) && (
+            <button
+              onClick={() => setGoalModalOpen(true)}
+              className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-medium hover:bg-accent-hover transition-colors duration-150"
+            >
+              + Nuevo objetivo
+            </button>
+          )}
         </div>
 
         {loading ? (
@@ -103,7 +106,7 @@ export default function Planning() {
             ))}
           </div>
         ) : (
-          <div className="py-16 text-center text-secondary bg-surface border border-border rounded-lg">
+          <div className="py-12 px-6 text-center text-secondary bg-surface border border-border rounded-lg">
             <Target size={28} strokeWidth={1.5} className="mx-auto mb-3 text-tertiary" />
             <p className="font-medium text-primary mb-1">No hay objetivos configurados</p>
             <p className="text-sm mb-4">Define metas de ahorro o límites de gasto para seguir tu progreso</p>
@@ -121,12 +124,14 @@ export default function Planning() {
       <div className="space-y-4">
         <div className="flex items-center justify-between gap-3">
           <h3 className="text-sm font-medium tracking-heading text-primary">Gastos previstos</h3>
-          <button
-            onClick={openCreateExpense}
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-medium hover:bg-accent-hover transition-colors duration-150"
-          >
-            + Nuevo gasto previsto
-          </button>
+          {(loading || expenses.length > 0) && (
+            <button
+              onClick={openCreateExpense}
+              className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-medium hover:bg-accent-hover transition-colors duration-150"
+            >
+              + Nuevo gasto previsto
+            </button>
+          )}
         </div>
 
         <div className="bg-surface border border-border rounded-lg overflow-hidden">
@@ -137,34 +142,48 @@ export default function Planning() {
               ))}
             </div>
           ) : expenses.length > 0 ? (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-border">
-                    <th className="text-left py-3 px-4 text-xs font-medium text-secondary uppercase tracking-wider">Nombre</th>
-                    <th className="text-left py-3 px-4 text-xs font-medium text-secondary uppercase tracking-wider">Categoría</th>
-                    <th className="text-right py-3 px-4 text-xs font-medium text-secondary uppercase tracking-wider">Importe</th>
-                    <th className="text-left py-3 px-4 text-xs font-medium text-secondary uppercase tracking-wider">Frecuencia</th>
-                    <th className="text-left py-3 px-4 text-xs font-medium text-secondary uppercase tracking-wider">Próxima fecha</th>
-                    <th className="text-left py-3 px-4 text-xs font-medium text-secondary uppercase tracking-wider">Estado</th>
-                    <th className="py-3 px-4" />
-                  </tr>
-                </thead>
-                <tbody>
-                  {expenses.map((e) => (
-                    <PlannedExpenseRow
-                      key={e.id}
-                      expense={e}
-                      onEdit={openEditExpense}
-                      onUpdate={handleExpenseUpdate}
-                      onDelete={handleExpenseDelete}
-                    />
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <>
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-border">
+                      <th className="text-left py-3 px-4 text-xs font-medium text-secondary uppercase tracking-wider">Nombre</th>
+                      <th className="text-left py-3 px-4 text-xs font-medium text-secondary uppercase tracking-wider">Categoría</th>
+                      <th className="text-right py-3 px-4 text-xs font-medium text-secondary uppercase tracking-wider">Importe</th>
+                      <th className="text-left py-3 px-4 text-xs font-medium text-secondary uppercase tracking-wider">Frecuencia</th>
+                      <th className="text-left py-3 px-4 text-xs font-medium text-secondary uppercase tracking-wider">Próxima fecha</th>
+                      <th className="text-left py-3 px-4 text-xs font-medium text-secondary uppercase tracking-wider">Estado</th>
+                      <th className="py-3 px-4" />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {expenses.map((e) => (
+                      <PlannedExpenseRow
+                        key={e.id}
+                        expense={e}
+                        onEdit={openEditExpense}
+                        onUpdate={handleExpenseUpdate}
+                        onDelete={handleExpenseDelete}
+                      />
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="md:hidden divide-y divide-white/[0.04]">
+                {expenses.map((e, i) => (
+                  <PlannedExpenseCard
+                    key={e.id}
+                    expense={e}
+                    index={i}
+                    onEdit={openEditExpense}
+                    onUpdate={handleExpenseUpdate}
+                    onDelete={handleExpenseDelete}
+                  />
+                ))}
+              </div>
+            </>
           ) : (
-            <div className="py-16 text-center text-secondary">
+            <div className="py-12 px-6 text-center text-secondary">
               <CalendarClock size={28} strokeWidth={1.5} className="mx-auto mb-3 text-tertiary" />
               <p className="font-medium text-primary mb-1">No hay gastos previstos</p>
               <p className="text-sm mb-4">Añade gastos recurrentes o puntuales para que la app los prediga</p>
