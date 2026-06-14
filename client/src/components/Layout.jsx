@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LayoutGrid, Receipt, BarChart3, Target, HandCoins, Upload } from 'lucide-react';
+import { LayoutGrid, Receipt, BarChart3, Target, HandCoins, Tags, Upload } from 'lucide-react';
 import Sidebar from './Sidebar.jsx';
 import UploadZone from './UploadZone.jsx';
 
@@ -9,6 +9,7 @@ const PAGE_META = {
   analytics: { label: 'Análisis', icon: BarChart3 },
   budgets: { label: 'Presupuestos', icon: Target },
   debts: { label: 'Deudas', icon: HandCoins },
+  categories: { label: 'Categorías', icon: Tags },
 };
 
 const MOBILE_NAV_ITEMS = [

@@ -5,6 +5,8 @@ import Transactions from './pages/Transactions.jsx';
 import Analytics from './pages/Analytics.jsx';
 import Budgets from './pages/Budgets.jsx';
 import Debts from './pages/Debts.jsx';
+import Categories from './pages/Categories.jsx';
+import { CategoriesProvider } from './context/CategoriesContext.jsx';
 
 export default function App() {
   const [page, setPage] = useState('dashboard');
@@ -15,11 +17,14 @@ export default function App() {
     analytics: <Analytics />,
     budgets: <Budgets />,
     debts: <Debts />,
+    categories: <Categories />,
   };
 
   return (
-    <Layout currentPage={page} onNavigate={setPage}>
-      {pages[page] || pages.dashboard}
-    </Layout>
+    <CategoriesProvider>
+      <Layout currentPage={page} onNavigate={setPage}>
+        {pages[page] || pages.dashboard}
+      </Layout>
+    </CategoriesProvider>
   );
 }

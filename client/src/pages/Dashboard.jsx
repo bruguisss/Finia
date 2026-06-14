@@ -5,7 +5,8 @@ import {
 } from 'recharts';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import StatCard from '../components/StatCard.jsx';
-import CategoryBadge, { CATEGORY_COLORS } from '../components/CategoryBadge.jsx';
+import CategoryBadge from '../components/CategoryBadge.jsx';
+import { useCategories, DEFAULT_COLOR } from '../context/CategoriesContext.jsx';
 import { getSummary } from '../api.js';
 
 function formatEur(n) {
@@ -54,6 +55,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export default function Dashboard() {
+  const { getCategory } = useCategories();
   const [month, setMonth] = useState(getCurrentMonth());
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -207,7 +209,7 @@ export default function Dashboard() {
                   style={{ filter: 'url(#neonGlowPie)' }}
                 >
                   {pieData.map((entry) => (
-                    <Cell key={entry.category} fill={CATEGORY_COLORS[entry.category] || '#4b5563'} stroke="transparent" />
+                    <Cell key={entry.category} fill={getCategory(entry.category)?.color || DEFAULT_COLOR} stroke="transparent" />
                   ))}
                 </Pie>
                 <Tooltip

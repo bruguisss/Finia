@@ -3,7 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   AreaChart, Area,
 } from 'recharts';
-import { CATEGORY_COLORS } from '../components/CategoryBadge.jsx';
+import { useCategories, DEFAULT_COLOR } from '../context/CategoriesContext.jsx';
 import { getMonthlyTrend, getTransactions } from '../api.js';
 
 function formatEur(n) {
@@ -25,6 +25,7 @@ const CHART_TOOLTIP_STYLE = {
 const TOP_CATEGORIES = ['Alimentación', 'Transporte', 'Ocio', 'Hogar', 'Compras', 'Salud'];
 
 export default function Analytics() {
+  const { getCategory } = useCategories();
   const [trend, setTrend] = useState(null);
   const [topMerchants, setTopMerchants] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -137,9 +138,9 @@ export default function Analytics() {
                   type="monotone"
                   dataKey={c}
                   stackId="1"
-                  stroke={CATEGORY_COLORS[c]}
+                  stroke={getCategory(c)?.color || DEFAULT_COLOR}
                   strokeWidth={1.5}
-                  fill={CATEGORY_COLORS[c]}
+                  fill={getCategory(c)?.color || DEFAULT_COLOR}
                   fillOpacity={0.6}
                   style={{ filter: 'url(#neonGlowArea)' }}
                 />

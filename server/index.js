@@ -10,6 +10,7 @@ const transactionsRouter = require('./routes/transactions');
 const budgetsRouter = require('./routes/budgets');
 const uploadRouter = require('./routes/upload');
 const debtsRouter = require('./routes/debts');
+const categoriesRouter = require('./routes/categories');
 const mcpRouter = require('./routes/mcp');
 
 const app = express();
@@ -23,6 +24,7 @@ app.use('/api/upload', uploadRouter);
 app.use('/api/transactions', transactionsRouter);
 app.use('/api/budgets', budgetsRouter);
 app.use('/api/debts', debtsRouter);
+app.use('/api/categories', categoriesRouter);
 
 // Summary endpoint
 app.get('/api/summary', require('./routes/summary'));

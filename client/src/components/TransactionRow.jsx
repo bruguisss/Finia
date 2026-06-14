@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Trash2 } from 'lucide-react';
-import CategoryBadge, { ALL_CATEGORIES } from './CategoryBadge.jsx';
+import CategoryBadge from './CategoryBadge.jsx';
+import { useCategories } from '../context/CategoriesContext.jsx';
 import { updateTransactionCategory, deleteTransaction } from '../api.js';
 
 function formatAmount(amount, type) {
@@ -13,6 +14,7 @@ function formatDate(dateStr) {
 }
 
 export default function TransactionRow({ transaction, onUpdate, onDelete }) {
+  const { categories } = useCategories();
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -62,8 +64,8 @@ export default function TransactionRow({ transaction, onUpdate, onDelete }) {
             disabled={saving}
             className="bg-elevated border border-border rounded px-2 py-1 text-xs text-primary focus:outline-none focus:border-accent"
           >
-            {ALL_CATEGORIES.map((c) => (
-              <option key={c} value={c}>{c}</option>
+            {categories.map((c) => (
+              <option key={c.name} value={c.name}>{c.name}</option>
             ))}
           </select>
         ) : (

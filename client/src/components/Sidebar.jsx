@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutGrid, Receipt, BarChart3, Target, HandCoins, Upload } from 'lucide-react';
+import { LayoutGrid, Receipt, BarChart3, Target, HandCoins, Tags, Upload } from 'lucide-react';
 
 const NAV_ITEMS = [
   { id: 'dashboard', icon: LayoutGrid, label: 'Dashboard' },
@@ -7,6 +7,7 @@ const NAV_ITEMS = [
   { id: 'analytics', icon: BarChart3, label: 'Análisis' },
   { id: 'budgets', icon: Target, label: 'Presupuestos' },
   { id: 'debts', icon: HandCoins, label: 'Deudas' },
+  { id: 'categories', icon: Tags, label: 'Categorías' },
 ];
 
 export default function Sidebar({ currentPage, onNavigate, onUpload }) {

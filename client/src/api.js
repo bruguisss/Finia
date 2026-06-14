@@ -77,6 +77,26 @@ export const updateDebt = (id, data) =>
 export const deleteDebt = (id) =>
   request(`/debts/${id}`, { method: 'DELETE' });
 
+// Categories
+export const getCategories = () => request('/categories');
+
+export const createCategory = (data) =>
+  request('/categories', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+export const updateCategory = (id, data) =>
+  request(`/categories/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+export const deleteCategory = (id) =>
+  request(`/categories/${id}`, { method: 'DELETE' });
+
 // Upload
 export const uploadCSV = (file) => {
   const formData = new FormData();

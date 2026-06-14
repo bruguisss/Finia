@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import BudgetBar from '../components/BudgetBar.jsx';
 import AlertBanner from '../components/AlertBanner.jsx';
-import { ALL_CATEGORIES, CATEGORY_EMOJIS } from '../components/CategoryBadge.jsx';
+import { useCategories } from '../context/CategoriesContext.jsx';
 import { getBudgets, createBudget } from '../api.js';
 
 function getCurrentMonth() {
@@ -21,11 +21,12 @@ function formatMonth(month) {
 }
 
 export default function Budgets() {
+  const { categories } = useCategories();
   const [month, setMonth] = useState(getCurrentMonth());
   const [budgets, setBudgets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
-  const [newCategory, setNewCategory] = useState('Alimentación');
+  const [newCategory, setNewCategory] = useState('');
   const [newLimit, setNewLimit] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -73,9 +74,15 @@ export default function Budgets() {
   }
 
   const usedCategories = new Set(budgets.map((b) => b.category));
-  const availableCategories = ALL_CATEGORIES.filter(
-    (c) => !usedCategories.has(c) && c !== 'Ingresos' && c !== 'Sin categoría'
+  const availableCategories = categories.filter(
+    (c) => !usedCategories.has(c.name) && c.name !== 'Ingresos' && c.name !== 'Sin categoría'
   );
+
+  useEffect(() => {
+    if (availableCategories.length > 0 && !availableCategories.some((c) => c.name === newCategory)) {
+      setNewCategory(availableCategories[0].name);
+    }
+  }, [availableCategories, newCategory]);
 
   return (
     <div className="space-y-5">
@@ -166,7 +173,7 @@ export default function Budgets() {
                   className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary focus:outline-none focus:border-accent"
                 >
                   {availableCategories.map((c) => (
-                    <option key={c} value={c}>{CATEGORY_EMOJIS[c]} {c}</option>
+                    <option key={c.name} value={c.name}>{c.emoji} {c.name}</option>
                   ))}
                 </select>
               </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import TransactionRow from '../components/TransactionRow.jsx';
-import { ALL_CATEGORIES } from '../components/CategoryBadge.jsx';
+import { useCategories } from '../context/CategoriesContext.jsx';
 import { getTransactions } from '../api.js';
 
 function getCurrentMonth() {
@@ -22,6 +22,7 @@ function formatMonth(month) {
 const PAGE_SIZE = 50;
 
 export default function Transactions() {
+  const { categories } = useCategories();
   const [month, setMonth] = useState(getCurrentMonth());
   const [category, setCategory] = useState('');
   const [search, setSearch] = useState('');
@@ -109,7 +110,7 @@ export default function Transactions() {
           className="bg-surface border border-border rounded-lg px-3 py-2 text-sm text-primary focus:outline-none focus:border-accent"
         >
           <option value="">Todas las categorías</option>
-          {ALL_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+          {categories.map((c) => <option key={c.name} value={c.name}>{c.name}</option>)}
         </select>
 
         {/* Search */}

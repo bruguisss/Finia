@@ -2,11 +2,6 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 
-const CATEGORIES = [
-  'Alimentación', 'Transporte', 'Ocio', 'Salud', 'Hogar',
-  'Compras', 'Viajes', 'Servicios', 'Transferencias', 'Ingresos', 'Sin categoría',
-];
-
 // GET /api/transactions
 router.get('/', async (req, res) => {
   try {
@@ -64,7 +59,8 @@ router.delete('/:id', async (req, res) => {
 router.put('/:id/category', async (req, res) => {
   try {
     const { category, subcategory } = req.body;
-    if (!CATEGORIES.includes(category)) {
+    const categoryCheck = await pool.query('SELECT 1 FROM categories WHERE name = $1', [category]);
+    if (categoryCheck.rowCount === 0) {
       return res.status(400).json({ error: 'Invalid category' });
     }
     const result = await pool.query(

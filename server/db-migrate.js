@@ -43,6 +43,39 @@ async function migrate() {
       created_at TIMESTAMP DEFAULT NOW()
     );
   `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS categories (
+      id SERIAL PRIMARY KEY,
+      name TEXT UNIQUE NOT NULL,
+      color TEXT NOT NULL,
+      emoji TEXT NOT NULL,
+      created_at TIMESTAMP DEFAULT NOW()
+    );
+  `);
+
+  const { rows } = await pool.query('SELECT COUNT(*) as count FROM categories');
+  if (parseInt(rows[0].count, 10) === 0) {
+    const defaults = [
+      ['Alimentación', '#f59e0b', '🍽️'],
+      ['Transporte', '#60a5fa', '🚗'],
+      ['Ocio', '#a78bfa', '🎮'],
+      ['Salud', '#34d399', '💊'],
+      ['Hogar', '#fb923c', '🏠'],
+      ['Compras', '#f472b6', '🛍️'],
+      ['Viajes', '#22d3ee', '✈️'],
+      ['Servicios', '#94a3b8', '⚙️'],
+      ['Transferencias', '#a3e635', '↔️'],
+      ['Ingresos', '#6ee7b7', '💰'],
+      ['Sin categoría', '#4b5563', '❓'],
+    ];
+    for (const [name, color, emoji] of defaults) {
+      await pool.query(
+        'INSERT INTO categories (name, color, emoji) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING',
+        [name, color, emoji]
+      );
+    }
+  }
 }
 
 module.exports = migrate;

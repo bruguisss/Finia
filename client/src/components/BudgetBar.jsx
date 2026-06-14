@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Pencil, Trash2 } from 'lucide-react';
-import { CATEGORY_EMOJIS, CATEGORY_COLORS } from './CategoryBadge.jsx';
+import { useCategories, DEFAULT_COLOR, DEFAULT_EMOJI } from '../context/CategoriesContext.jsx';
 import { updateBudget, deleteBudget } from '../api.js';
 
 function formatEur(n) {
@@ -8,13 +8,15 @@ function formatEur(n) {
 }
 
 export default function BudgetBar({ budget, onUpdate, onDelete }) {
+  const { getCategory } = useCategories();
   const [editing, setEditing] = useState(false);
   const [limit, setLimit] = useState(budget.monthly_limit);
   const [saving, setSaving] = useState(false);
 
   const { category, monthly_limit, spent = 0, percentage = 0 } = budget;
-  const emoji = CATEGORY_EMOJIS[category] || '📂';
-  const color = CATEGORY_COLORS[category] || '#10b981';
+  const cat = getCategory(category);
+  const emoji = cat?.emoji || DEFAULT_EMOJI;
+  const color = cat?.color || DEFAULT_COLOR;
 
   const barColor = percentage >= 100 ? '#f87171' : percentage >= 75 ? '#fbbf24' : '#6ee7b7';
 
