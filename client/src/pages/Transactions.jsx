@@ -107,7 +107,7 @@ export default function Transactions() {
         <select
           value={category}
           onChange={(e) => { setCategory(e.target.value); handleFilterChange(); }}
-          className="bg-surface border border-border rounded-lg px-3 py-2 text-sm text-primary focus:outline-none focus:border-accent"
+          className="bg-surface border border-border rounded-lg px-3 py-2 text-sm text-primary focus:outline-none focus:border-white/30"
         >
           <option value="">Todas las categorías</option>
           {categories.map((c) => <option key={c.name} value={c.name}>{c.name}</option>)}
@@ -121,7 +121,7 @@ export default function Transactions() {
             value={search}
             onChange={(e) => handleSearchChange(e.target.value)}
             placeholder="Buscar transacciones..."
-            className="w-full bg-surface border border-border rounded-lg pl-9 pr-3 py-2 text-sm text-primary placeholder-secondary focus:outline-none focus:border-accent"
+            className="w-full bg-surface border border-border rounded-lg pl-9 pr-3 py-2 text-sm text-primary placeholder-secondary focus:outline-none focus:border-white/30"
           />
         </div>
       </div>
@@ -189,14 +189,14 @@ export default function Transactions() {
               <button
                 onClick={() => setOffset(Math.max(0, offset - PAGE_SIZE))}
                 disabled={offset === 0}
-                className="px-3.5 py-1.5 text-[13px] font-medium rounded-md bg-white/[0.06] border border-white/10 text-secondary hover:text-primary disabled:opacity-30 transition-colors duration-150"
+                className="px-3.5 py-1.5 text-[13px] font-medium rounded-md bg-muted border border-white/10 text-primary hover:bg-[#3f3f46] disabled:opacity-30 transition-colors duration-150"
               >
                 Anterior
               </button>
               <button
                 onClick={() => setOffset(offset + PAGE_SIZE)}
                 disabled={offset + PAGE_SIZE >= total}
-                className="px-3.5 py-1.5 text-[13px] font-medium rounded-md bg-white/[0.06] border border-white/10 text-secondary hover:text-primary disabled:opacity-30 transition-colors duration-150"
+                className="px-3.5 py-1.5 text-[13px] font-medium rounded-md bg-muted border border-white/10 text-primary hover:bg-[#3f3f46] disabled:opacity-30 transition-colors duration-150"
               >
                 Siguiente
               </button>

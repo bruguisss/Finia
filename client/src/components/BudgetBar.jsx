@@ -84,7 +84,7 @@ export default function BudgetBar({ budget, onUpdate, onDelete }) {
             type="number"
             value={limit}
             onChange={(e) => setLimit(e.target.value)}
-            className="flex-1 bg-elevated border border-border rounded px-3 py-1.5 text-sm text-primary focus:outline-none focus:border-accent"
+            className="flex-1 bg-muted border border-border rounded px-3 py-1.5 text-sm text-primary focus:outline-none focus:border-white/30"
             placeholder="Límite mensual"
             min="0"
             step="10"

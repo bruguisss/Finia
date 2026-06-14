@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { getCategories } from '../api.js';
 
-export const DEFAULT_COLOR = '#3d3d4d';
+export const DEFAULT_COLOR = '#3f3f46';
 export const DEFAULT_EMOJI = '❓';
 
 const CategoriesContext = createContext(null);

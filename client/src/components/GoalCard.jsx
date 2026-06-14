@@ -106,7 +106,7 @@ export default function GoalCard({ goal, onUpdate, onDelete }) {
             type="number"
             value={target}
             onChange={(e) => setTarget(e.target.value)}
-            className="flex-1 bg-elevated border border-border rounded px-3 py-1.5 text-sm text-primary focus:outline-none focus:border-accent"
+            className="flex-1 bg-muted border border-border rounded px-3 py-1.5 text-sm text-primary focus:outline-none focus:border-white/30"
             placeholder="Importe objetivo"
             min="0"
             step="10"
@@ -127,14 +127,14 @@ export default function GoalCard({ goal, onUpdate, onDelete }) {
             type="number"
             value={contribution}
             onChange={(e) => setContribution(e.target.value)}
-            className="flex-1 bg-elevated border border-border rounded px-3 py-1.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-accent"
+            className="flex-1 bg-muted border border-border rounded px-3 py-1.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-white/30"
             placeholder="Añadir aporte (€)"
             step="1"
           />
           <button
             type="submit"
             disabled={saving}
-            className="flex items-center gap-1 px-3.5 py-1.5 rounded-md bg-white/[0.06] border border-white/10 text-secondary hover:text-primary text-[13px] font-medium transition-colors duration-150 disabled:opacity-50"
+            className="flex items-center gap-1 px-3.5 py-1.5 rounded-md bg-muted border border-white/10 text-primary hover:bg-[#3f3f46] text-[13px] font-medium transition-colors duration-150 disabled:opacity-50"
           >
             <Plus size={13} strokeWidth={2} />
             Aporte

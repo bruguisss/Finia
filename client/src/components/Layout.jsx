@@ -53,7 +53,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
             </button>
             <button
               onClick={() => setUploadOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-[13px] font-medium bg-white/[0.06] border border-white/10 text-secondary hover:text-primary hover:bg-white/[0.1] transition-colors duration-150"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-[13px] font-medium bg-muted border border-white/10 text-primary hover:bg-[#3f3f46] transition-colors duration-150"
             >
               <Upload size={13} strokeWidth={2} />
               Importar CSV

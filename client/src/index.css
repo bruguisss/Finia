@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,16 +9,21 @@
     box-sizing: border-box;
   }
 
+  html {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   html, body {
     overflow-x: hidden;
     max-width: 100vw;
   }
 
   body {
-    background-color: #0e0e10;
-    color: #e2e2e7;
-    font-family: 'Inter', system-ui, sans-serif;
-    -webkit-font-smoothing: antialiased;
+    background-color: #09090b;
+    color: #fafafa;
   }
 
   button, a, [role="button"], summary, select, label[for] {
@@ -28,7 +35,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid rgba(91, 106, 245, 0.5);
+    outline: 2px solid rgba(255,255,255,0.3);
     outline-offset: 1px;
   }
 
@@ -64,7 +71,7 @@
 }
 
 .skeleton {
-  background-color: #1a1a1f;
+  background-color: #1c1c1f;
   border-radius: 4px;
   animation: skeleton-pulse 1.5s ease-in-out infinite;
 }

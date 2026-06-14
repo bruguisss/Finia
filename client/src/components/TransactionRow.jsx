@@ -65,7 +65,7 @@ export default function TransactionRow({ transaction, onUpdate, onDelete }) {
             onChange={handleCategoryChange}
             onBlur={() => setEditing(false)}
             disabled={saving}
-            className="bg-elevated border border-border rounded px-2 py-1 text-xs text-primary focus:outline-none focus:border-accent"
+            className="bg-muted border border-border rounded px-2 py-1 text-xs text-primary focus:outline-none focus:border-white/30"
           >
             {categories.map((c) => (
               <option key={c.name} value={c.name}>{c.name}</option>

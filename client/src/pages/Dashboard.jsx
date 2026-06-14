@@ -49,7 +49,7 @@ const CustomTooltip = ({ active, payload, label, isMobile }) => {
   if (!active || !payload?.length) return null;
   const fmt = isMobile ? formatEurCompact : formatEur;
   return (
-    <div className={`bg-elevated border border-white/10 rounded-md ${isMobile ? 'p-2 text-[11px]' : 'p-3 text-xs'}`}>
+    <div className={`bg-elevated border border-border rounded-md ${isMobile ? 'p-2 text-[11px]' : 'p-3 text-xs'}`}>
       <p className="text-secondary mb-1">{label}</p>
       {payload.map((p) => (
         <p key={p.name} style={{ color: p.color }}>
@@ -68,12 +68,12 @@ const ProgressTooltip = ({ active, payload, label, isMobile }) => {
   const scheduled = payload.find((p) => p.dataKey === 'scheduled' && p.value != null);
   const budget = payload.find((p) => p.dataKey === 'budget' && p.value != null);
   return (
-    <div className={`bg-elevated border border-white/10 rounded-md ${isMobile ? 'p-2 text-[11px]' : 'p-3 text-xs'}`}>
+    <div className={`bg-elevated border border-border rounded-md ${isMobile ? 'p-2 text-[11px]' : 'p-3 text-xs'}`}>
       <p className="text-secondary mb-1">Día {label}</p>
       {actual && <p style={{ color: '#ef4444' }}>Gastado: {fmt(actual.value)}</p>}
-      {projected && <p style={{ color: '#6b6b7b' }}>Proyección: {fmt(projected.value)}</p>}
+      {projected && <p style={{ color: '#71717a' }}>Proyección: {fmt(projected.value)}</p>}
       {scheduled && <p style={{ color: '#f59e0b' }}>Previsto: {fmt(scheduled.value)}</p>}
-      {budget && <p style={{ color: '#6b6b7b' }}>Presupuesto: {fmt(budget.value)}</p>}
+      {budget && <p style={{ color: '#71717a' }}>Presupuesto: {fmt(budget.value)}</p>}
     </div>
   );
 };
@@ -213,7 +213,7 @@ export default function Dashboard() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setMonth(addMonths(month, -1))}
-            className="w-8 h-8 rounded-md bg-white/[0.06] border border-white/10 text-secondary hover:text-primary transition-colors duration-150 flex items-center justify-center"
+            className="w-8 h-8 rounded-md bg-muted border border-white/10 text-primary hover:bg-[#3f3f46] transition-colors duration-150 flex items-center justify-center"
           >
             <ChevronLeft size={15} strokeWidth={2} />
           </button>
@@ -223,7 +223,7 @@ export default function Dashboard() {
           <button
             onClick={() => setMonth(addMonths(month, 1))}
             disabled={month >= getCurrentMonth()}
-            className="w-8 h-8 rounded-md bg-white/[0.06] border border-white/10 text-secondary hover:text-primary transition-colors duration-150 flex items-center justify-center disabled:opacity-30"
+            className="w-8 h-8 rounded-md bg-muted border border-white/10 text-primary hover:bg-[#3f3f46] transition-colors duration-150 flex items-center justify-center disabled:opacity-30"
           >
             <ChevronRight size={15} strokeWidth={2} />
           </button>
@@ -232,7 +232,7 @@ export default function Dashboard() {
 
       {/* Monthly spending progress */}
       <div className="bg-surface border border-border rounded-lg p-5 transition-colors duration-150 hover:border-border-hover">
-        <h3 className="text-sm font-medium text-primary mb-4">Progreso de gasto mensual</h3>
+        <h3 className="text-sm font-medium tracking-heading text-primary mb-4">Progreso de gasto mensual</h3>
         {loading ? (
           <div className="skeleton h-64" />
         ) : (
@@ -243,7 +243,7 @@ export default function Dashboard() {
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-sm bg-secondary/40 shrink-0" />
                   <div>
-                    <p className="text-[11px] text-secondary uppercase tracking-wider">Presupuesto</p>
+                    <p className="text-[11px] font-medium text-secondary uppercase tracking-wider">Presupuesto</p>
                     <p className="text-lg font-semibold text-primary font-mono tabular-nums">{formatEur(totalBudget)}</p>
                   </div>
                 </div>
@@ -251,7 +251,7 @@ export default function Dashboard() {
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-sm bg-danger shrink-0" />
                 <div>
-                  <p className="text-[11px] text-secondary uppercase tracking-wider">Gastado</p>
+                  <p className="text-[11px] font-medium text-secondary uppercase tracking-wider">Gastado</p>
                   <p className="text-lg font-semibold text-primary font-mono tabular-nums">{formatEur(progress.cumulativeAtToday)}</p>
                 </div>
               </div>
@@ -259,7 +259,7 @@ export default function Dashboard() {
                 <div className="flex items-center gap-2">
                   <span className={`w-2.5 h-2.5 rounded-sm shrink-0 ${overBudget ? 'bg-danger' : 'bg-success'}`} />
                   <div>
-                    <p className="text-[11px] text-secondary uppercase tracking-wider">Proyección fin de mes</p>
+                    <p className="text-[11px] font-medium text-secondary uppercase tracking-wider">Proyección fin de mes</p>
                     <p className={`text-lg font-semibold font-mono tabular-nums ${overBudget ? 'text-danger' : 'text-primary'}`}>{formatEur(progress.projectedTotal)}</p>
                   </div>
                 </div>
@@ -268,7 +268,7 @@ export default function Dashboard() {
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-sm bg-warning shrink-0" />
                   <div>
-                    <p className="text-[11px] text-secondary uppercase tracking-wider">Previsto resto de mes</p>
+                    <p className="text-[11px] font-medium text-secondary uppercase tracking-wider">Previsto resto de mes</p>
                     <p className="text-lg font-semibold text-primary font-mono tabular-nums">{formatEur(progress.plannedRemaining)}</p>
                   </div>
                 </div>
@@ -285,28 +285,28 @@ export default function Dashboard() {
                   </linearGradient>
                   <pattern id="projectionHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
                     <rect width="6" height="6" fill="transparent" />
-                    <line x1="0" y1="0" x2="0" y2="6" stroke={overBudget ? '#ef4444' : '#6b6b7b'} strokeWidth="1" strokeOpacity="0.25" />
+                    <line x1="0" y1="0" x2="0" y2="6" stroke={overBudget ? '#ef4444' : '#71717a'} strokeWidth="1" strokeOpacity="0.25" />
                   </pattern>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                <XAxis dataKey="day" tick={{ fill: '#6b6b7b', fontSize: 11 }} axisLine={false} tickLine={false} interval={isMobile ? 6 : 2} />
-                <YAxis tick={{ fill: '#6b6b7b', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v)}€`} tickCount={5} />
+                <XAxis dataKey="day" tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} interval={isMobile ? 6 : 2} />
+                <YAxis tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v)}€`} tickCount={5} />
                 <Tooltip content={<ProgressTooltip isMobile={isMobile} />} />
                 {progress.currentDay < progress.daysInMonth && (
                   <ReferenceArea x1={progress.currentDay} x2={progress.daysInMonth} fill="url(#projectionHatch)" stroke="none" />
                 )}
                 {totalBudget > 0 && (
-                  <Line type="monotone" dataKey="budget" stroke="#6b6b7b" strokeWidth={1.5} strokeDasharray="4 4" dot={false} isAnimationActive={!isMobile} />
+                  <Line type="monotone" dataKey="budget" stroke="#71717a" strokeWidth={1.5} strokeDasharray="4 4" dot={false} isAnimationActive={!isMobile} />
                 )}
                 <Area type="monotone" dataKey="actual" stroke="#ef4444" fill="url(#spendGrad)" strokeWidth={2} dot={false} connectNulls isAnimationActive={!isMobile} />
                 {progress.currentDay < progress.daysInMonth && (
-                  <Line type="monotone" dataKey="projected" stroke={overBudget ? '#ef4444' : '#6b6b7b'} strokeWidth={1.5} strokeDasharray="4 4" dot={false} connectNulls isAnimationActive={!isMobile} />
+                  <Line type="monotone" dataKey="projected" stroke={overBudget ? '#ef4444' : '#71717a'} strokeWidth={1.5} strokeDasharray="4 4" dot={false} connectNulls isAnimationActive={!isMobile} />
                 )}
                 {progress.currentDay < progress.daysInMonth && progress.plannedRemaining > 0 && (
                   <Line type="monotone" dataKey="scheduled" stroke="#f59e0b" strokeWidth={1.5} strokeDasharray="2 3" dot={false} connectNulls isAnimationActive={!isMobile} />
                 )}
                 {progress.currentDay < progress.daysInMonth && (
-                  <ReferenceLine x={progress.currentDay} stroke="rgba(255,255,255,0.2)" strokeDasharray="3 3" label={{ value: 'Hoy', position: 'top', fill: '#6b6b7b', fontSize: 11 }} />
+                  <ReferenceLine x={progress.currentDay} stroke="rgba(255,255,255,0.2)" strokeDasharray="3 3" label={{ value: 'Hoy', position: 'top', fill: '#71717a', fontSize: 11 }} />
                 )}
               </ComposedChart>
             </ResponsiveContainer>
@@ -347,7 +347,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
         {/* Daily spending chart */}
         <div className="lg:col-span-3 bg-surface border border-border rounded-lg p-5 transition-colors duration-150 hover:border-border-hover will-change-transform">
-          <h3 className="text-sm font-medium text-primary mb-4">Gasto diario</h3>
+          <h3 className="text-sm font-medium tracking-heading text-primary mb-4">Gasto diario</h3>
           {loading ? (
             <div className="skeleton h-48" />
           ) : (data?.dailyTotals?.length > 0) ? (
@@ -364,8 +364,8 @@ export default function Dashboard() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                <XAxis dataKey="date" tickFormatter={formatDayLabel} tick={{ fill: '#6b6b7b', fontSize: 11 }} axisLine={false} tickLine={false} interval={isMobile ? 4 : 0} />
-                <YAxis tick={{ fill: '#6b6b7b', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} tickCount={isMobile ? 3 : 5} />
+                <XAxis dataKey="date" tickFormatter={formatDayLabel} tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} interval={isMobile ? 4 : 0} />
+                <YAxis tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} tickCount={isMobile ? 3 : 5} />
                 <Tooltip content={<CustomTooltip isMobile={isMobile} />} />
                 <Area type="monotone" dataKey="expenses" stroke="#ef4444" fill="url(#expGrad)" strokeWidth={2} name="expenses" dot={false} isAnimationActive={!isMobile} />
                 <Area type="monotone" dataKey="income" stroke="#22c55e" fill="url(#incGrad)" strokeWidth={2} name="income" dot={false} isAnimationActive={!isMobile} />
@@ -380,7 +380,7 @@ export default function Dashboard() {
 
         {/* Category donut */}
         <div className="lg:col-span-2 bg-surface border border-border rounded-lg p-5 transition-colors duration-150 hover:border-border-hover will-change-transform">
-          <h3 className="text-sm font-medium text-primary mb-4">Top categorías</h3>
+          <h3 className="text-sm font-medium tracking-heading text-primary mb-4">Top categorías</h3>
           {loading ? (
             <div className="skeleton h-48" />
           ) : pieData.length > 0 ? (
@@ -402,10 +402,10 @@ export default function Dashboard() {
                 </Pie>
                 <Tooltip
                   formatter={(value, name) => [isMobile ? formatEurCompact(value) : formatEur(value), name]}
-                  contentStyle={{ backgroundColor: '#1a1a1f', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, fontSize: isMobile ? 11 : 12 }}
+                  contentStyle={{ backgroundColor: '#18181b', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 6, fontSize: isMobile ? 11 : 12 }}
                 />
                 <Legend
-                  formatter={(value) => <span style={{ color: '#6b6b7b', fontSize: 11 }}>{value}</span>}
+                  formatter={(value) => <span style={{ color: '#71717a', fontSize: 11 }}>{value}</span>}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -420,7 +420,7 @@ export default function Dashboard() {
       {/* Recent transactions */}
       <div className="bg-surface border border-border rounded-lg transition-colors duration-150 hover:border-border-hover">
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
-          <h3 className="text-sm font-medium text-primary">Últimas transacciones</h3>
+          <h3 className="text-sm font-medium tracking-heading text-primary">Últimas transacciones</h3>
         </div>
         {loading ? (
           <div className="divide-y divide-white/[0.04]">

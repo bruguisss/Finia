@@ -152,7 +152,7 @@ export default function Categories() {
                   onChange={(e) => setName(e.target.value)}
                   disabled={editing?.name === PROTECTED_CATEGORY}
                   placeholder="ej: Mascotas"
-                  className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-accent disabled:opacity-50"
+                  className="w-full bg-muted border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-white/30 disabled:opacity-50"
                   required
                 />
               </div>
@@ -166,7 +166,7 @@ export default function Categories() {
                     onChange={(e) => setEmoji(e.target.value)}
                     placeholder="🏷️"
                     maxLength={4}
-                    className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-accent"
+                    className="w-full bg-muted border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-white/30"
                     required
                   />
                 </div>
@@ -176,7 +176,7 @@ export default function Categories() {
                     type="color"
                     value={color}
                     onChange={(e) => setColor(e.target.value)}
-                    className="w-full h-[42px] bg-elevated border border-border rounded-lg px-1.5 py-1.5 cursor-pointer"
+                    className="w-full h-[42px] bg-muted border border-border rounded-lg px-1.5 py-1.5 cursor-pointer"
                   />
                 </div>
               </div>
@@ -187,7 +187,7 @@ export default function Categories() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="flex-1 px-4 py-2.5 rounded-md bg-white/[0.06] border border-white/10 text-sm font-medium text-secondary hover:text-primary transition-colors duration-150"
+                  className="flex-1 px-4 py-2.5 rounded-md bg-muted border border-white/10 text-sm font-medium text-primary hover:bg-[#3f3f46] transition-colors duration-150"
                 >
                   Cancelar
                 </button>

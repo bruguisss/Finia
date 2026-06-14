@@ -77,7 +77,7 @@ export default function Planning() {
       {/* Goals section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between gap-3">
-          <h3 className="text-sm font-medium text-primary">Objetivos</h3>
+          <h3 className="text-sm font-medium tracking-heading text-primary">Objetivos</h3>
           <button
             onClick={() => setGoalModalOpen(true)}
             className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-medium hover:bg-accent-hover transition-colors duration-150"
@@ -120,7 +120,7 @@ export default function Planning() {
       {/* Planned expenses section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between gap-3">
-          <h3 className="text-sm font-medium text-primary">Gastos previstos</h3>
+          <h3 className="text-sm font-medium tracking-heading text-primary">Gastos previstos</h3>
           <button
             onClick={openCreateExpense}
             className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-medium hover:bg-accent-hover transition-colors duration-150"

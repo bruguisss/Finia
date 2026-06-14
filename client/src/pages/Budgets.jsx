@@ -170,7 +170,7 @@ export default function Budgets() {
                 <select
                   value={newCategory}
                   onChange={(e) => setNewCategory(e.target.value)}
-                  className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary focus:outline-none focus:border-accent"
+                  className="w-full bg-muted border border-border rounded-lg px-3 py-2.5 text-sm text-primary focus:outline-none focus:border-white/30"
                 >
                   {availableCategories.map((c) => (
                     <option key={c.name} value={c.name}>{c.emoji} {c.name}</option>
@@ -187,7 +187,7 @@ export default function Budgets() {
                   placeholder="ej: 300"
                   min="1"
                   step="10"
-                  className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-accent"
+                  className="w-full bg-muted border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-white/30"
                   required
                 />
               </div>
@@ -200,7 +200,7 @@ export default function Budgets() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="flex-1 px-4 py-2.5 rounded-md bg-white/[0.06] border border-white/10 text-sm font-medium text-secondary hover:text-primary transition-colors duration-150"
+                  className="flex-1 px-4 py-2.5 rounded-md bg-muted border border-white/10 text-sm font-medium text-primary hover:bg-[#3f3f46] transition-colors duration-150"
                 >
                   Cancelar
                 </button>

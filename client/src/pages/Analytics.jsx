@@ -21,8 +21,8 @@ function shortMonth(monthStr) {
 }
 
 const CHART_TOOLTIP_STYLE = {
-  backgroundColor: '#1a1a1f',
-  border: '1px solid rgba(255,255,255,0.1)',
+  backgroundColor: '#18181b',
+  border: '1px solid rgba(255,255,255,0.07)',
   borderRadius: 6,
   fontSize: 12,
 };
@@ -89,20 +89,20 @@ export default function Analytics() {
 
       {/* Income vs Expenses bar chart */}
       <div className="bg-surface border border-border rounded-lg p-5 transition-colors duration-150 hover:border-border-hover will-change-transform">
-        <h3 className="text-sm font-medium text-primary mb-4">Ingresos vs Gastos (últimos 6 meses)</h3>
+        <h3 className="text-sm font-medium tracking-heading text-primary mb-4">Ingresos vs Gastos (últimos 6 meses)</h3>
         {loading ? (
           <div className="skeleton h-52" />
         ) : (
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={barData} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-              <XAxis dataKey="month" tick={{ fill: '#6b6b7b', fontSize: 12 }} axisLine={false} tickLine={false} interval={isMobile ? 1 : 0} />
-              <YAxis tick={{ fill: '#6b6b7b', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} tickCount={isMobile ? 3 : 5} />
+              <XAxis dataKey="month" tick={{ fill: '#71717a', fontSize: 12 }} axisLine={false} tickLine={false} interval={isMobile ? 1 : 0} />
+              <YAxis tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} tickCount={isMobile ? 3 : 5} />
               <Tooltip
                 contentStyle={{ ...CHART_TOOLTIP_STYLE, fontSize: isMobile ? 11 : 12 }}
                 formatter={(v) => isMobile ? formatEurCompact(v) : formatEur(v)}
               />
-              <Legend formatter={(v) => <span style={{ color: '#6b6b7b', fontSize: 12 }}>{v}</span>} />
+              <Legend formatter={(v) => <span style={{ color: '#71717a', fontSize: 12 }}>{v}</span>} />
               <Bar dataKey="Ingresos" fill="#22c55e" radius={[4, 4, 0, 0]} isAnimationActive={!isMobile} />
               <Bar dataKey="Gastos" fill="#ef4444" radius={[4, 4, 0, 0]} isAnimationActive={!isMobile} />
             </BarChart>
@@ -112,20 +112,20 @@ export default function Analytics() {
 
       {/* Category evolution stacked area */}
       <div className="bg-surface border border-border rounded-lg p-5 transition-colors duration-150 hover:border-border-hover will-change-transform">
-        <h3 className="text-sm font-medium text-primary mb-4">Evolución por categoría</h3>
+        <h3 className="text-sm font-medium tracking-heading text-primary mb-4">Evolución por categoría</h3>
         {loading ? (
           <div className="skeleton h-52" />
         ) : (
           <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={stackedData} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-              <XAxis dataKey="month" tick={{ fill: '#6b6b7b', fontSize: 12 }} axisLine={false} tickLine={false} interval={isMobile ? 1 : 0} />
-              <YAxis tick={{ fill: '#6b6b7b', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} tickCount={isMobile ? 3 : 5} />
+              <XAxis dataKey="month" tick={{ fill: '#71717a', fontSize: 12 }} axisLine={false} tickLine={false} interval={isMobile ? 1 : 0} />
+              <YAxis tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} tickCount={isMobile ? 3 : 5} />
               <Tooltip
                 contentStyle={{ ...CHART_TOOLTIP_STYLE, fontSize: isMobile ? 11 : 12 }}
                 formatter={(v) => isMobile ? formatEurCompact(v) : formatEur(v)}
               />
-              <Legend formatter={(v) => <span style={{ color: '#6b6b7b', fontSize: 12 }}>{v}</span>} />
+              <Legend formatter={(v) => <span style={{ color: '#71717a', fontSize: 12 }}>{v}</span>} />
               {TOP_CATEGORIES.map((c) => (
                 <Area
                   key={c}
@@ -148,7 +148,7 @@ export default function Analytics() {
       {/* Top merchants */}
       <div className="bg-surface border border-border rounded-lg transition-colors duration-150 hover:border-border-hover">
         <div className="px-5 py-4 border-b border-border">
-          <h3 className="text-sm font-medium text-primary">Top comercios por gasto total</h3>
+          <h3 className="text-sm font-medium tracking-heading text-primary">Top comercios por gasto total</h3>
         </div>
         {loading ? (
           <div className="divide-y divide-white/[0.04]">

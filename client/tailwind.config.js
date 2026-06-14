@@ -4,16 +4,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        base: '#0e0e10',
-        surface: '#141416',
-        elevated: '#1a1a1f',
-        border: 'rgba(255,255,255,0.06)',
-        'border-hover': 'rgba(255,255,255,0.12)',
-        primary: '#e2e2e7',
-        secondary: '#6b6b7b',
-        tertiary: '#3d3d4d',
-        accent: '#5b6af5',
-        'accent-hover': '#6b7aff',
+        base: '#09090b',
+        surface: '#18181b',
+        elevated: '#1c1c1f',
+        muted: '#27272a',
+        border: 'rgba(255,255,255,0.07)',
+        'border-hover': 'rgba(255,255,255,0.14)',
+        primary: '#fafafa',
+        secondary: '#71717a',
+        tertiary: '#3f3f46',
+        accent: '#ffffff',
+        'accent-hover': '#e4e4e7',
+        'accent-dim': '#a1a1aa',
         success: '#22c55e',
         danger: '#ef4444',
         warning: '#f59e0b',
@@ -22,7 +24,12 @@ export default {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       letterSpacing: {
-        tight: '-0.02em',
+        tight: '-0.025em',
+        heading: '-0.01em',
+        label: '-0.005em',
+        stat: '-0.03em',
+        badge: '0.02em',
+        wider: '0.02em',
       },
       keyframes: {
         fadeInUp: {

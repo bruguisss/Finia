@@ -77,7 +77,7 @@ export default function GoalModal({ onClose, onSave }) {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={type === 'savings' ? 'ej: Fondo de emergencia' : 'ej: Gasto total mensual'}
-              className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-accent"
+              className="w-full bg-muted border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-white/30"
               required
             />
           </div>
@@ -92,7 +92,7 @@ export default function GoalModal({ onClose, onSave }) {
                 placeholder="0.00"
                 min="0.01"
                 step="10"
-                className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-accent"
+                className="w-full bg-muted border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-white/30"
                 required
               />
             </div>
@@ -106,7 +106,7 @@ export default function GoalModal({ onClose, onSave }) {
                   placeholder="0.00"
                   min="0"
                   step="10"
-                  className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-accent"
+                  className="w-full bg-muted border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-white/30"
                 />
               </div>
             )}
@@ -119,7 +119,7 @@ export default function GoalModal({ onClose, onSave }) {
                 type="date"
                 value={targetDate}
                 onChange={(e) => setTargetDate(e.target.value)}
-                className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary focus:outline-none focus:border-accent"
+                className="w-full bg-muted border border-border rounded-lg px-3 py-2.5 text-sm text-primary focus:outline-none focus:border-white/30"
               />
             </div>
           )}
@@ -130,7 +130,7 @@ export default function GoalModal({ onClose, onSave }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 rounded-md bg-white/[0.06] border border-white/10 text-sm font-medium text-secondary hover:text-primary transition-colors duration-150"
+              className="flex-1 px-4 py-2.5 rounded-md bg-muted border border-white/10 text-sm font-medium text-primary hover:bg-[#3f3f46] transition-colors duration-150"
             >
               Cancelar
             </button>

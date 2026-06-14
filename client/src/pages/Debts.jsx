@@ -101,7 +101,7 @@ export default function Debts() {
         <select
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="bg-surface border border-border rounded-lg px-3 py-2 text-sm text-primary focus:outline-none focus:border-accent"
+          className="bg-surface border border-border rounded-lg px-3 py-2 text-sm text-primary focus:outline-none focus:border-white/30"
         >
           <option value="">Todos los tipos</option>
           <option value="owed_to_me">Me deben</option>
@@ -111,7 +111,7 @@ export default function Debts() {
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="bg-surface border border-border rounded-lg px-3 py-2 text-sm text-primary focus:outline-none focus:border-accent"
+          className="bg-surface border border-border rounded-lg px-3 py-2 text-sm text-primary focus:outline-none focus:border-white/30"
         >
           <option value="">Todos los estados</option>
           <option value="pending">Pendiente</option>
