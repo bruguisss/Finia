@@ -15,6 +15,13 @@ export const getTransactions = (params = {}) => {
   return request(`/transactions${qs ? `?${qs}` : ''}`);
 };
 
+export const createTransaction = (data) =>
+  request('/transactions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
 export const deleteTransaction = (id) =>
   request(`/transactions/${id}`, { method: 'DELETE' });
 

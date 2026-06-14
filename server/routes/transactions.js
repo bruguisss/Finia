@@ -44,6 +44,34 @@ router.get('/', async (req, res) => {
   }
 });
 
+// POST /api/transactions
+router.post('/', async (req, res) => {
+  try {
+    const { date, description, amount, type, category } = req.body;
+    if (!date || !description || amount === undefined || !type || !category) {
+      return res.status(400).json({ error: 'date, description, amount, type and category are required' });
+    }
+    if (!['debit', 'credit'].includes(type)) {
+      return res.status(400).json({ error: 'Invalid type' });
+    }
+
+    const categoryCheck = await pool.query('SELECT 1 FROM categories WHERE name = $1', [category]);
+    if (categoryCheck.rowCount === 0) {
+      return res.status(400).json({ error: 'Invalid category' });
+    }
+
+    const result = await pool.query(`
+      INSERT INTO transactions (date, description, amount, currency, type, category, subcategory, raw_description)
+      VALUES ($1, $2, $3, 'EUR', $4, $5, NULL, $2)
+      RETURNING *
+    `, [date, description, Math.abs(parseFloat(amount)), type, category]);
+
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // DELETE /api/transactions/:id
 router.delete('/:id', async (req, res) => {
   try {

@@ -1,0 +1,163 @@
+import React, { useState } from 'react';
+import { X } from 'lucide-react';
+import { useCategories } from '../context/CategoriesContext.jsx';
+import { createTransaction } from '../api.js';
+
+function getToday() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+export default function AddTransactionModal({ onClose, onSwitchToUpload }) {
+  const { categories } = useCategories();
+  const [type, setType] = useState('debit');
+  const [description, setDescription] = useState('');
+  const [amount, setAmount] = useState('');
+  const [category, setCategory] = useState('Sin categoría');
+  const [date, setDate] = useState(getToday());
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!description.trim() || !amount || parseFloat(amount) <= 0) {
+      setError('Rellena la descripción y un importe válido');
+      return;
+    }
+    setSaving(true);
+    setError(null);
+    try {
+      await createTransaction({
+        date,
+        description: description.trim(),
+        amount: parseFloat(amount),
+        type,
+        category,
+      });
+      window.location.reload();
+    } catch (err) {
+      setError(err.message);
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div className="bg-surface border border-border rounded-xl w-full max-w-sm shadow-2xl animate-scale-in">
+        <div className="flex items-center justify-between p-5 border-b border-border">
+          <h2 className="text-base font-semibold text-primary">Añadir transacción</h2>
+          <button onClick={onClose} className="text-secondary hover:text-primary transition-colors">
+            <X size={18} strokeWidth={2} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-5 space-y-4">
+          {/* Type toggle */}
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => setType('debit')}
+              className={`px-4 py-2.5 rounded-lg text-sm font-medium border transition-colors ${
+                type === 'debit' ? 'bg-danger/15 border-danger text-danger' : 'border-border text-secondary hover:text-primary'
+              }`}
+            >
+              Gasto
+            </button>
+            <button
+              type="button"
+              onClick={() => setType('credit')}
+              className={`px-4 py-2.5 rounded-lg text-sm font-medium border transition-colors ${
+                type === 'credit' ? 'bg-accent/15 border-accent text-accent' : 'border-border text-secondary hover:text-primary'
+              }`}
+            >
+              Ingreso
+            </button>
+          </div>
+
+          <div>
+            <label className="block text-xs text-secondary mb-1.5">Descripción</label>
+            <input
+              type="text"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="ej: Cena con amigos"
+              className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-accent"
+              required
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs text-secondary mb-1.5">Importe (€)</label>
+              <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="0.00"
+                min="0.01"
+                step="0.01"
+                className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-accent"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-secondary mb-1.5">Fecha</label>
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                max={getToday()}
+                className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary focus:outline-none focus:border-accent"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs text-secondary mb-1.5">Categoría</label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary focus:outline-none focus:border-accent"
+            >
+              {categories.map((c) => (
+                <option key={c.name} value={c.name}>{c.emoji} {c.name}</option>
+              ))}
+            </select>
+          </div>
+
+          {error && <p className="text-xs text-danger">{error}</p>}
+
+          <div className="flex gap-3 pt-1">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 px-4 py-2.5 rounded-lg border border-border text-sm text-secondary hover:text-primary transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={saving}
+              className="flex-1 px-4 py-2.5 rounded-lg bg-accent text-base font-medium text-sm hover:bg-accent/80 transition-colors disabled:opacity-50"
+            >
+              {saving ? 'Guardando...' : 'Añadir'}
+            </button>
+          </div>
+
+          {onSwitchToUpload && (
+            <button
+              type="button"
+              onClick={onSwitchToUpload}
+              className="w-full text-center text-xs text-secondary hover:text-accent transition-colors pt-1"
+            >
+              ¿Prefieres importar un extracto CSV?
+            </button>
+          )}
+        </form>
+      </div>
+    </div>
+  );
+}

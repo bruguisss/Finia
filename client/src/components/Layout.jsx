@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { LayoutGrid, Receipt, BarChart3, Target, HandCoins, Tags, Upload } from 'lucide-react';
+import { LayoutGrid, Receipt, BarChart3, Target, HandCoins, Tags, Upload, Plus } from 'lucide-react';
 import Sidebar from './Sidebar.jsx';
 import UploadZone from './UploadZone.jsx';
+import AddTransactionModal from './AddTransactionModal.jsx';
 
 const PAGE_META = {
   dashboard: { label: 'Dashboard', icon: LayoutGrid },
@@ -22,6 +23,7 @@ const MOBILE_NAV_ITEMS = [
 
 export default function Layout({ children, currentPage, onNavigate }) {
   const [uploadOpen, setUploadOpen] = useState(false);
+  const [addTxOpen, setAddTxOpen] = useState(false);
   const meta = PAGE_META[currentPage] || PAGE_META.dashboard;
   const PageIcon = meta.icon;
 
@@ -40,13 +42,22 @@ export default function Layout({ children, currentPage, onNavigate }) {
             <PageIcon size={15} strokeWidth={2} className="text-secondary" />
             <span className="font-medium text-primary">{meta.label}</span>
           </div>
-          <button
-            onClick={() => setUploadOpen(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium text-secondary hover:text-primary hover:bg-elevated transition-colors"
-          >
-            <Upload size={13} strokeWidth={2} />
-            Importar CSV
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setAddTxOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-accent text-base hover:bg-accent/80 transition-colors"
+            >
+              <Plus size={13} strokeWidth={2.5} />
+              Añadir transacción
+            </button>
+            <button
+              onClick={() => setUploadOpen(true)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium text-secondary hover:text-primary hover:bg-elevated transition-colors"
+            >
+              <Upload size={13} strokeWidth={2} />
+              Importar CSV
+            </button>
+          </div>
         </header>
 
         {/* Main content */}
@@ -76,15 +87,20 @@ export default function Layout({ children, currentPage, onNavigate }) {
           );
         })}
         <button
-          onClick={() => setUploadOpen(true)}
-          className="flex flex-col items-center gap-1 px-2 py-1 text-[11px] text-secondary"
+          onClick={() => setAddTxOpen(true)}
+          className="flex flex-col items-center justify-center -mt-6 w-12 h-12 rounded-full bg-accent text-base shadow-lg shadow-accent/30"
         >
-          <Upload size={18} strokeWidth={2} />
-          Importar
+          <Plus size={22} strokeWidth={2.5} />
         </button>
       </nav>
 
       {uploadOpen && <UploadZone onClose={() => setUploadOpen(false)} />}
+      {addTxOpen && (
+        <AddTransactionModal
+          onClose={() => setAddTxOpen(false)}
+          onSwitchToUpload={() => { setAddTxOpen(false); setUploadOpen(true); }}
+        />
+      )}
     </div>
   );
 }
