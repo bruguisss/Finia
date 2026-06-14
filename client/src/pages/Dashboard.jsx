@@ -8,7 +8,7 @@ import StatCard from '../components/StatCard.jsx';
 import CategoryBadge from '../components/CategoryBadge.jsx';
 import { useCategories, DEFAULT_COLOR } from '../context/CategoriesContext.jsx';
 import { useIsMobile } from '../hooks/useIsMobile.js';
-import { getSummary, getBudgets } from '../api.js';
+import { getSummary, getBudgets, getPlannedExpenseOccurrences } from '../api.js';
 
 function formatEur(n) {
   return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) + ' €';
@@ -65,18 +65,20 @@ const ProgressTooltip = ({ active, payload, label, isMobile }) => {
   const fmt = isMobile ? formatEurCompact : formatEur;
   const actual = payload.find((p) => p.dataKey === 'actual' && p.value != null);
   const projected = payload.find((p) => p.dataKey === 'projected' && p.value != null);
+  const scheduled = payload.find((p) => p.dataKey === 'scheduled' && p.value != null);
   const budget = payload.find((p) => p.dataKey === 'budget' && p.value != null);
   return (
     <div className={`bg-elevated border border-white/10 rounded-md ${isMobile ? 'p-2 text-[11px]' : 'p-3 text-xs'}`}>
       <p className="text-secondary mb-1">Día {label}</p>
       {actual && <p style={{ color: '#ef4444' }}>Gastado: {fmt(actual.value)}</p>}
       {projected && <p style={{ color: '#6b6b7b' }}>Proyección: {fmt(projected.value)}</p>}
+      {scheduled && <p style={{ color: '#f59e0b' }}>Previsto: {fmt(scheduled.value)}</p>}
       {budget && <p style={{ color: '#6b6b7b' }}>Presupuesto: {fmt(budget.value)}</p>}
     </div>
   );
 };
 
-function buildSpendingProgress(month, dailyTotals, totalBudget, prevMonthDailyTotals) {
+function buildSpendingProgress(month, dailyTotals, totalBudget, prevMonthDailyTotals, plannedOccurrences) {
   const [y, m] = month.split('-').map(Number);
   const daysInMonth = new Date(y, m, 0).getDate();
   const isCurrentMonth = month === getCurrentMonth();
@@ -86,6 +88,12 @@ function buildSpendingProgress(month, dailyTotals, totalBudget, prevMonthDailyTo
   (dailyTotals || []).forEach((d) => {
     const day = parseInt(d.date.slice(8, 10), 10);
     expenseByDay[day] = (expenseByDay[day] || 0) + d.expenses;
+  });
+
+  const plannedByDay = {};
+  (plannedOccurrences || []).forEach((o) => {
+    const day = parseInt(o.date.slice(8, 10), 10);
+    plannedByDay[day] = (plannedByDay[day] || 0) + o.amount;
   });
 
   let cumulative = 0;
@@ -102,6 +110,7 @@ function buildSpendingProgress(month, dailyTotals, totalBudget, prevMonthDailyTo
   }
 
   let projectedTotal = null;
+  let plannedRemaining = 0;
   if (currentDay < daysInMonth && currentDay > 0) {
     // Shape the projection after last month's cumulative spending curve,
     // scaled so it matches today's actual cumulative spend.
@@ -135,9 +144,18 @@ function buildSpendingProgress(month, dailyTotals, totalBudget, prevMonthDailyTo
         data[day - 1].projected = cumulativeAtToday + avgPerDay * (day - currentDay);
       }
     }
+
+    // Scheduled: a "guaranteed minimum" trajectory from known planned expenses
+    let scheduledCumulative = cumulativeAtToday;
+    for (let day = currentDay; day <= daysInMonth; day++) {
+      if (day > currentDay) scheduledCumulative += plannedByDay[day] || 0;
+      data[day - 1].scheduled = scheduledCumulative;
+    }
+    plannedRemaining = scheduledCumulative - cumulativeAtToday;
+    projectedTotal = Math.max(projectedTotal, scheduledCumulative);
   }
 
-  return { data, daysInMonth, currentDay, cumulativeAtToday, projectedTotal };
+  return { data, daysInMonth, currentDay, cumulativeAtToday, projectedTotal, plannedRemaining };
 }
 
 export default function Dashboard() {
@@ -147,19 +165,22 @@ export default function Dashboard() {
   const [data, setData] = useState(null);
   const [budgets, setBudgets] = useState([]);
   const [prevDailyTotals, setPrevDailyTotals] = useState([]);
+  const [plannedOccurrences, setPlannedOccurrences] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [summary, budgetsData, prevSummary] = await Promise.all([
+      const [summary, budgetsData, prevSummary, occurrences] = await Promise.all([
         getSummary(month),
         getBudgets(month),
         getSummary(addMonths(month, -1)),
+        getPlannedExpenseOccurrences(month),
       ]);
       setData(summary);
       setBudgets(budgetsData);
       setPrevDailyTotals(prevSummary.dailyTotals);
+      setPlannedOccurrences(occurrences);
     } catch (err) {
       console.error(err);
     } finally {
@@ -178,7 +199,7 @@ export default function Dashboard() {
     .slice(0, 5);
 
   const totalBudget = budgets.reduce((sum, b) => sum + parseFloat(b.monthly_limit || 0), 0);
-  const progress = data ? buildSpendingProgress(month, data.dailyTotals, totalBudget, prevDailyTotals) : null;
+  const progress = data ? buildSpendingProgress(month, data.dailyTotals, totalBudget, prevDailyTotals, plannedOccurrences) : null;
   const overBudget = progress?.projectedTotal != null && totalBudget > 0 && progress.projectedTotal > totalBudget;
 
   return (
@@ -243,6 +264,15 @@ export default function Dashboard() {
                   </div>
                 </div>
               )}
+              {progress.plannedRemaining > 0 && (
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-warning shrink-0" />
+                  <div>
+                    <p className="text-[11px] text-secondary uppercase tracking-wider">Previsto resto de mes</p>
+                    <p className="text-lg font-semibold text-primary font-mono tabular-nums">{formatEur(progress.plannedRemaining)}</p>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Chart */}
@@ -271,6 +301,9 @@ export default function Dashboard() {
                 <Area type="monotone" dataKey="actual" stroke="#ef4444" fill="url(#spendGrad)" strokeWidth={2} dot={false} connectNulls isAnimationActive={!isMobile} />
                 {progress.currentDay < progress.daysInMonth && (
                   <Line type="monotone" dataKey="projected" stroke={overBudget ? '#ef4444' : '#6b6b7b'} strokeWidth={1.5} strokeDasharray="4 4" dot={false} connectNulls isAnimationActive={!isMobile} />
+                )}
+                {progress.currentDay < progress.daysInMonth && progress.plannedRemaining > 0 && (
+                  <Line type="monotone" dataKey="scheduled" stroke="#f59e0b" strokeWidth={1.5} strokeDasharray="2 3" dot={false} connectNulls isAnimationActive={!isMobile} />
                 )}
                 {progress.currentDay < progress.daysInMonth && (
                   <ReferenceLine x={progress.currentDay} stroke="rgba(255,255,255,0.2)" strokeDasharray="3 3" label={{ value: 'Hoy', position: 'top', fill: '#6b6b7b', fontSize: 11 }} />

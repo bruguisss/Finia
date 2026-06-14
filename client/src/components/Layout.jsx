@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LayoutGrid, Receipt, BarChart3, Target, HandCoins, Tags, Upload, Plus } from 'lucide-react';
+import { LayoutGrid, Receipt, BarChart3, Target, HandCoins, Tags, Upload, Plus, Flag } from 'lucide-react';
 import Sidebar from './Sidebar.jsx';
 import UploadZone from './UploadZone.jsx';
 import AddTransactionModal from './AddTransactionModal.jsx';
@@ -9,6 +9,7 @@ const PAGE_META = {
   transactions: { label: 'Transacciones', icon: Receipt },
   analytics: { label: 'Análisis', icon: BarChart3 },
   budgets: { label: 'Presupuestos', icon: Target },
+  planning: { label: 'Planificación', icon: Flag },
   debts: { label: 'Deudas', icon: HandCoins },
   categories: { label: 'Categorías', icon: Tags },
 };

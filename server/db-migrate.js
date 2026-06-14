@@ -45,6 +45,33 @@ async function migrate() {
   `);
 
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS goals (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      type TEXT CHECK(type IN ('savings','spending')) NOT NULL,
+      target_amount DOUBLE PRECISION NOT NULL,
+      current_amount DOUBLE PRECISION DEFAULT 0,
+      target_date TEXT,
+      color TEXT DEFAULT '#5b6af5',
+      created_at TIMESTAMP DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS planned_expenses (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      amount DOUBLE PRECISION NOT NULL,
+      category TEXT DEFAULT 'Sin categoría',
+      frequency TEXT CHECK(frequency IN ('once','monthly','yearly')) NOT NULL DEFAULT 'monthly',
+      next_date TEXT NOT NULL,
+      active BOOLEAN DEFAULT true,
+      notes TEXT,
+      created_at TIMESTAMP DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS categories (
       id SERIAL PRIMARY KEY,
       name TEXT UNIQUE NOT NULL,

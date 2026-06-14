@@ -104,6 +104,49 @@ export const updateCategory = (id, data) =>
 export const deleteCategory = (id) =>
   request(`/categories/${id}`, { method: 'DELETE' });
 
+// Goals
+export const getGoals = () => request('/goals');
+
+export const createGoal = (data) =>
+  request('/goals', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+export const updateGoal = (id, data) =>
+  request(`/goals/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+export const deleteGoal = (id) =>
+  request(`/goals/${id}`, { method: 'DELETE' });
+
+// Planned expenses
+export const getPlannedExpenses = () => request('/planned-expenses');
+
+export const getPlannedExpenseOccurrences = (month) =>
+  request(`/planned-expenses/occurrences${month ? `?month=${month}` : ''}`);
+
+export const createPlannedExpense = (data) =>
+  request('/planned-expenses', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+export const updatePlannedExpense = (id, data) =>
+  request(`/planned-expenses/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+export const deletePlannedExpense = (id) =>
+  request(`/planned-expenses/${id}`, { method: 'DELETE' });
+
 // Upload
 export const uploadCSV = (file) => {
   const formData = new FormData();

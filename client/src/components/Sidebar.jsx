@@ -1,11 +1,12 @@
 import React from 'react';
-import { LayoutGrid, Receipt, BarChart3, Target, HandCoins, Tags, Upload } from 'lucide-react';
+import { LayoutGrid, Receipt, BarChart3, Target, HandCoins, Tags, Upload, Flag } from 'lucide-react';
 
 const NAV_ITEMS = [
   { id: 'dashboard', icon: LayoutGrid, label: 'Dashboard' },
   { id: 'transactions', icon: Receipt, label: 'Transacciones' },
   { id: 'analytics', icon: BarChart3, label: 'Análisis' },
   { id: 'budgets', icon: Target, label: 'Presupuestos' },
+  { id: 'planning', icon: Flag, label: 'Planificación' },
   { id: 'debts', icon: HandCoins, label: 'Deudas' },
   { id: 'categories', icon: Tags, label: 'Categorías' },
 ];
