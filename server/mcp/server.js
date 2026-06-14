@@ -56,6 +56,28 @@ function createMcpServer() {
     };
   }));
 
+  server.registerTool('delete_transaction', {
+    title: 'Borrar transacción',
+    description: 'Borra una transacción de Finia por su ID',
+    inputSchema: {
+      id: z.number().describe('ID de la transacción a borrar'),
+    },
+  }, safeTool(async ({ id }) => {
+    const result = await pool.query('DELETE FROM transactions WHERE id = $1 RETURNING *', [id]);
+
+    if (result.rowCount === 0) {
+      return { content: [{ type: 'text', text: `No se ha encontrado ninguna transacción con el ID ${id}.` }] };
+    }
+
+    const t = result.rows[0];
+    return {
+      content: [{
+        type: 'text',
+        text: `Transacción borrada: "${t.description}" (${parseFloat(t.amount).toFixed(2)}€, ${t.date}).`,
+      }],
+    };
+  }));
+
   server.registerTool('get_summary', {
     title: 'Resumen financiero',
     description: 'Obtiene el resumen financiero del mes actual o de un mes concreto',

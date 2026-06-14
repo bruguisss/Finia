@@ -96,6 +96,7 @@ Esto lanza:
 Finia expone un servidor MCP que permite a un asistente de IA (como Claude) consultar y modificar tus finanzas mediante herramientas:
 
 - `add_transaction` — añade una transacción manual (ingreso o gasto)
+- `delete_transaction` — borra una transacción por su ID
 - `get_summary` — resumen financiero del mes actual o de un mes concreto
 - `get_transactions` — lista las transacciones recientes (con filtros opcionales)
 - `add_debt` — registra una deuda (dinero que debes o que te deben)
