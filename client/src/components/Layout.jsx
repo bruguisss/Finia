@@ -18,11 +18,10 @@ const PAGE_META = {
 const MOBILE_NAV_ITEMS = [
   { id: 'dashboard', icon: LayoutGrid, label: 'Inicio' },
   { id: 'transactions', icon: Receipt, label: 'Gastos' },
-  { id: 'analytics', icon: BarChart3, label: 'Análisis' },
   { id: 'planning', icon: Flag, label: 'Plan' },
 ];
 
-const MORE_PAGES = ['budgets', 'debts', 'categories'];
+const MORE_PAGES = ['budgets', 'debts', 'categories', 'analytics'];
 
 export default function Layout({ children, currentPage, onNavigate }) {
   const [uploadOpen, setUploadOpen] = useState(false);
@@ -84,14 +83,17 @@ export default function Layout({ children, currentPage, onNavigate }) {
         {/* Main content */}
         <main ref={mainRef} className="flex-1 overflow-y-auto">
           <div key={currentPage} className="max-w-6xl mx-auto px-5 pt-[max(1.5rem,env(safe-area-inset-top))] md:pt-6 pb-[calc(100px+env(safe-area-inset-bottom))] md:pb-6 animate-page-in">
-            {children}
+            {React.cloneElement(children, {
+              onAddTransaction: () => setAddTxOpen(true),
+              onOpenMore: () => setMoreSheetOpen(true),
+            })}
           </div>
         </main>
       </div>
 
       {/* Mobile floating glass nav island */}
       <nav
-        className="md:hidden fixed left-1/2 -translate-x-1/2 z-20 flex items-center justify-around gap-1 w-[calc(100%-48px)] max-w-[380px] px-2 py-2.5 rounded-3xl bg-[rgba(28,28,32,0.45)] backdrop-blur-2xl backdrop-saturate-150 border border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
+        className="md:hidden fixed left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 w-[calc(100%-48px)] max-w-[380px] px-2 py-2 rounded-[26px] bg-[rgba(18,18,18,0.85)] backdrop-blur-[40px] border border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
         style={{ bottom: 'calc(24px + env(safe-area-inset-bottom))' }}
       >
         {MOBILE_NAV_ITEMS.map((item) => {
@@ -101,23 +103,23 @@ export default function Layout({ children, currentPage, onNavigate }) {
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`relative flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 text-[11px] font-medium transition-all duration-[180ms] ease-[cubic-bezier(0.32,0.72,0,1)] ${
-                active ? 'text-white bg-white/[0.12] backdrop-blur-[20px] border border-white/[0.18] rounded-2xl px-4' : 'text-white/45'
+              className={`relative flex items-center justify-center gap-2 transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+                active ? 'flex-[2] bg-[#1c1c1e] text-white rounded-[20px] px-5 py-2.5' : 'flex-1 text-white/40 py-2.5'
               }`}
             >
-              <Icon size={18} strokeWidth={active ? 2.5 : 2} />
-              {item.label}
+              <Icon size={20} strokeWidth={2} />
+              {active && <span className="text-[13px] font-medium whitespace-nowrap">{item.label}</span>}
             </button>
           );
         })}
         <button
           onClick={() => setMoreSheetOpen(true)}
-          className={`relative flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 text-[11px] font-medium transition-all duration-[180ms] ease-[cubic-bezier(0.32,0.72,0,1)] ${
-            MORE_PAGES.includes(currentPage) ? 'text-white bg-white/[0.12] backdrop-blur-[20px] border border-white/[0.18] rounded-2xl px-4' : 'text-white/45'
+          className={`relative flex items-center justify-center gap-2 transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+            MORE_PAGES.includes(currentPage) ? 'flex-[2] bg-[#1c1c1e] text-white rounded-[20px] px-5 py-2.5' : 'flex-1 text-white/40 py-2.5'
           }`}
         >
-          <MoreHorizontal size={18} strokeWidth={MORE_PAGES.includes(currentPage) ? 2.5 : 2} />
-          Más
+          <MoreHorizontal size={20} strokeWidth={2} />
+          {MORE_PAGES.includes(currentPage) && <span className="text-[13px] font-medium whitespace-nowrap">Más</span>}
         </button>
       </nav>
 

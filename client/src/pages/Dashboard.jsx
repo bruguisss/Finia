@@ -3,7 +3,7 @@ import {
   Area, ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   ReferenceLine, ReferenceArea,
 } from 'recharts';
-import { ChevronLeft, ChevronRight, Receipt } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Receipt, Search, BarChart3, Plus } from 'lucide-react';
 import StatCard from '../components/StatCard.jsx';
 import TransactionCard from '../components/TransactionCard.jsx';
 import { useIsMobile } from '../hooks/useIsMobile.js';
@@ -131,7 +131,7 @@ function buildSpendingProgress(month, dailyTotals, totalBudget, prevMonthDailyTo
   return { data, daysInMonth, currentDay, cumulativeAtToday, projectedTotal, plannedRemaining };
 }
 
-export default function Dashboard() {
+export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) {
   const isMobile = useIsMobile();
   const [month, setMonth] = useState(getCurrentMonth());
 
@@ -160,77 +160,74 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <h2 className="text-xl font-semibold text-primary tracking-tight">Albert Brugué</h2>
-          <p className="text-sm text-secondary">Finanzas personales</p>
-        </div>
-        <div className="flex items-center gap-2">
+      {/* Mobile top bar */}
+      <div className="md:hidden flex items-center gap-3">
+        <button
+          onClick={onOpenMore}
+          className="w-10 h-10 rounded-full bg-white/[0.15] flex items-center justify-center text-[13px] font-semibold text-primary shrink-0"
+        >
+          AB
+        </button>
+        <button
+          onClick={() => onNavigate('transactions')}
+          className="flex-1 h-[38px] rounded-[20px] bg-white/[0.08] flex items-center gap-2 px-3.5 text-sm text-tertiary"
+        >
+          <Search size={15} strokeWidth={2} className="shrink-0" />
+          <span className="truncate">Buscar en Finia...</span>
+        </button>
+        <button
+          onClick={() => onNavigate('analytics')}
+          className="w-10 h-10 rounded-full bg-white/[0.1] flex items-center justify-center text-primary shrink-0"
+        >
+          <BarChart3 size={18} strokeWidth={2} />
+        </button>
+        <button
+          onClick={onAddTransaction}
+          className="w-10 h-10 rounded-full bg-white/[0.1] flex items-center justify-center text-primary shrink-0"
+        >
+          <Plus size={18} strokeWidth={2} />
+        </button>
+      </div>
+
+      {/* Desktop title */}
+      <div className="hidden md:block">
+        <h2 className="text-xl font-semibold text-primary tracking-tight">Albert Brugué</h2>
+        <p className="text-sm text-secondary">Finanzas personales</p>
+      </div>
+
+      {/* Monthly overview */}
+      <div className="bg-surface border border-border rounded-lg p-5 transition-colors duration-150 hover:border-border-hover">
+        {/* Month selector */}
+        <div className="flex items-center justify-center gap-3 mb-4">
           <button
             onClick={() => setMonth(addMonths(month, -1))}
-            className="w-8 h-8 rounded-md bg-muted border border-white/10 text-primary hover:bg-[#555555] transition-colors duration-150 flex items-center justify-center"
+            className="w-7 h-7 rounded-md bg-muted border border-white/10 text-primary hover:bg-[#555555] transition-colors duration-150 flex items-center justify-center"
           >
-            <ChevronLeft size={15} strokeWidth={2} />
+            <ChevronLeft size={14} strokeWidth={2} />
           </button>
-          <span className="text-sm text-primary font-medium px-2 capitalize">
-            {formatMonth(month)}
-          </span>
+          <span className="text-xs font-medium text-tertiary capitalize">{formatMonth(month)}</span>
           <button
             onClick={() => setMonth(addMonths(month, 1))}
             disabled={month >= getCurrentMonth()}
-            className="w-8 h-8 rounded-md bg-muted border border-white/10 text-primary hover:bg-[#555555] transition-colors duration-150 flex items-center justify-center disabled:opacity-30"
+            className="w-7 h-7 rounded-md bg-muted border border-white/10 text-primary hover:bg-[#555555] transition-colors duration-150 flex items-center justify-center disabled:opacity-30"
           >
-            <ChevronRight size={15} strokeWidth={2} />
+            <ChevronRight size={14} strokeWidth={2} />
           </button>
         </div>
-      </div>
 
-      {/* Monthly spending progress */}
-      <div className="bg-surface border border-border rounded-lg p-5 transition-colors duration-150 hover:border-border-hover">
-        <h3 className="text-sm font-medium tracking-heading text-primary mb-4">Progreso de gasto mensual</h3>
         {loading ? (
           <div className="skeleton h-64" />
         ) : (
           <>
-            {/* Key numbers */}
-            <div className="flex flex-wrap gap-x-8 gap-y-3 mb-5">
-              {totalBudget > 0 && (
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-secondary/40 shrink-0" />
-                  <div>
-                    <p className="text-[11px] font-medium text-secondary uppercase tracking-wider">Presupuesto</p>
-                    <p className="text-lg font-semibold text-primary font-mono tabular-nums">{formatEur(totalBudget)}</p>
-                  </div>
-                </div>
-              )}
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-sm bg-danger shrink-0" />
-                <div>
-                  <p className="text-[11px] font-medium text-secondary uppercase tracking-wider">Gastado</p>
-                  <p className="text-lg font-semibold text-primary font-mono tabular-nums">{formatEur(progress.cumulativeAtToday)}</p>
-                </div>
-              </div>
-              {progress.projectedTotal != null && (
-                <div className="flex items-center gap-2">
-                  <svg width="14" height="10" viewBox="0 0 14 10" className="shrink-0" aria-hidden="true">
-                    <line x1="0" y1="5" x2="14" y2="5" stroke={overBudget ? '#FF4D4D' : '#8A8A8A'} strokeWidth="1.5" strokeDasharray="4 4" />
-                  </svg>
-                  <div>
-                    <p className="text-[11px] font-medium text-secondary uppercase tracking-wider">Proyección fin de mes</p>
-                    <p className={`text-lg font-semibold font-mono tabular-nums ${overBudget ? 'text-danger' : 'text-primary'}`}>{formatEur(progress.projectedTotal)}</p>
-                  </div>
-                </div>
-              )}
-              {progress.plannedRemaining > 0 && (
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-warning shrink-0" />
-                  <div>
-                    <p className="text-[11px] font-medium text-secondary uppercase tracking-wider">Previsto resto de mes</p>
-                    <p className="text-lg font-semibold text-primary font-mono tabular-nums">{formatEur(progress.plannedRemaining)}</p>
-                  </div>
-                </div>
-              )}
+            {/* Hero balance */}
+            <div className="text-center mb-5">
+              <p className="text-[11px] font-medium text-tertiary uppercase tracking-wider mb-1">Disponible</p>
+              <p className={`text-5xl font-bold tracking-[-0.04em] ${data.balance >= 0 ? 'text-success' : 'text-danger'}`}>
+                {formatEur(data.balance)}
+              </p>
+              <p className="text-[17px] font-semibold text-secondary mt-1.5">
+                Gastado: {formatEur(progress.cumulativeAtToday)}
+              </p>
             </div>
 
             {/* Chart */}

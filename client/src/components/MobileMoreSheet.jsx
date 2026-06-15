@@ -1,7 +1,8 @@
 import React from 'react';
-import { Target, HandCoins, Tags, Upload } from 'lucide-react';
+import { BarChart3, Target, HandCoins, Tags, Upload } from 'lucide-react';
 
 const MORE_ITEMS = [
+  { id: 'analytics', icon: BarChart3, label: 'Análisis' },
   { id: 'budgets', icon: Target, label: 'Presupuestos' },
   { id: 'debts', icon: HandCoins, label: 'Deudas' },
   { id: 'categories', icon: Tags, label: 'Categorías' },
