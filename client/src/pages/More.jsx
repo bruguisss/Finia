@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { ChevronRight, Plus, Upload, Tags, BarChart3, Settings as SettingsIcon } from 'lucide-react';
+import { ChevronRight, Upload, Tags, BarChart3, Settings as SettingsIcon } from 'lucide-react';
 import Header from '../components/Header.jsx';
 import UploadZone from '../components/UploadZone.jsx';
-import AddTransactionModal from '../components/AddTransactionModal.jsx';
 
 function Row({ icon: Icon, label, onClick, last = false }) {
   return (
@@ -23,14 +22,12 @@ function Group({ children }) {
 
 export default function More({ onNavigate }) {
   const [uploadOpen, setUploadOpen] = useState(false);
-  const [addTxOpen, setAddTxOpen] = useState(false);
 
   return (
     <div className="pt-3 space-y-6">
       <Header title="Más" />
 
       <Group>
-        <Row icon={Plus} label="Añadir transacción" onClick={() => setAddTxOpen(true)} />
         <Row icon={Upload} label="Importar CSV" onClick={() => setUploadOpen(true)} last />
       </Group>
 
@@ -44,12 +41,6 @@ export default function More({ onNavigate }) {
       </Group>
 
       {uploadOpen && <UploadZone onClose={() => setUploadOpen(false)} />}
-      {addTxOpen && (
-        <AddTransactionModal
-          onClose={() => setAddTxOpen(false)}
-          onSwitchToUpload={() => { setAddTxOpen(false); setUploadOpen(true); }}
-        />
-      )}
     </div>
   );
 }
