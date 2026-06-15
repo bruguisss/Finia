@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { LayoutGrid, Receipt, BarChart3, Target, HandCoins, Tags, Upload, Plus, Flag, MoreHorizontal } from 'lucide-react';
 import Sidebar from './Sidebar.jsx';
 import UploadZone from './UploadZone.jsx';
@@ -30,6 +30,11 @@ export default function Layout({ children, currentPage, onNavigate }) {
   const [moreSheetOpen, setMoreSheetOpen] = useState(false);
   const meta = PAGE_META[currentPage] || PAGE_META.dashboard;
   const PageIcon = meta.icon;
+  const mainRef = useRef(null);
+
+  useEffect(() => {
+    mainRef.current?.scrollTo({ top: 0 });
+  }, [currentPage]);
 
   return (
     <div className="flex h-screen overflow-hidden bg-base text-primary">
@@ -77,8 +82,8 @@ export default function Layout({ children, currentPage, onNavigate }) {
         </header>
 
         {/* Main content */}
-        <main className="flex-1 overflow-y-auto">
-          <div key={currentPage} className="max-w-6xl mx-auto px-5 pt-[max(1.5rem,env(safe-area-inset-top))] md:pt-6 pb-[calc(100px+env(safe-area-inset-bottom))] md:pb-6 animate-fade-in-up">
+        <main ref={mainRef} className="flex-1 overflow-y-auto">
+          <div key={currentPage} className="max-w-6xl mx-auto px-5 pt-[max(1.5rem,env(safe-area-inset-top))] md:pt-6 pb-[calc(100px+env(safe-area-inset-bottom))] md:pb-6 animate-page-in">
             {children}
           </div>
         </main>
@@ -97,7 +102,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`relative flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 text-[11px] font-medium transition-all duration-[180ms] ease-in-out ${
+              className={`relative flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 text-[11px] font-medium transition-all duration-[180ms] ease-[cubic-bezier(0.32,0.72,0,1)] ${
                 active ? 'text-white bg-white/[0.12] backdrop-blur-[20px] border border-white/[0.18] rounded-2xl px-4' : 'text-white/45'
               }`}
             >
@@ -108,7 +113,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
         })}
         <button
           onClick={() => setMoreSheetOpen(true)}
-          className={`relative flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 text-[11px] font-medium transition-all duration-[180ms] ease-in-out ${
+          className={`relative flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 text-[11px] font-medium transition-all duration-[180ms] ease-[cubic-bezier(0.32,0.72,0,1)] ${
             MORE_PAGES.includes(currentPage) ? 'text-white bg-white/[0.12] backdrop-blur-[20px] border border-white/[0.18] rounded-2xl px-4' : 'text-white/45'
           }`}
         >
