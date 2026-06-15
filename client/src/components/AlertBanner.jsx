@@ -8,9 +8,9 @@ export default function AlertBanner({ budgets }) {
   if (exceeded.length === 0 && warning.length === 0) return null;
 
   return (
-    <div className="space-y-2 mb-4">
+    <div className="space-y-2 mb-6">
       {exceeded.length > 0 && (
-        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-danger/10 text-subhead">
+        <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-danger/10 border border-danger/30 text-sm">
           <AlertTriangle size={15} strokeWidth={2} className="text-danger shrink-0" />
           <span className="text-danger font-medium">Presupuesto superado:</span>
           <span className="text-primary">
@@ -19,7 +19,7 @@ export default function AlertBanner({ budgets }) {
         </div>
       )}
       {warning.length > 0 && (
-        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-warning/10 text-subhead">
+        <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-warning/10 border border-warning/30 text-sm">
           <Zap size={15} strokeWidth={2} className="text-warning shrink-0" />
           <span className="text-warning font-medium">Cerca del límite:</span>
           <span className="text-primary">

@@ -14,7 +14,7 @@ function formatDate(dateStr) {
   return new Date(dateStr + 'T00:00:00').toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
 }
 
-export default function TransactionCard({ transaction, onUpdate, onDelete, index = 0, last = false }) {
+export default function TransactionCard({ transaction, onUpdate, onDelete, index = 0 }) {
   const { categories } = useCategories();
   const [editing, setEditing] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -45,12 +45,12 @@ export default function TransactionCard({ transaction, onUpdate, onDelete, index
   return (
     <>
     <div
-      className={`flex items-center gap-3 py-2.5 min-h-[56px] active:scale-[0.98] transition-transform duration-[80ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] animate-fade-in-up-sm ${!last ? 'border-b border-white/[0.05]' : ''}`}
+      className="flex items-center gap-3 px-4 py-3 active:bg-white/[0.04] transition-colors duration-100 animate-fade-in-up-sm"
       style={{ animationDelay: `${Math.min(index, 8) * 30}ms` }}
     >
-      <CategoryAvatar category={transaction.category} size={40} />
+      <CategoryAvatar category={transaction.category} />
       <div className="flex-1 min-w-0">
-        <p className="text-body text-primary truncate">{transaction.description}</p>
+        <p className="text-[14px] text-primary truncate">{transaction.description}</p>
         {onUpdate ? (
           editing ? (
             <select
@@ -58,29 +58,26 @@ export default function TransactionCard({ transaction, onUpdate, onDelete, index
               value={transaction.category}
               onChange={handleCategoryChange}
               onBlur={() => setEditing(false)}
-              className="mt-0.5 bg-muted border border-border rounded px-1.5 py-0.5 text-caption text-primary focus:outline-none focus:border-white/30"
+              className="mt-0.5 bg-muted border border-border rounded px-1.5 py-0.5 text-[11px] text-primary focus:outline-none focus:border-white/30"
             >
               {categories.map((c) => (
                 <option key={c.name} value={c.name}>{c.name}</option>
               ))}
             </select>
           ) : (
-            <button onClick={() => setEditing(true)} className="text-caption text-tertiary truncate">
-              {transaction.category}
+            <button onClick={() => setEditing(true)} className="text-[12px] text-secondary">
+              {transaction.category} · {formatDate(transaction.date)}
             </button>
           )
         ) : (
-          <p className="text-caption text-tertiary truncate">{transaction.category}</p>
+          <p className="text-[12px] text-secondary">{transaction.category} · {formatDate(transaction.date)}</p>
         )}
       </div>
-      <div className="text-right shrink-0">
-        <p className={`text-body font-semibold ${isDebit ? 'text-danger' : 'text-success'}`}>
-          {formatAmount(transaction.amount, transaction.type)}
-        </p>
-        <p className="text-caption text-tertiary">{formatDate(transaction.date)}</p>
-      </div>
+      <span className={`text-[14px] font-medium font-mono tabular-nums shrink-0 ${isDebit ? 'text-danger' : 'text-success'}`}>
+        {formatAmount(transaction.amount, transaction.type)}
+      </span>
       {onDelete && (
-        <button onClick={() => setConfirmOpen(true)} className="shrink-0 text-tertiary hover:text-danger p-1.5 -mr-1.5 rounded-md">
+        <button onClick={() => setConfirmOpen(true)} className="shrink-0 text-secondary hover:text-danger p-1.5 -mr-1.5 rounded-md">
           <Trash2 size={14} strokeWidth={2} />
         </button>
       )}
