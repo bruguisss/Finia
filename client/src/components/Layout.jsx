@@ -66,14 +66,15 @@ export default function Layout({ children, currentPage, onNavigate }) {
 
         {/* Main content */}
         <main className="flex-1 overflow-y-auto">
-          <div key={currentPage} className="max-w-6xl mx-auto px-5 py-6 pb-24 md:pb-6 animate-fade-in-up">
+          <div key={currentPage} className="max-w-6xl mx-auto px-5 pt-[max(1.5rem,env(safe-area-inset-top))] md:pt-6 pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-6 animate-fade-in-up">
             {children}
           </div>
         </main>
       </div>
 
       {/* Mobile floating glass nav */}
-      <nav className="md:hidden fixed bottom-3 left-3 right-3 z-40 flex items-center justify-around gap-1 px-2 py-2 rounded-2xl bg-white/[0.06] backdrop-blur-xl backdrop-saturate-150 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
+      <nav className="md:hidden fixed left-3 right-3 z-40 flex items-center justify-around gap-1 px-2 py-2 rounded-[28px] bg-white/[0.07] backdrop-blur-2xl backdrop-saturate-150 border border-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.08)] overflow-hidden" style={{ bottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
+        <div className="absolute inset-0 rounded-[28px] bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none" />
         {MOBILE_NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const active = currentPage === item.id;
@@ -81,7 +82,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 rounded-xl text-[11px] font-medium transition-colors duration-150 ${
+              className={`relative flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 rounded-xl text-[11px] font-medium transition-colors duration-150 ${
                 active ? 'text-primary bg-white/10' : 'text-secondary'
               }`}
             >
@@ -92,7 +93,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
         })}
         <button
           onClick={() => setMoreSheetOpen(true)}
-          className={`flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 rounded-xl text-[11px] font-medium transition-colors duration-150 ${
+          className={`relative flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 rounded-xl text-[11px] font-medium transition-colors duration-150 ${
             MORE_PAGES.includes(currentPage) ? 'text-primary bg-white/10' : 'text-secondary'
           }`}
         >
@@ -104,9 +105,11 @@ export default function Layout({ children, currentPage, onNavigate }) {
       {/* Mobile floating glass FAB */}
       <button
         onClick={() => setAddTxOpen(true)}
-        className="md:hidden fixed bottom-[5.5rem] right-4 z-40 w-14 h-14 rounded-full flex items-center justify-center bg-white/[0.08] backdrop-blur-xl backdrop-saturate-150 border border-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.35)] text-primary"
+        className="md:hidden fixed right-4 z-40 w-14 h-14 rounded-full flex items-center justify-center bg-white/[0.09] backdrop-blur-2xl backdrop-saturate-150 border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.1)] text-primary overflow-hidden"
+        style={{ bottom: 'calc(5.5rem + env(safe-area-inset-bottom))' }}
       >
-        <Plus size={24} strokeWidth={2.5} />
+        <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/[0.1] to-transparent pointer-events-none" />
+        <Plus size={24} strokeWidth={2.5} className="relative" />
       </button>
 
       {moreSheetOpen && (
