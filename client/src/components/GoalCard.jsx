@@ -22,8 +22,8 @@ export default function GoalCard({ goal, onUpdate, onDelete }) {
   const isSavings = type === 'savings';
 
   const barColor = isSavings
-    ? '#00D4A8'
-    : (percentage >= 100 ? '#FF4D4D' : percentage >= 75 ? '#FFAA00' : '#00D4A8');
+    ? '#30D158'
+    : (percentage >= 100 ? '#FF453A' : percentage >= 75 ? '#FFD60A' : '#30D158');
 
   async function handleSaveTarget() {
     setSaving(true);
@@ -66,30 +66,30 @@ export default function GoalCard({ goal, onUpdate, onDelete }) {
   }
 
   return (
-    <div className="bg-surface border border-border rounded-lg p-5 transition-colors duration-150 hover:border-border-hover">
+    <div className="bg-surface border border-border rounded-2xl p-5 transition-colors duration-150">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
           {isSavings ? (
             <PiggyBank size={18} strokeWidth={1.75} className="text-success shrink-0" />
           ) : (
-            <TrendingDown size={18} strokeWidth={1.75} className="text-accent shrink-0" />
+            <TrendingDown size={18} strokeWidth={1.75} className="text-blue shrink-0" />
           )}
           <div className="min-w-0">
-            <p className="text-sm font-medium text-primary truncate">{name}</p>
-            <p className="text-xs text-secondary">
+            <p className="text-subhead font-medium text-primary truncate">{name}</p>
+            <p className="text-caption text-tertiary">
               {formatEur(current_amount)} de {formatEur(target_amount)}
               {target_date && ` · hasta ${formatDate(target_date)}`}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <span className="text-sm font-semibold tabular-nums" style={{ color: barColor }}>
+          <span className="text-subhead font-semibold tabular-nums" style={{ color: barColor }}>
             {percentage}%
           </span>
-          <button onClick={() => setEditing(!editing)} className="text-secondary hover:text-primary transition-colors duration-150">
+          <button onClick={() => setEditing(!editing)} className="text-tertiary p-1">
             <Pencil size={13} strokeWidth={2} />
           </button>
-          <button onClick={() => setConfirmOpen(true)} className="text-secondary hover:text-danger transition-colors duration-150">
+          <button onClick={() => setConfirmOpen(true)} className="text-tertiary p-1">
             <Trash2 size={13} strokeWidth={2} />
           </button>
         </div>
@@ -108,7 +108,7 @@ export default function GoalCard({ goal, onUpdate, onDelete }) {
             type="number"
             value={target}
             onChange={(e) => setTarget(e.target.value)}
-            className="flex-1 bg-muted border border-border rounded px-3 py-1.5 text-sm text-primary focus:outline-none focus:border-white/30"
+            className="flex-1 bg-elevated border border-border rounded-lg px-3 py-1.5 text-subhead text-primary focus:outline-none focus:border-border-strong"
             placeholder="Importe objetivo"
             min="0"
             step="10"
@@ -116,7 +116,7 @@ export default function GoalCard({ goal, onUpdate, onDelete }) {
           <button
             onClick={handleSaveTarget}
             disabled={saving}
-            className="px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-semibold hover:bg-accent-hover transition-colors duration-150 disabled:opacity-50"
+            className="px-3.5 py-1.5 rounded-md bg-blue text-white text-caption font-semibold disabled:opacity-50"
           >
             {saving ? '...' : 'Guardar'}
           </button>
@@ -129,14 +129,14 @@ export default function GoalCard({ goal, onUpdate, onDelete }) {
             type="number"
             value={contribution}
             onChange={(e) => setContribution(e.target.value)}
-            className="flex-1 bg-muted border border-border rounded px-3 py-1.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-white/30"
+            className="flex-1 bg-elevated border border-border rounded-lg px-3 py-1.5 text-subhead text-primary placeholder-tertiary focus:outline-none focus:border-border-strong"
             placeholder="Añadir aporte (€)"
             step="1"
           />
           <button
             type="submit"
             disabled={saving}
-            className="flex items-center gap-1 px-3.5 py-1.5 rounded-md bg-muted border border-white/10 text-primary hover:bg-[#555555] text-[13px] font-medium transition-colors duration-150 disabled:opacity-50"
+            className="flex items-center gap-1 px-3.5 py-1.5 rounded-md bg-elevated border border-border text-primary text-caption font-medium disabled:opacity-50"
           >
             <Plus size={13} strokeWidth={2} />
             Aporte

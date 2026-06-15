@@ -4,7 +4,7 @@ import ConfirmDialog from './ConfirmDialog.jsx';
 import { updateDebt, deleteDebt } from '../api.js';
 
 const STATUS_LABELS = { pending: 'Pendiente', partial: 'Parcial', paid: 'Pagada' };
-const STATUS_COLORS = { pending: '#FFAA00', partial: '#8A8A8A', paid: '#00D4A8' };
+const STATUS_COLORS = { pending: '#FFD60A', partial: 'rgba(235,235,245,0.6)', paid: '#30D158' };
 
 function formatEur(n) {
   return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) + ' €';
@@ -57,34 +57,31 @@ export default function DebtCard({ debt, onEdit, onUpdate, onDelete }) {
   }
 
   return (
-    <div className="bg-surface border border-border rounded-lg p-5 transition-colors duration-150 hover:border-border-hover">
+    <div className="bg-surface border border-border rounded-2xl p-5 transition-colors duration-150">
       <div className="flex items-start justify-between mb-2">
         <div className="min-w-0">
-          <p className="text-sm font-medium text-primary truncate">{debt.person}</p>
-          {debt.description && <p className="text-xs text-secondary mt-0.5 truncate">{debt.description}</p>}
+          <p className="text-subhead font-medium text-primary truncate">{debt.person}</p>
+          {debt.description && <p className="text-caption text-tertiary mt-0.5 truncate">{debt.description}</p>}
         </div>
         <div className="flex items-center gap-2 shrink-0 ml-2">
-          <button onClick={() => onEdit(debt)} className="text-secondary hover:text-primary transition-colors duration-150">
+          <button onClick={() => onEdit(debt)} className="text-tertiary p-1">
             <Pencil size={13} strokeWidth={2} />
           </button>
-          <button onClick={() => setConfirmOpen(true)} className="text-secondary hover:text-danger transition-colors duration-150">
+          <button onClick={() => setConfirmOpen(true)} className="text-tertiary p-1">
             <Trash2 size={13} strokeWidth={2} />
           </button>
         </div>
       </div>
 
       <div className="flex flex-wrap items-center gap-2 mb-3">
-        <span className={`text-xs font-medium px-2 py-0.5 rounded ${isOwedByMe ? 'bg-danger/10 text-danger' : 'bg-success/10 text-success'}`}>
-          {isOwedByMe ? 'Yo debo' : 'Me deben'}
-        </span>
         <span
-          className="text-xs font-medium px-2 py-0.5 rounded"
+          className="text-caption font-medium px-2 py-0.5 rounded"
           style={{ backgroundColor: `${STATUS_COLORS[debt.status]}1a`, color: STATUS_COLORS[debt.status] }}
         >
           {STATUS_LABELS[debt.status]}
         </span>
         {overdue && (
-          <span className="text-xs font-medium px-2 py-0.5 rounded bg-danger/10 text-danger">
+          <span className="text-caption font-medium px-2 py-0.5 rounded bg-danger/10 text-danger">
             Vencida
           </span>
         )}
@@ -92,23 +89,23 @@ export default function DebtCard({ debt, onEdit, onUpdate, onDelete }) {
 
       <div className="flex items-end justify-between mb-2 gap-2">
         <div>
-          <p className={`text-xl font-semibold tabular-nums ${isOwedByMe ? 'text-danger' : 'text-success'}`}>
+          <p className={`text-title-2 tabular-nums ${isOwedByMe ? 'text-danger' : 'text-success'}`}>
             {formatEur(remaining)}
           </p>
           {debt.amount_paid > 0 && (
-            <p className="text-xs text-secondary">de {formatEur(debt.amount)} · pagado {formatEur(debt.amount_paid)}</p>
+            <p className="text-caption text-tertiary">de {formatEur(debt.amount)} · pagado {formatEur(debt.amount_paid)}</p>
           )}
         </div>
         {debt.date_due && (
-          <p className={`text-xs whitespace-nowrap ${overdue ? 'text-danger' : 'text-secondary'}`}>
+          <p className={`text-caption whitespace-nowrap ${overdue ? 'text-danger' : 'text-tertiary'}`}>
             Vence: {formatDate(debt.date_due)}
           </p>
         )}
       </div>
 
       {debt.amount_paid > 0 && debt.status !== 'paid' && (
-        <div className="h-1.5 bg-elevated rounded-full overflow-hidden mb-3">
-          <div className="h-full rounded-full bg-accent transition-all duration-500" style={{ width: `${percentage}%` }} />
+        <div className="h-1 bg-elevated rounded-full overflow-hidden mb-3">
+          <div className="h-full rounded-full bg-blue transition-all duration-500" style={{ width: `${percentage}%` }} />
         </div>
       )}
 
@@ -121,12 +118,12 @@ export default function DebtCard({ debt, onEdit, onUpdate, onDelete }) {
             placeholder="Registrar abono (€)"
             min="0.01"
             step="0.01"
-            className="flex-1 min-w-0 bg-muted border border-border rounded px-2.5 py-1.5 text-xs text-primary placeholder-secondary focus:outline-none focus:border-white/30"
+            className="flex-1 min-w-0 bg-elevated border border-border rounded-lg px-2.5 py-1.5 text-caption text-primary placeholder-tertiary focus:outline-none focus:border-border-strong"
           />
           <button
             type="submit"
             disabled={paying || !payAmount}
-            className="px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-semibold hover:bg-accent-hover transition-colors duration-150 disabled:opacity-50"
+            className="px-3.5 py-1.5 rounded-md bg-blue text-white text-caption font-semibold disabled:opacity-50"
           >
             {paying ? '...' : 'Abonar'}
           </button>

@@ -4,9 +4,7 @@ import SplashScreen from './components/SplashScreen.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Transactions from './pages/Transactions.jsx';
 import Analytics from './pages/Analytics.jsx';
-import Budgets from './pages/Budgets.jsx';
-import Planning from './pages/Planning.jsx';
-import Debts from './pages/Debts.jsx';
+import Plan from './pages/Plan.jsx';
 import Categories from './pages/Categories.jsx';
 import More from './pages/More.jsx';
 import Settings from './pages/Settings.jsx';
@@ -30,11 +28,9 @@ export default function App() {
   const pages = {
     dashboard: <Dashboard onNavigate={setPage} />,
     transactions: <Transactions />,
-    plan: <Planning />,
+    plan: <Plan />,
     more: <More onNavigate={setPage} />,
     analytics: <Analytics />,
-    budgets: <Budgets />,
-    debts: <Debts />,
     categories: <Categories />,
     settings: <Settings onNavigate={setPage} />,
   };

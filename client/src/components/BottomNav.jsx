@@ -9,7 +9,7 @@ const NAV_ITEMS = [
 ];
 
 // Pages reachable only via the "Más" tab — kept highlighted as a group.
-const MORE_PAGES = ['more', 'analytics', 'categories', 'settings', 'budgets', 'debts'];
+const MORE_PAGES = ['more', 'analytics', 'categories', 'settings'];
 
 export default function BottomNav({ currentPage, onNavigate }) {
   return (

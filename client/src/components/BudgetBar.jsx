@@ -8,7 +8,7 @@ function formatEur(n) {
   return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) + ' €';
 }
 
-export default function BudgetBar({ budget, onUpdate, onDelete }) {
+export default function BudgetBar({ budget, onUpdate, onDelete, last = false }) {
   const { getCategory } = useCategories();
   const [editing, setEditing] = useState(false);
   const [limit, setLimit] = useState(budget.monthly_limit);
@@ -20,7 +20,7 @@ export default function BudgetBar({ budget, onUpdate, onDelete }) {
   const emoji = cat?.emoji || DEFAULT_EMOJI;
   const color = cat?.color || DEFAULT_COLOR;
 
-  const barColor = percentage >= 100 ? '#FF4D4D' : percentage >= 75 ? '#FFAA00' : '#00D4A8';
+  const barColor = percentage >= 100 ? '#FF453A' : percentage >= 75 ? '#FFD60A' : '#30D158';
 
   async function handleSave() {
     setSaving(true);
@@ -46,47 +46,39 @@ export default function BudgetBar({ budget, onUpdate, onDelete }) {
   }
 
   return (
-    <div className="bg-surface border border-border rounded-lg p-5 transition-colors duration-150 hover:border-border-hover">
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <span className="text-xl">{emoji}</span>
-          <div>
-            <p className="text-sm font-medium text-primary">{category}</p>
-            <p className="text-xs text-secondary">{formatEur(spent)} de {formatEur(monthly_limit)}</p>
-          </div>
+    <div className={`py-3 ${!last ? 'border-b border-white/[0.05]' : ''}`}>
+      <div className="flex items-center justify-between gap-2 mb-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="text-base shrink-0">{emoji}</span>
+          <p className="text-subhead text-primary truncate">{category}</p>
         </div>
-        <div className="flex items-center gap-2">
-          <span
-            className="text-sm font-semibold tabular-nums"
-            style={{ color: barColor }}
-          >
-            {percentage}%
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className="text-caption text-tertiary tabular-nums whitespace-nowrap">
+            {formatEur(spent)} / {formatEur(monthly_limit)}
           </span>
-          <button onClick={() => setEditing(!editing)} className="text-secondary hover:text-primary transition-colors duration-150">
+          <button onClick={() => setEditing(!editing)} className="text-tertiary p-1">
             <Pencil size={13} strokeWidth={2} />
           </button>
-          <button onClick={() => setConfirmOpen(true)} className="text-secondary hover:text-danger transition-colors duration-150">
+          <button onClick={() => setConfirmOpen(true)} className="text-tertiary p-1">
             <Trash2 size={13} strokeWidth={2} />
           </button>
         </div>
       </div>
 
-      {/* Progress bar */}
-      <div className="h-2 bg-elevated rounded-full overflow-hidden">
+      <div className="h-1 bg-elevated rounded-full overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-500"
           style={{ width: `${Math.min(percentage, 100)}%`, backgroundColor: barColor }}
         />
       </div>
 
-      {/* Edit form */}
       {editing && (
         <div className="mt-3 flex items-center gap-2">
           <input
             type="number"
             value={limit}
             onChange={(e) => setLimit(e.target.value)}
-            className="flex-1 bg-muted border border-border rounded px-3 py-1.5 text-sm text-primary focus:outline-none focus:border-white/30"
+            className="flex-1 bg-elevated border border-border rounded-lg px-3 py-1.5 text-subhead text-primary focus:outline-none focus:border-border-strong"
             placeholder="Límite mensual"
             min="0"
             step="10"
@@ -94,7 +86,7 @@ export default function BudgetBar({ budget, onUpdate, onDelete }) {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-semibold hover:bg-accent-hover transition-colors duration-150 disabled:opacity-50"
+            className="px-3.5 py-1.5 rounded-md bg-blue text-white text-caption font-semibold disabled:opacity-50"
           >
             {saving ? '...' : 'Guardar'}
           </button>

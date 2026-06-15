@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronRight, Plus, Upload, Target, HandCoins, Tags, BarChart3, Settings as SettingsIcon } from 'lucide-react';
+import { ChevronRight, Plus, Upload, Tags, BarChart3, Settings as SettingsIcon } from 'lucide-react';
 import Header from '../components/Header.jsx';
 import UploadZone from '../components/UploadZone.jsx';
 import AddTransactionModal from '../components/AddTransactionModal.jsx';
@@ -35,8 +35,6 @@ export default function More({ onNavigate }) {
       </Group>
 
       <Group>
-        <Row icon={Target} label="Presupuestos" onClick={() => onNavigate('budgets')} />
-        <Row icon={HandCoins} label="Deudas" onClick={() => onNavigate('debts')} />
         <Row icon={Tags} label="Categorías" onClick={() => onNavigate('categories')} />
         <Row icon={BarChart3} label="Análisis detallado" onClick={() => onNavigate('analytics')} last />
       </Group>
