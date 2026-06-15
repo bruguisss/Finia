@@ -3,7 +3,7 @@ import { Pencil, Trash2 } from 'lucide-react';
 import { updateDebt, deleteDebt } from '../api.js';
 
 const STATUS_LABELS = { pending: 'Pendiente', partial: 'Parcial', paid: 'Pagada' };
-const STATUS_COLORS = { pending: '#f59e0b', partial: '#a1a1aa', paid: '#22c55e' };
+const STATUS_COLORS = { pending: '#FFD60A', partial: '#8E8E93', paid: '#34C759' };
 
 function formatEur(n) {
   return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) + ' €';

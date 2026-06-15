@@ -42,10 +42,10 @@ const ProgressTooltip = ({ active, payload, label, isMobile }) => {
   return (
     <div className={`bg-elevated border border-border rounded-md ${isMobile ? 'p-2 text-[11px]' : 'p-3 text-xs'}`}>
       <p className="text-secondary mb-1">Día {label}</p>
-      {actual && <p style={{ color: '#DC2626' }}>Gastado: {fmt(actual.value)}</p>}
-      {projected && <p style={{ color: '#94A3B8' }}>Proyección: {fmt(projected.value)}</p>}
-      {scheduled && <p style={{ color: '#f59e0b' }}>Previsto: {fmt(scheduled.value)}</p>}
-      {budget && <p style={{ color: '#94A3B8' }}>Presupuesto: {fmt(budget.value)}</p>}
+      {actual && <p style={{ color: '#FF3B30' }}>Gastado: {fmt(actual.value)}</p>}
+      {projected && <p style={{ color: '#8E8E93' }}>Proyección: {fmt(projected.value)}</p>}
+      {scheduled && <p style={{ color: '#FFD60A' }}>Previsto: {fmt(scheduled.value)}</p>}
+      {budget && <p style={{ color: '#8E8E93' }}>Presupuesto: {fmt(budget.value)}</p>}
     </div>
   );
 };
@@ -180,7 +180,7 @@ export default function Dashboard() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setMonth(addMonths(month, -1))}
-            className="w-8 h-8 rounded-md bg-muted border border-white/10 text-primary hover:bg-[#334155] transition-colors duration-150 flex items-center justify-center"
+            className="w-8 h-8 rounded-md bg-muted border border-white/10 text-primary hover:bg-[#3A3A3C] transition-colors duration-150 flex items-center justify-center"
           >
             <ChevronLeft size={15} strokeWidth={2} />
           </button>
@@ -190,7 +190,7 @@ export default function Dashboard() {
           <button
             onClick={() => setMonth(addMonths(month, 1))}
             disabled={month >= getCurrentMonth()}
-            className="w-8 h-8 rounded-md bg-muted border border-white/10 text-primary hover:bg-[#334155] transition-colors duration-150 flex items-center justify-center disabled:opacity-30"
+            className="w-8 h-8 rounded-md bg-muted border border-white/10 text-primary hover:bg-[#3A3A3C] transition-colors duration-150 flex items-center justify-center disabled:opacity-30"
           >
             <ChevronRight size={15} strokeWidth={2} />
           </button>
@@ -225,7 +225,7 @@ export default function Dashboard() {
               {progress.projectedTotal != null && (
                 <div className="flex items-center gap-2">
                   <svg width="14" height="10" viewBox="0 0 14 10" className="shrink-0" aria-hidden="true">
-                    <line x1="0" y1="5" x2="14" y2="5" stroke={overBudget ? '#DC2626' : '#94A3B8'} strokeWidth="1.5" strokeDasharray="4 4" />
+                    <line x1="0" y1="5" x2="14" y2="5" stroke={overBudget ? '#FF3B30' : '#8E8E93'} strokeWidth="1.5" strokeDasharray="4 4" />
                   </svg>
                   <div>
                     <p className="text-[11px] font-medium text-secondary uppercase tracking-wider">Proyección fin de mes</p>
@@ -249,33 +249,33 @@ export default function Dashboard() {
               <ComposedChart data={progress.data} margin={{ top: 5, right: 5, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="spendGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#DC2626" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#DC2626" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#FF3B30" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="#FF3B30" stopOpacity={0} />
                   </linearGradient>
                   <pattern id="projectionHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
                     <rect width="6" height="6" fill="transparent" />
-                    <line x1="0" y1="0" x2="0" y2="6" stroke={overBudget ? '#DC2626' : '#94A3B8'} strokeWidth="1" strokeOpacity="0.25" />
+                    <line x1="0" y1="0" x2="0" y2="6" stroke={overBudget ? '#FF3B30' : '#8E8E93'} strokeWidth="1" strokeOpacity="0.25" />
                   </pattern>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                <XAxis dataKey="day" tick={{ fill: '#94A3B8', fontSize: 11 }} axisLine={false} tickLine={false} interval={isMobile ? 6 : 2} />
-                <YAxis tick={{ fill: '#94A3B8', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v)}€`} tickCount={5} />
+                <XAxis dataKey="day" tick={{ fill: '#8E8E93', fontSize: 11 }} axisLine={false} tickLine={false} interval={isMobile ? 6 : 2} />
+                <YAxis tick={{ fill: '#8E8E93', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v)}€`} tickCount={5} />
                 <Tooltip content={<ProgressTooltip isMobile={isMobile} />} />
                 {progress.currentDay < progress.daysInMonth && (
                   <ReferenceArea x1={progress.currentDay} x2={progress.daysInMonth} fill="url(#projectionHatch)" stroke="none" />
                 )}
                 {totalBudget > 0 && (
-                  <Line type="monotone" dataKey="budget" stroke="#94A3B8" strokeWidth={1.5} strokeDasharray="4 4" dot={false} isAnimationActive={!isMobile} />
+                  <Line type="monotone" dataKey="budget" stroke="#8E8E93" strokeWidth={1.5} strokeDasharray="4 4" dot={false} isAnimationActive={!isMobile} />
                 )}
-                <Area type="monotone" dataKey="actual" stroke="#DC2626" fill="url(#spendGrad)" strokeWidth={2} dot={false} connectNulls isAnimationActive={!isMobile} />
+                <Area type="monotone" dataKey="actual" stroke="#FF3B30" fill="url(#spendGrad)" strokeWidth={2} dot={false} connectNulls isAnimationActive={!isMobile} />
                 {progress.currentDay < progress.daysInMonth && (
-                  <Line type="monotone" dataKey="projected" stroke={overBudget ? '#DC2626' : '#94A3B8'} strokeWidth={1.5} strokeDasharray="4 4" dot={false} connectNulls isAnimationActive={!isMobile} />
+                  <Line type="monotone" dataKey="projected" stroke={overBudget ? '#FF3B30' : '#8E8E93'} strokeWidth={1.5} strokeDasharray="4 4" dot={false} connectNulls isAnimationActive={!isMobile} />
                 )}
                 {progress.currentDay < progress.daysInMonth && progress.plannedRemaining > 0 && (
-                  <Line type="monotone" dataKey="scheduled" stroke="#f59e0b" strokeWidth={1.5} strokeDasharray="2 3" dot={false} connectNulls isAnimationActive={!isMobile} />
+                  <Line type="monotone" dataKey="scheduled" stroke="#FFD60A" strokeWidth={1.5} strokeDasharray="2 3" dot={false} connectNulls isAnimationActive={!isMobile} />
                 )}
                 {progress.currentDay < progress.daysInMonth && (
-                  <ReferenceLine x={progress.currentDay} stroke="rgba(255,255,255,0.2)" strokeDasharray="3 3" label={{ value: 'Hoy', position: 'top', fill: '#94A3B8', fontSize: 11 }} />
+                  <ReferenceLine x={progress.currentDay} stroke="rgba(255,255,255,0.2)" strokeDasharray="3 3" label={{ value: 'Hoy', position: 'top', fill: '#8E8E93', fontSize: 11 }} />
                 )}
               </ComposedChart>
             </ResponsiveContainer>

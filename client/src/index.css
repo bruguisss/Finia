@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -10,7 +10,7 @@
   }
 
   html {
-    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -22,12 +22,8 @@
   }
 
   body {
-    background-color: #0B1220;
-    color: #F8FAFC;
-  }
-
-  h1, h2, h3 {
-    @apply font-heading;
+    background-color: #000000;
+    color: #FFFFFF;
   }
 
   button, a, [role="button"], summary, select, label[for] {
@@ -43,7 +39,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid #3B82F6;
+    outline: 2px solid #FF9500;
     outline-offset: 1px;
   }
 
@@ -62,12 +58,12 @@
   }
 
   .amount-positive {
-    color: #22c55e;
+    color: #34C759;
     font-variant-numeric: tabular-nums;
   }
 
   .amount-negative {
-    color: #DC2626;
+    color: #FF3B30;
     font-variant-numeric: tabular-nums;
   }
 }
@@ -79,7 +75,7 @@
 }
 
 .skeleton {
-  background-color: #161F36;
+  background-color: #242426;
   border-radius: 4px;
   animation: skeleton-pulse 1.5s ease-in-out infinite;
 }

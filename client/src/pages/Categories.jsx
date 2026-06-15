@@ -10,7 +10,7 @@ export default function Categories() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [name, setName] = useState('');
-  const [color, setColor] = useState('#22c55e');
+  const [color, setColor] = useState('#34C759');
   const [emoji, setEmoji] = useState('🏷️');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -18,7 +18,7 @@ export default function Categories() {
   function openCreate() {
     setEditing(null);
     setName('');
-    setColor('#22c55e');
+    setColor('#34C759');
     setEmoji('🏷️');
     setError(null);
     setModalOpen(true);
@@ -187,7 +187,7 @@ export default function Categories() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="flex-1 px-4 py-2.5 rounded-md bg-muted border border-white/10 text-sm font-medium text-primary hover:bg-[#334155] transition-colors duration-150"
+                  className="flex-1 px-4 py-2.5 rounded-md bg-muted border border-white/10 text-sm font-medium text-primary hover:bg-[#3A3A3C] transition-colors duration-150"
                 >
                   Cancelar
                 </button>

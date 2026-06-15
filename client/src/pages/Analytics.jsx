@@ -21,7 +21,7 @@ function shortMonth(monthStr) {
 }
 
 const CHART_TOOLTIP_STYLE = {
-  backgroundColor: '#121A2E',
+  backgroundColor: '#1C1C1E',
   border: '1px solid rgba(255,255,255,0.07)',
   borderRadius: 6,
   fontSize: 12,
@@ -96,15 +96,15 @@ export default function Analytics() {
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={barData} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-              <XAxis dataKey="month" tick={{ fill: '#94A3B8', fontSize: 12 }} axisLine={false} tickLine={false} interval={isMobile ? 1 : 0} />
-              <YAxis tick={{ fill: '#94A3B8', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} tickCount={isMobile ? 3 : 5} />
+              <XAxis dataKey="month" tick={{ fill: '#8E8E93', fontSize: 12 }} axisLine={false} tickLine={false} interval={isMobile ? 1 : 0} />
+              <YAxis tick={{ fill: '#8E8E93', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} tickCount={isMobile ? 3 : 5} />
               <Tooltip
                 contentStyle={{ ...CHART_TOOLTIP_STYLE, fontSize: isMobile ? 11 : 12 }}
                 formatter={(v) => isMobile ? formatEurCompact(v) : formatEur(v)}
               />
-              <Legend formatter={(v) => <span style={{ color: '#94A3B8', fontSize: 12 }}>{v}</span>} />
-              <Bar dataKey="Ingresos" fill="#22c55e" radius={[4, 4, 0, 0]} isAnimationActive={!isMobile} />
-              <Bar dataKey="Gastos" fill="#DC2626" radius={[4, 4, 0, 0]} isAnimationActive={!isMobile} />
+              <Legend formatter={(v) => <span style={{ color: '#8E8E93', fontSize: 12 }}>{v}</span>} />
+              <Bar dataKey="Ingresos" fill="#34C759" radius={[4, 4, 0, 0]} isAnimationActive={!isMobile} />
+              <Bar dataKey="Gastos" fill="#FF3B30" radius={[4, 4, 0, 0]} isAnimationActive={!isMobile} />
             </BarChart>
           </ResponsiveContainer>
         )}
@@ -119,13 +119,13 @@ export default function Analytics() {
           <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={stackedData} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-              <XAxis dataKey="month" tick={{ fill: '#94A3B8', fontSize: 12 }} axisLine={false} tickLine={false} interval={isMobile ? 1 : 0} />
-              <YAxis tick={{ fill: '#94A3B8', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} tickCount={isMobile ? 3 : 5} />
+              <XAxis dataKey="month" tick={{ fill: '#8E8E93', fontSize: 12 }} axisLine={false} tickLine={false} interval={isMobile ? 1 : 0} />
+              <YAxis tick={{ fill: '#8E8E93', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} tickCount={isMobile ? 3 : 5} />
               <Tooltip
                 contentStyle={{ ...CHART_TOOLTIP_STYLE, fontSize: isMobile ? 11 : 12 }}
                 formatter={(v) => isMobile ? formatEurCompact(v) : formatEur(v)}
               />
-              <Legend formatter={(v) => <span style={{ color: '#94A3B8', fontSize: 12 }}>{v}</span>} />
+              <Legend formatter={(v) => <span style={{ color: '#8E8E93', fontSize: 12 }}>{v}</span>} />
               {TOP_CATEGORIES.map((c) => (
                 <Area
                   key={c}

@@ -18,7 +18,7 @@ export default function BudgetBar({ budget, onUpdate, onDelete }) {
   const emoji = cat?.emoji || DEFAULT_EMOJI;
   const color = cat?.color || DEFAULT_COLOR;
 
-  const barColor = percentage >= 100 ? '#DC2626' : percentage >= 75 ? '#f59e0b' : '#22c55e';
+  const barColor = percentage >= 100 ? '#FF3B30' : percentage >= 75 ? '#FFD60A' : '#34C759';
 
   async function handleSave() {
     setSaving(true);
