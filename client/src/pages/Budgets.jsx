@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, X, Target } from 'lucide-react';
 import BudgetBar from '../components/BudgetBar.jsx';
 import AlertBanner from '../components/AlertBanner.jsx';
 import { useCategories } from '../context/CategoriesContext.jsx';
+import { useCachedData } from '../context/DataContext.jsx';
 import { getBudgets, createBudget } from '../api.js';
 
 function getCurrentMonth() {
@@ -23,27 +24,13 @@ function formatMonth(month) {
 export default function Budgets() {
   const { categories } = useCategories();
   const [month, setMonth] = useState(getCurrentMonth());
-  const [budgets, setBudgets] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [newCategory, setNewCategory] = useState('');
   const [newLimit, setNewLimit] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    try {
-      const data = await getBudgets(month);
-      setBudgets(data);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }, [month]);
-
-  useEffect(() => { load(); }, [load]);
+  const { data: budgets = [], loading, mutate } = useCachedData(`budgets:${month}`, useCallback(() => getBudgets(month), [month]));
 
   async function handleCreate(e) {
     e.preventDefault();
@@ -55,7 +42,7 @@ export default function Budgets() {
     setError(null);
     try {
       const created = await createBudget({ category: newCategory, monthly_limit: parseFloat(newLimit) });
-      setBudgets((prev) => [...prev, created]);
+      mutate((prev) => [...(prev ?? []), created]);
       setModalOpen(false);
       setNewLimit('');
     } catch (err) {
@@ -66,11 +53,11 @@ export default function Budgets() {
   }
 
   function handleUpdate(updated) {
-    setBudgets((prev) => prev.map((b) => b.id === updated.id ? updated : b));
+    mutate((prev) => (prev ?? []).map((b) => b.id === updated.id ? updated : b));
   }
 
   function handleDelete(id) {
-    setBudgets((prev) => prev.filter((b) => b.id !== id));
+    mutate((prev) => (prev ?? []).filter((b) => b.id !== id));
   }
 
   const usedCategories = new Set(budgets.map((b) => b.category));

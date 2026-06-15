@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   AreaChart, Area,
 } from 'recharts';
 import { useCategories, DEFAULT_COLOR } from '../context/CategoriesContext.jsx';
+import { useCachedData } from '../context/DataContext.jsx';
 import { getMonthlyTrend, getTransactions } from '../api.js';
 import { useIsMobile } from '../hooks/useIsMobile.js';
 
@@ -32,40 +33,30 @@ const TOP_CATEGORIES = ['Alimentación', 'Transporte', 'Ocio', 'Hogar', 'Compras
 export default function Analytics() {
   const { getCategory } = useCategories();
   const isMobile = useIsMobile();
-  const [trend, setTrend] = useState(null);
-  const [topMerchants, setTopMerchants] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function load() {
-      setLoading(true);
-      try {
-        const [trendData, txRes] = await Promise.all([
-          getMonthlyTrend(),
-          getTransactions({ type: 'debit', limit: 500, offset: 0 }),
-        ]);
-        setTrend(trendData);
+  const { data: result, loading } = useCachedData('analytics', useCallback(async () => {
+    const [trendData, txRes] = await Promise.all([
+      getMonthlyTrend(),
+      getTransactions({ type: 'debit', limit: 500, offset: 0 }),
+    ]);
 
-        // Aggregate top merchants
-        const map = {};
-        for (const t of txRes.transactions) {
-          const key = t.description;
-          if (!map[key]) map[key] = { description: key, count: 0, total: 0 };
-          map[key].count++;
-          map[key].total += t.amount;
-        }
-        const sorted = Object.values(map)
-          .sort((a, b) => b.total - a.total)
-          .slice(0, 10);
-        setTopMerchants(sorted);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
+    // Aggregate top merchants
+    const map = {};
+    for (const t of txRes.transactions) {
+      const key = t.description;
+      if (!map[key]) map[key] = { description: key, count: 0, total: 0 };
+      map[key].count++;
+      map[key].total += t.amount;
     }
-    load();
-  }, []);
+    const topMerchants = Object.values(map)
+      .sort((a, b) => b.total - a.total)
+      .slice(0, 10);
+
+    return { trend: trendData, topMerchants };
+  }, []));
+
+  const trend = result?.trend ?? null;
+  const topMerchants = result?.topMerchants ?? [];
 
   // Prepare stacked area data: each month has a breakdown per category
   const stackedData = (trend || []).map((m) => {

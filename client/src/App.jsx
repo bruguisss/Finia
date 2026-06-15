@@ -9,6 +9,7 @@ import Planning from './pages/Planning.jsx';
 import Debts from './pages/Debts.jsx';
 import Categories from './pages/Categories.jsx';
 import { CategoriesProvider } from './context/CategoriesContext.jsx';
+import { DataProvider } from './context/DataContext.jsx';
 
 export default function App() {
   const [page, setPage] = useState('dashboard');
@@ -35,11 +36,13 @@ export default function App() {
   };
 
   return (
-    <CategoriesProvider>
-      {showSplash && <SplashScreen fadingOut={splashFadingOut} />}
-      <Layout currentPage={page} onNavigate={setPage}>
-        {pages[page] || pages.dashboard}
-      </Layout>
-    </CategoriesProvider>
+    <DataProvider>
+      <CategoriesProvider>
+        {showSplash && <SplashScreen fadingOut={splashFadingOut} />}
+        <Layout currentPage={page} onNavigate={setPage}>
+          {pages[page] || pages.dashboard}
+        </Layout>
+      </CategoriesProvider>
+    </DataProvider>
   );
 }

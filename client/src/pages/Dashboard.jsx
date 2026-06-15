@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Area, ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   ReferenceLine, ReferenceArea,
@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight, Receipt } from 'lucide-react';
 import StatCard from '../components/StatCard.jsx';
 import TransactionCard from '../components/TransactionCard.jsx';
 import { useIsMobile } from '../hooks/useIsMobile.js';
+import { useCachedData } from '../context/DataContext.jsx';
 import { getSummary, getBudgets, getPlannedExpenseOccurrences } from '../api.js';
 
 function formatEur(n) {
@@ -133,33 +134,21 @@ function buildSpendingProgress(month, dailyTotals, totalBudget, prevMonthDailyTo
 export default function Dashboard() {
   const isMobile = useIsMobile();
   const [month, setMonth] = useState(getCurrentMonth());
-  const [data, setData] = useState(null);
-  const [budgets, setBudgets] = useState([]);
-  const [prevDailyTotals, setPrevDailyTotals] = useState([]);
-  const [plannedOccurrences, setPlannedOccurrences] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [summary, budgetsData, prevSummary, occurrences] = await Promise.all([
-        getSummary(month),
-        getBudgets(month),
-        getSummary(addMonths(month, -1)),
-        getPlannedExpenseOccurrences(month),
-      ]);
-      setData(summary);
-      setBudgets(budgetsData);
-      setPrevDailyTotals(prevSummary.dailyTotals);
-      setPlannedOccurrences(occurrences);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }, [month]);
+  const { data: result, loading } = useCachedData(`dashboard:${month}`, useCallback(async () => {
+    const [summary, budgetsData, prevSummary, occurrences] = await Promise.all([
+      getSummary(month),
+      getBudgets(month),
+      getSummary(addMonths(month, -1)),
+      getPlannedExpenseOccurrences(month),
+    ]);
+    return { summary, budgets: budgetsData, prevDailyTotals: prevSummary.dailyTotals, plannedOccurrences: occurrences };
+  }, [month]));
 
-  useEffect(() => { load(); }, [load]);
+  const data = result?.summary ?? null;
+  const budgets = result?.budgets ?? [];
+  const prevDailyTotals = result?.prevDailyTotals ?? [];
+  const plannedOccurrences = result?.plannedOccurrences ?? [];
 
   const trend = data && data.previousMonthExpenses > 0
     ? ((data.totalExpenses - data.previousMonthExpenses) / data.previousMonthExpenses) * 100

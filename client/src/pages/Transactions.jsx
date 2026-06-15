@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import TransactionRow from '../components/TransactionRow.jsx';
 import TransactionCard from '../components/TransactionCard.jsx';
 import { useCategories } from '../context/CategoriesContext.jsx';
+import { useCachedData } from '../context/DataContext.jsx';
 import { getTransactions } from '../api.js';
 
 function getCurrentMonth() {
@@ -28,10 +29,7 @@ export default function Transactions() {
   const [category, setCategory] = useState('');
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
-  const [transactions, setTransactions] = useState([]);
-  const [total, setTotal] = useState(0);
   const [offset, setOffset] = useState(0);
-  const [loading, setLoading] = useState(true);
 
   // Debounce search
   const debounceRef = useRef(null);
@@ -44,34 +42,27 @@ export default function Transactions() {
     }, 300);
   }
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await getTransactions({
-        month,
-        category: category || undefined,
-        search: debouncedSearch || undefined,
-        limit: PAGE_SIZE,
-        offset,
-      });
-      setTransactions(res.transactions);
-      setTotal(res.total);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }, [month, category, debouncedSearch, offset]);
+  const cacheKey = `transactions:${month}:${category}:${debouncedSearch}:${offset}`;
+  const { data: result, loading, mutate } = useCachedData(cacheKey, useCallback(async () => {
+    const res = await getTransactions({
+      month,
+      category: category || undefined,
+      search: debouncedSearch || undefined,
+      limit: PAGE_SIZE,
+      offset,
+    });
+    return { transactions: res.transactions, total: res.total };
+  }, [month, category, debouncedSearch, offset]));
 
-  useEffect(() => { load(); }, [load]);
+  const transactions = result?.transactions ?? [];
+  const total = result?.total ?? 0;
 
   function handleUpdate(updated) {
-    setTransactions((prev) => prev.map((t) => t.id === updated.id ? updated : t));
+    mutate((prev) => prev && ({ ...prev, transactions: prev.transactions.map((t) => t.id === updated.id ? updated : t) }));
   }
 
   function handleDelete(id) {
-    setTransactions((prev) => prev.filter((t) => t.id !== id));
-    setTotal((prev) => prev - 1);
+    mutate((prev) => prev && ({ ...prev, transactions: prev.transactions.filter((t) => t.id !== id), total: prev.total - 1 }));
   }
 
   function handleFilterChange() {

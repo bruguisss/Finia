@@ -1,46 +1,37 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Target, CalendarClock } from 'lucide-react';
 import GoalCard from '../components/GoalCard.jsx';
 import GoalModal from '../components/GoalModal.jsx';
 import PlannedExpenseRow from '../components/PlannedExpenseRow.jsx';
 import PlannedExpenseCard from '../components/PlannedExpenseCard.jsx';
 import PlannedExpenseModal from '../components/PlannedExpenseModal.jsx';
+import { useCachedData } from '../context/DataContext.jsx';
 import { getGoals, getPlannedExpenses } from '../api.js';
 
 export default function Planning() {
-  const [goals, setGoals] = useState([]);
-  const [expenses, setExpenses] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [goalModalOpen, setGoalModalOpen] = useState(false);
   const [expenseModalOpen, setExpenseModalOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState(null);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [goalsData, expensesData] = await Promise.all([getGoals(), getPlannedExpenses()]);
-      setGoals(goalsData);
-      setExpenses(expensesData);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const { data: result, loading, mutate } = useCachedData('planning', useCallback(async () => {
+    const [goalsData, expensesData] = await Promise.all([getGoals(), getPlannedExpenses()]);
+    return { goals: goalsData, expenses: expensesData };
+  }, []));
 
-  useEffect(() => { load(); }, [load]);
+  const goals = result?.goals ?? [];
+  const expenses = result?.expenses ?? [];
 
   function handleGoalSave(created) {
-    setGoals((prev) => [...prev, created]);
+    mutate((prev) => ({ ...prev, goals: [...(prev?.goals ?? []), created] }));
     setGoalModalOpen(false);
   }
 
   function handleGoalUpdate(updated) {
-    setGoals((prev) => prev.map((g) => (g.id === updated.id ? updated : g)));
+    mutate((prev) => ({ ...prev, goals: (prev?.goals ?? []).map((g) => (g.id === updated.id ? updated : g)) }));
   }
 
   function handleGoalDelete(id) {
-    setGoals((prev) => prev.filter((g) => g.id !== id));
+    mutate((prev) => ({ ...prev, goals: (prev?.goals ?? []).filter((g) => g.id !== id) }));
   }
 
   function openCreateExpense() {
@@ -54,19 +45,21 @@ export default function Planning() {
   }
 
   function handleExpenseSave(saved) {
-    setExpenses((prev) => {
-      const exists = prev.some((e) => e.id === saved.id);
-      return exists ? prev.map((e) => (e.id === saved.id ? saved : e)) : [...prev, saved];
+    mutate((prev) => {
+      const list = prev?.expenses ?? [];
+      const exists = list.some((e) => e.id === saved.id);
+      const expenses = exists ? list.map((e) => (e.id === saved.id ? saved : e)) : [...list, saved];
+      return { ...prev, expenses };
     });
     setExpenseModalOpen(false);
   }
 
   function handleExpenseUpdate(updated) {
-    setExpenses((prev) => prev.map((e) => (e.id === updated.id ? updated : e)));
+    mutate((prev) => ({ ...prev, expenses: (prev?.expenses ?? []).map((e) => (e.id === updated.id ? updated : e)) }));
   }
 
   function handleExpenseDelete(id) {
-    setExpenses((prev) => prev.filter((e) => e.id !== id));
+    mutate((prev) => ({ ...prev, expenses: (prev?.expenses ?? []).filter((e) => e.id !== id) }));
   }
 
   return (

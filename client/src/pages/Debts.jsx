@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Handshake } from 'lucide-react';
 import StatCard from '../components/StatCard.jsx';
 import DebtCard from '../components/DebtCard.jsx';
 import DebtModal from '../components/DebtModal.jsx';
+import { useCachedData } from '../context/DataContext.jsx';
 import { getDebts, getDebtsSummary } from '../api.js';
 
 function formatEur(n) {
@@ -10,31 +11,25 @@ function formatEur(n) {
 }
 
 export default function Debts() {
-  const [debts, setDebts] = useState([]);
-  const [summary, setSummary] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [typeFilter, setTypeFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [editingDebt, setEditingDebt] = useState(null);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [debtsData, summaryData] = await Promise.all([
-        getDebts({ type: typeFilter || undefined, status: statusFilter || undefined }),
-        getDebtsSummary(),
-      ]);
-      setDebts(debtsData);
-      setSummary(summaryData);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }, [typeFilter, statusFilter]);
+  const { data: result, loading, mutate } = useCachedData(`debts:${typeFilter}:${statusFilter}`, useCallback(async () => {
+    const [debtsData, summaryData] = await Promise.all([
+      getDebts({ type: typeFilter || undefined, status: statusFilter || undefined }),
+      getDebtsSummary(),
+    ]);
+    return { debts: debtsData, summary: summaryData };
+  }, [typeFilter, statusFilter]));
 
-  useEffect(() => { load(); }, [load]);
+  const debts = result?.debts ?? [];
+  const summary = result?.summary ?? null;
+
+  function refreshSummary() {
+    getDebtsSummary().then((summaryData) => mutate((prev) => ({ ...prev, summary: summaryData }))).catch(console.error);
+  }
 
   function openCreate() {
     setEditingDebt(null);
@@ -47,22 +42,24 @@ export default function Debts() {
   }
 
   function handleSave(saved) {
-    setDebts((prev) => {
-      const exists = prev.some((d) => d.id === saved.id);
-      return exists ? prev.map((d) => (d.id === saved.id ? saved : d)) : [saved, ...prev];
+    mutate((prev) => {
+      const list = prev?.debts ?? [];
+      const exists = list.some((d) => d.id === saved.id);
+      const debts = exists ? list.map((d) => (d.id === saved.id ? saved : d)) : [saved, ...list];
+      return { ...prev, debts };
     });
     setModalOpen(false);
-    getDebtsSummary().then(setSummary).catch(console.error);
+    refreshSummary();
   }
 
   function handleUpdate(updated) {
-    setDebts((prev) => prev.map((d) => (d.id === updated.id ? updated : d)));
-    getDebtsSummary().then(setSummary).catch(console.error);
+    mutate((prev) => ({ ...prev, debts: (prev?.debts ?? []).map((d) => (d.id === updated.id ? updated : d)) }));
+    refreshSummary();
   }
 
   function handleDelete(id) {
-    setDebts((prev) => prev.filter((d) => d.id !== id));
-    getDebtsSummary().then(setSummary).catch(console.error);
+    mutate((prev) => ({ ...prev, debts: (prev?.debts ?? []).filter((d) => d.id !== id) }));
+    refreshSummary();
   }
 
   return (
