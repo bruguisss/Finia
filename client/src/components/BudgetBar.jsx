@@ -18,7 +18,7 @@ export default function BudgetBar({ budget, onUpdate, onDelete }) {
   const emoji = cat?.emoji || DEFAULT_EMOJI;
   const color = cat?.color || DEFAULT_COLOR;
 
-  const barColor = percentage >= 100 ? '#FF3B30' : percentage >= 75 ? '#FFD60A' : '#34C759';
+  const barColor = percentage >= 100 ? '#FF4D4D' : percentage >= 75 ? '#FFAA00' : '#00D4A8';
 
   async function handleSave() {
     setSaving(true);
@@ -92,7 +92,7 @@ export default function BudgetBar({ budget, onUpdate, onDelete }) {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-medium hover:bg-accent-hover transition-colors duration-150 disabled:opacity-50"
+            className="px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-semibold hover:bg-accent-hover transition-colors duration-150 disabled:opacity-50"
           >
             {saving ? '...' : 'Guardar'}
           </button>

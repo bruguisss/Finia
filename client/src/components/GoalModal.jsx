@@ -133,14 +133,14 @@ export default function GoalModal({ onClose, onSave }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 rounded-md bg-muted border border-white/10 text-sm font-medium text-primary hover:bg-[#3A3A3C] transition-colors duration-150"
+              className="flex-1 px-4 py-2.5 rounded-md bg-muted border border-white/10 text-sm font-medium text-primary hover:bg-[#555555] transition-colors duration-150"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 px-4 py-2.5 rounded-md bg-accent text-base font-medium text-sm hover:bg-accent-hover transition-colors duration-150 disabled:opacity-50"
+              className="flex-1 px-4 py-2.5 rounded-md bg-accent text-base font-semibold text-sm hover:bg-accent-hover transition-colors duration-150 disabled:opacity-50"
             >
               {saving ? 'Guardando...' : 'Crear'}
             </button>

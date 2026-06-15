@@ -109,7 +109,7 @@ export default function Budgets() {
           <button
             onClick={() => setModalOpen(true)}
             disabled={availableCategories.length === 0}
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-medium hover:bg-accent-hover transition-colors duration-150 disabled:opacity-40"
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-semibold hover:bg-accent-hover transition-colors duration-150 disabled:opacity-40"
           >
             + Añadir presupuesto
           </button>
@@ -146,7 +146,7 @@ export default function Budgets() {
           <p className="text-sm mb-4">Añade presupuestos para controlar tus gastos por categoría</p>
           <button
             onClick={() => setModalOpen(true)}
-            className="px-3.5 py-1.5 rounded-md bg-accent text-base font-medium text-[13px] hover:bg-accent-hover transition-colors duration-150"
+            className="px-3.5 py-1.5 rounded-md bg-accent text-base font-semibold text-[13px] hover:bg-accent-hover transition-colors duration-150"
           >
             + Añadir tu primer presupuesto
           </button>
@@ -203,14 +203,14 @@ export default function Budgets() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="flex-1 px-4 py-2.5 rounded-md bg-muted border border-white/10 text-sm font-medium text-primary hover:bg-[#3A3A3C] transition-colors duration-150"
+                  className="flex-1 px-4 py-2.5 rounded-md bg-muted border border-white/10 text-sm font-medium text-primary hover:bg-[#555555] transition-colors duration-150"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex-1 px-4 py-2.5 rounded-md bg-accent text-base font-medium text-sm hover:bg-accent-hover transition-colors duration-150 disabled:opacity-50"
+                  className="flex-1 px-4 py-2.5 rounded-md bg-accent text-base font-semibold text-sm hover:bg-accent-hover transition-colors duration-150 disabled:opacity-50"
                 >
                   {saving ? 'Guardando...' : 'Crear'}
                 </button>

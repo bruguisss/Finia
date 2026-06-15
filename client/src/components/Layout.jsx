@@ -61,14 +61,14 @@ export default function Layout({ children, currentPage, onNavigate }) {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setAddTxOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-[13px] font-medium bg-accent text-base hover:bg-accent-hover transition-colors duration-150"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-[13px] font-semibold bg-accent text-base hover:bg-accent-hover transition-colors duration-150"
             >
               <Plus size={13} strokeWidth={2.5} />
               Añadir transacción
             </button>
             <button
               onClick={() => setUploadOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-[13px] font-medium bg-muted border border-white/10 text-primary hover:bg-[#3A3A3C] transition-colors duration-150"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-[13px] font-medium bg-muted border border-white/10 text-primary hover:bg-[#555555] transition-colors duration-150"
             >
               <Upload size={13} strokeWidth={2} />
               Importar CSV
@@ -78,15 +78,18 @@ export default function Layout({ children, currentPage, onNavigate }) {
 
         {/* Main content */}
         <main className="flex-1 overflow-y-auto">
-          <div key={currentPage} className="max-w-6xl mx-auto px-5 pt-[max(1.5rem,env(safe-area-inset-top))] md:pt-6 pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-6 animate-fade-in-up">
+          <div key={currentPage} className="max-w-6xl mx-auto px-5 pt-[max(1.5rem,env(safe-area-inset-top))] md:pt-6 pb-[calc(100px+env(safe-area-inset-bottom))] md:pb-6 animate-fade-in-up">
             {children}
           </div>
         </main>
       </div>
 
-      {/* Mobile floating glass nav */}
-      <nav className="md:hidden fixed left-3 right-3 z-20 flex items-center justify-around gap-1 px-2 py-2 rounded-t-3xl bg-white/5 backdrop-blur-2xl backdrop-saturate-200 backdrop-brightness-110 border-t border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.08)] overflow-hidden" style={{ bottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
-        <div className="absolute inset-0 rounded-t-3xl bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none" />
+      {/* Mobile floating glass nav island */}
+      <nav
+        className="md:hidden fixed left-1/2 -translate-x-1/2 z-20 flex items-center justify-around gap-1 w-[calc(100%-48px)] max-w-[380px] px-2 py-2.5 rounded-3xl bg-[rgba(28,28,32,0.75)] backdrop-blur-2xl backdrop-saturate-[1.8] backdrop-brightness-[1.2] border border-white/[0.15] shadow-[0_8px_32px_rgba(0,0,0,0.4),0_2px_8px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] overflow-hidden"
+        style={{ bottom: 'calc(24px + env(safe-area-inset-bottom))' }}
+      >
+        <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none" />
         {MOBILE_NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const active = currentPage === item.id;
@@ -94,22 +97,22 @@ export default function Layout({ children, currentPage, onNavigate }) {
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`relative flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 text-[11px] font-medium transition-all duration-200 ease-in-out ${
-                active ? 'text-white bg-white/10 backdrop-blur-[20px] border border-white/[0.15] rounded-[14px] px-4' : 'text-white/40'
+              className={`relative flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 text-[11px] font-medium transition-all duration-[180ms] ease-in-out ${
+                active ? 'text-white bg-white/[0.12] backdrop-blur-[20px] border border-white/[0.18] rounded-2xl px-4' : 'text-white/45'
               }`}
             >
-              <Icon size={18} strokeWidth={2} />
+              <Icon size={18} strokeWidth={active ? 2.5 : 2} />
               {item.label}
             </button>
           );
         })}
         <button
           onClick={() => setMoreSheetOpen(true)}
-          className={`relative flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 text-[11px] font-medium transition-all duration-200 ease-in-out ${
-            MORE_PAGES.includes(currentPage) ? 'text-white bg-white/10 backdrop-blur-[20px] border border-white/[0.15] rounded-[14px] px-4' : 'text-white/40'
+          className={`relative flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 text-[11px] font-medium transition-all duration-[180ms] ease-in-out ${
+            MORE_PAGES.includes(currentPage) ? 'text-white bg-white/[0.12] backdrop-blur-[20px] border border-white/[0.18] rounded-2xl px-4' : 'text-white/45'
           }`}
         >
-          <MoreHorizontal size={18} strokeWidth={2} />
+          <MoreHorizontal size={18} strokeWidth={MORE_PAGES.includes(currentPage) ? 2.5 : 2} />
           Más
         </button>
       </nav>
@@ -118,7 +121,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
       <button
         onClick={() => setAddTxOpen(true)}
         className="md:hidden fixed right-4 z-40 w-14 h-14 rounded-full flex items-center justify-center bg-white/[0.09] backdrop-blur-2xl backdrop-saturate-150 border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.1)] text-primary overflow-hidden"
-        style={{ bottom: 'calc(5.5rem + env(safe-area-inset-bottom))' }}
+        style={{ bottom: 'calc(6.5rem + env(safe-area-inset-bottom))' }}
       >
         <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/[0.1] to-transparent pointer-events-none" />
         <Plus size={24} strokeWidth={2.5} className="relative" />

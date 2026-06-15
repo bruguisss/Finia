@@ -3,7 +3,7 @@ import { Pencil, Trash2 } from 'lucide-react';
 import { updateDebt, deleteDebt } from '../api.js';
 
 const STATUS_LABELS = { pending: 'Pendiente', partial: 'Parcial', paid: 'Pagada' };
-const STATUS_COLORS = { pending: '#FFD60A', partial: '#8E8E93', paid: '#34C759' };
+const STATUS_COLORS = { pending: '#FFAA00', partial: '#8A8A8A', paid: '#00D4A8' };
 
 function formatEur(n) {
   return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) + ' €';
@@ -124,7 +124,7 @@ export default function DebtCard({ debt, onEdit, onUpdate, onDelete }) {
           <button
             type="submit"
             disabled={paying || !payAmount}
-            className="px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-medium hover:bg-accent-hover transition-colors duration-150 disabled:opacity-50"
+            className="px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-semibold hover:bg-accent-hover transition-colors duration-150 disabled:opacity-50"
           >
             {paying ? '...' : 'Abonar'}
           </button>

@@ -71,7 +71,7 @@ export default function Debts() {
         <h2 className="text-xl font-semibold text-primary tracking-tight">Deudas</h2>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-medium hover:bg-accent-hover transition-colors duration-150"
+          className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-semibold hover:bg-accent-hover transition-colors duration-150"
         >
           + Nueva deuda
         </button>
@@ -150,7 +150,7 @@ export default function Debts() {
           <p className="text-sm mb-4">Lleva el control del dinero que debes o que te deben</p>
           <button
             onClick={openCreate}
-            className="px-3.5 py-1.5 rounded-md bg-accent text-base font-medium text-[13px] hover:bg-accent-hover transition-colors duration-150"
+            className="px-3.5 py-1.5 rounded-md bg-accent text-base font-semibold text-[13px] hover:bg-accent-hover transition-colors duration-150"
           >
             + Añadir tu primera deuda
           </button>

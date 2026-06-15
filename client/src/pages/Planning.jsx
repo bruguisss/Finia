@@ -82,7 +82,7 @@ export default function Planning() {
           {(loading || goals.length > 0) && (
             <button
               onClick={() => setGoalModalOpen(true)}
-              className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-medium hover:bg-accent-hover transition-colors duration-150"
+              className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-semibold hover:bg-accent-hover transition-colors duration-150"
             >
               + Nuevo objetivo
             </button>
@@ -112,7 +112,7 @@ export default function Planning() {
             <p className="text-sm mb-4">Define metas de ahorro o límites de gasto para seguir tu progreso</p>
             <button
               onClick={() => setGoalModalOpen(true)}
-              className="px-3.5 py-1.5 rounded-md bg-accent text-base font-medium text-[13px] hover:bg-accent-hover transition-colors duration-150"
+              className="px-3.5 py-1.5 rounded-md bg-accent text-base font-semibold text-[13px] hover:bg-accent-hover transition-colors duration-150"
             >
               + Añadir tu primer objetivo
             </button>
@@ -127,7 +127,7 @@ export default function Planning() {
           {(loading || expenses.length > 0) && (
             <button
               onClick={openCreateExpense}
-              className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-medium hover:bg-accent-hover transition-colors duration-150"
+              className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-semibold hover:bg-accent-hover transition-colors duration-150"
             >
               + Nuevo gasto previsto
             </button>
@@ -189,7 +189,7 @@ export default function Planning() {
               <p className="text-sm mb-4">Añade gastos recurrentes o puntuales para que la app los prediga</p>
               <button
                 onClick={openCreateExpense}
-                className="px-3.5 py-1.5 rounded-md bg-accent text-base font-medium text-[13px] hover:bg-accent-hover transition-colors duration-150"
+                className="px-3.5 py-1.5 rounded-md bg-accent text-base font-semibold text-[13px] hover:bg-accent-hover transition-colors duration-150"
               >
                 + Añadir tu primer gasto previsto
               </button>

@@ -124,7 +124,7 @@ export default function UploadZone({ onClose }) {
               </div>
               <button
                 onClick={onClose}
-                className="px-6 py-2.5 rounded-md bg-accent text-base font-medium text-sm hover:bg-accent-hover transition-colors duration-150"
+                className="px-6 py-2.5 rounded-md bg-accent text-base font-semibold text-sm hover:bg-accent-hover transition-colors duration-150"
               >
                 Ver transacciones
               </button>

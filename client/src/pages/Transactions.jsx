@@ -233,14 +233,14 @@ export default function Transactions() {
               <button
                 onClick={() => setOffset(Math.max(0, offset - PAGE_SIZE))}
                 disabled={offset === 0}
-                className="px-3.5 py-1.5 text-[13px] font-medium rounded-md bg-muted border border-white/10 text-primary hover:bg-[#3A3A3C] disabled:opacity-30 transition-colors duration-150"
+                className="px-3.5 py-1.5 text-[13px] font-medium rounded-md bg-muted border border-white/10 text-primary hover:bg-[#555555] disabled:opacity-30 transition-colors duration-150"
               >
                 Anterior
               </button>
               <button
                 onClick={() => setOffset(offset + PAGE_SIZE)}
                 disabled={offset + PAGE_SIZE >= total}
-                className="px-3.5 py-1.5 text-[13px] font-medium rounded-md bg-muted border border-white/10 text-primary hover:bg-[#3A3A3C] disabled:opacity-30 transition-colors duration-150"
+                className="px-3.5 py-1.5 text-[13px] font-medium rounded-md bg-muted border border-white/10 text-primary hover:bg-[#555555] disabled:opacity-30 transition-colors duration-150"
               >
                 Siguiente
               </button>

@@ -10,7 +10,7 @@ export default function Categories() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [name, setName] = useState('');
-  const [color, setColor] = useState('#34C759');
+  const [color, setColor] = useState('#00D4A8');
   const [emoji, setEmoji] = useState('🏷️');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -18,7 +18,7 @@ export default function Categories() {
   function openCreate() {
     setEditing(null);
     setName('');
-    setColor('#34C759');
+    setColor('#00D4A8');
     setEmoji('🏷️');
     setError(null);
     setModalOpen(true);
@@ -72,7 +72,7 @@ export default function Categories() {
         <h2 className="text-xl font-semibold text-primary tracking-tight">Categorías</h2>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-medium hover:bg-accent-hover transition-colors duration-150"
+          className="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-accent text-base text-[13px] font-semibold hover:bg-accent-hover transition-colors duration-150"
         >
           + Nueva categoría
         </button>
@@ -190,14 +190,14 @@ export default function Categories() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="flex-1 px-4 py-2.5 rounded-md bg-muted border border-white/10 text-sm font-medium text-primary hover:bg-[#3A3A3C] transition-colors duration-150"
+                  className="flex-1 px-4 py-2.5 rounded-md bg-muted border border-white/10 text-sm font-medium text-primary hover:bg-[#555555] transition-colors duration-150"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex-1 px-4 py-2.5 rounded-md bg-accent text-base font-medium text-sm hover:bg-accent-hover transition-colors duration-150 disabled:opacity-50"
+                  className="flex-1 px-4 py-2.5 rounded-md bg-accent text-base font-semibold text-sm hover:bg-accent-hover transition-colors duration-150 disabled:opacity-50"
                 >
                   {saving ? 'Guardando...' : editing ? 'Guardar' : 'Crear'}
                 </button>
