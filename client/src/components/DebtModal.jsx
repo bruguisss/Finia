@@ -161,7 +161,7 @@ export default function DebtModal({ debt, onClose, onSave }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 rounded-md bg-muted border border-white/10 text-sm font-medium text-primary hover:bg-[#3f3f46] transition-colors duration-150"
+              className="flex-1 px-4 py-2.5 rounded-md bg-muted border border-white/10 text-sm font-medium text-primary hover:bg-[#334155] transition-colors duration-150"
             >
               Cancelar
             </button>

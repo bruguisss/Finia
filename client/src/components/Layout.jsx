@@ -33,6 +33,16 @@ export default function Layout({ children, currentPage, onNavigate }) {
 
   return (
     <div className="flex h-screen overflow-hidden bg-base text-primary">
+      {/* Ambient background glow */}
+      <div
+        aria-hidden="true"
+        className="fixed -top-32 -left-24 w-[36rem] h-[36rem] rounded-full bg-brand-light/20 blur-3xl pointer-events-none motion-safe:animate-ambient"
+      />
+      <div
+        aria-hidden="true"
+        className="fixed -bottom-32 -right-24 w-[36rem] h-[36rem] rounded-full bg-accent/15 blur-3xl pointer-events-none motion-safe:animate-ambient"
+      />
+
       {/* Desktop sidebar - flush panel, separated by subtle shadow only */}
       <div className="hidden md:flex flex-col w-60 shrink-0 bg-base shadow-[4px_0_24px_-12px_rgba(0,0,0,0.7)]">
         <Sidebar currentPage={currentPage} onNavigate={onNavigate} onUpload={() => setUploadOpen(true)} />
@@ -56,7 +66,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
             </button>
             <button
               onClick={() => setUploadOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-[13px] font-medium bg-muted border border-white/10 text-primary hover:bg-[#3f3f46] transition-colors duration-150"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-[13px] font-medium bg-muted border border-white/10 text-primary hover:bg-[#334155] transition-colors duration-150"
             >
               <Upload size={13} strokeWidth={2} />
               Importar CSV

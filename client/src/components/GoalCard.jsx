@@ -21,7 +21,7 @@ export default function GoalCard({ goal, onUpdate, onDelete }) {
 
   const barColor = isSavings
     ? '#22c55e'
-    : (percentage >= 100 ? '#ef4444' : percentage >= 75 ? '#f59e0b' : '#22c55e');
+    : (percentage >= 100 ? '#DC2626' : percentage >= 75 ? '#f59e0b' : '#22c55e');
 
   async function handleSaveTarget() {
     setSaving(true);
@@ -134,7 +134,7 @@ export default function GoalCard({ goal, onUpdate, onDelete }) {
           <button
             type="submit"
             disabled={saving}
-            className="flex items-center gap-1 px-3.5 py-1.5 rounded-md bg-muted border border-white/10 text-primary hover:bg-[#3f3f46] text-[13px] font-medium transition-colors duration-150 disabled:opacity-50"
+            className="flex items-center gap-1 px-3.5 py-1.5 rounded-md bg-muted border border-white/10 text-primary hover:bg-[#334155] text-[13px] font-medium transition-colors duration-150 disabled:opacity-50"
           >
             <Plus size={13} strokeWidth={2} />
             Aporte

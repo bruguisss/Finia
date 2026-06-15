@@ -52,7 +52,7 @@ export default function Sidebar({ currentPage, onNavigate, onUpload }) {
       <div className="px-2 mt-2">
         <button
           onClick={onUpload}
-          className="w-full flex items-center justify-center gap-2 px-2.5 py-[7px] rounded-md text-[13px] font-medium bg-muted border border-white/10 text-primary hover:bg-[#3f3f46] transition-colors duration-150"
+          className="w-full flex items-center justify-center gap-2 px-2.5 py-[7px] rounded-md text-[13px] font-medium bg-muted border border-white/10 text-primary hover:bg-[#334155] transition-colors duration-150"
         >
           <Upload size={14} strokeWidth={2} />
           Importar CSV
