@@ -34,8 +34,8 @@ export default {
       },
       keyframes: {
         pageIn: {
-          '0%': { opacity: '0', transform: 'translateY(8px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
         },
         fadeInUp: {
           '0%': { opacity: '0', transform: 'translateY(6px)' },
@@ -59,7 +59,7 @@ export default {
         },
       },
       animation: {
-        'page-in': 'pageIn 0.24s cubic-bezier(0.32, 0.72, 0, 1) both',
+        'page-in': 'pageIn 0.18s ease-out both',
         'fade-in-up': 'fadeInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both',
         'fade-in-up-sm': 'fadeInUpSm 0.3s cubic-bezier(0.16, 1, 0.3, 1) both',
         'fade-in': 'fadeIn 0.2s ease-out both',

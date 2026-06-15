@@ -19,11 +19,15 @@
   html, body {
     overflow-x: hidden;
     max-width: 100vw;
+    background-color: #000000;
   }
 
   body {
-    background-color: #000000;
     color: #FFFFFF;
+  }
+
+  #root {
+    background-color: #000000;
   }
 
   button, a, [role="button"], summary, select, label[for] {

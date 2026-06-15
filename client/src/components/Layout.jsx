@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useLayoutEffect, useRef } from 'react';
 import { LayoutGrid, Receipt, BarChart3, Target, HandCoins, Tags, Upload, Plus, Flag, MoreHorizontal } from 'lucide-react';
 import Sidebar from './Sidebar.jsx';
 import UploadZone from './UploadZone.jsx';
@@ -32,8 +32,8 @@ export default function Layout({ children, currentPage, onNavigate }) {
   const PageIcon = meta.icon;
   const mainRef = useRef(null);
 
-  useEffect(() => {
-    mainRef.current?.scrollTo({ top: 0 });
+  useLayoutEffect(() => {
+    if (mainRef.current) mainRef.current.scrollTop = 0;
   }, [currentPage]);
 
   return (
@@ -91,10 +91,9 @@ export default function Layout({ children, currentPage, onNavigate }) {
 
       {/* Mobile floating glass nav island */}
       <nav
-        className="md:hidden fixed left-1/2 -translate-x-1/2 z-20 flex items-center justify-around gap-1 w-[calc(100%-48px)] max-w-[380px] px-2 py-2.5 rounded-3xl bg-[rgba(28,28,32,0.75)] backdrop-blur-2xl backdrop-saturate-[1.8] backdrop-brightness-[1.2] border border-white/[0.15] shadow-[0_8px_32px_rgba(0,0,0,0.4),0_2px_8px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] overflow-hidden"
+        className="md:hidden fixed left-1/2 -translate-x-1/2 z-20 flex items-center justify-around gap-1 w-[calc(100%-48px)] max-w-[380px] px-2 py-2.5 rounded-3xl bg-[rgba(28,28,32,0.45)] backdrop-blur-2xl backdrop-saturate-150 border border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
         style={{ bottom: 'calc(24px + env(safe-area-inset-bottom))' }}
       >
-        <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none" />
         {MOBILE_NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const active = currentPage === item.id;
