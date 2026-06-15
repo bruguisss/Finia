@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Search, Plus } from 'lucide-react';
 import Header from '../components/Header.jsx';
 import TransactionCard from '../components/TransactionCard.jsx';
+import PullToRefresh from '../components/PullToRefresh.jsx';
 import AddTransactionModal from '../components/AddTransactionModal.jsx';
 import { useCategories } from '../context/CategoriesContext.jsx';
 import { useCachedData } from '../context/DataContext.jsx';
@@ -76,7 +77,7 @@ export default function Transactions() {
   }
 
   const cacheKey = `transactions:${month}:${category}:${debouncedSearch}:${offset}`;
-  const { data: result, loading, mutate } = useCachedData(cacheKey, useCallback(async () => {
+  const { data: result, loading, mutate, refresh } = useCachedData(cacheKey, useCallback(async () => {
     const res = await getTransactions({
       month,
       category: category || undefined,
@@ -111,6 +112,7 @@ export default function Transactions() {
     <div className="pt-3">
       <Header title="Gastos" />
 
+      <PullToRefresh onRefresh={refresh}>
       {/* Filters */}
       <div className="flex items-center gap-2 mt-2">
         <div className="flex items-center gap-1 bg-elevated border border-border rounded-lg px-1 shrink-0">
@@ -233,6 +235,7 @@ export default function Transactions() {
           </div>
         </div>
       )}
+      </PullToRefresh>
 
       {/* FAB */}
       <button

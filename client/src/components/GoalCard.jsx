@@ -11,7 +11,7 @@ function formatDate(dateStr) {
   return new Date(dateStr + 'T00:00:00').toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
-export default function GoalCard({ goal, onUpdate, onDelete }) {
+export default function GoalCard({ goal, onUpdate, onDelete, index = 0 }) {
   const [editing, setEditing] = useState(false);
   const [target, setTarget] = useState(goal.target_amount);
   const [contribution, setContribution] = useState('');
@@ -66,7 +66,10 @@ export default function GoalCard({ goal, onUpdate, onDelete }) {
   }
 
   return (
-    <div className="bg-surface border border-border rounded-2xl p-5 transition-colors duration-150">
+    <div
+      className="bg-surface border border-border rounded-2xl p-5 transition-colors duration-150 animate-fade-in-up-sm"
+      style={{ animationDelay: `${Math.min(index, 8) * 30}ms` }}
+    >
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
           {isSavings ? (

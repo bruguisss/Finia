@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X } from 'lucide-react';
+import BottomSheet from './BottomSheet.jsx';
 import { useCategories } from '../context/CategoriesContext.jsx';
 import { createPlannedExpense, updatePlannedExpense } from '../api.js';
 
@@ -18,137 +18,127 @@ export default function PlannedExpenseModal({ expense, onClose, onSave }) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    if (!name.trim() || !amount || parseFloat(amount) <= 0) {
-      setError('Rellena el nombre y un importe válido');
-      return;
-    }
-    setSaving(true);
-    setError(null);
-    try {
-      const payload = {
-        name: name.trim(),
-        amount: parseFloat(amount),
-        category,
-        frequency,
-        next_date: nextDate,
-      };
-      const saved = isEdit
-        ? await updatePlannedExpense(expense.id, payload)
-        : await createPlannedExpense(payload);
-      onSave(saved);
-    } catch (err) {
-      setError(err.message);
-      setSaving(false);
-    }
-  }
-
   return (
-    <div
-      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm animate-fade-in"
-      onClick={(e) => e.target === e.currentTarget && onClose()}
-    >
-      <div
-        style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 'calc(100vw - 32px)', maxWidth: '480px', maxHeight: '90vh', overflowY: 'auto' }}
-        className="bg-surface border border-border rounded-2xl shadow-2xl animate-fade-in"
-      >
-        <div className="flex items-center justify-between p-5 border-b border-border">
-          <h2 className="text-base font-semibold text-primary tracking-tight">{isEdit ? 'Editar gasto previsto' : 'Nuevo gasto previsto'}</h2>
-          <button onClick={onClose} className="text-secondary hover:text-primary transition-colors duration-150">
-            <X size={18} strokeWidth={2} />
-          </button>
-        </div>
+    <BottomSheet title={isEdit ? 'Editar gasto previsto' : 'Nuevo gasto previsto'} onClose={onClose}>
+      {(close) => {
+        async function handleSubmit(e) {
+          e.preventDefault();
+          if (!name.trim() || !amount || parseFloat(amount) <= 0) {
+            setError('Rellena el nombre y un importe válido');
+            return;
+          }
+          setSaving(true);
+          setError(null);
+          try {
+            const payload = {
+              name: name.trim(),
+              amount: parseFloat(amount),
+              category,
+              frequency,
+              next_date: nextDate,
+            };
+            const saved = isEdit
+              ? await updatePlannedExpense(expense.id, payload)
+              : await createPlannedExpense(payload);
+            onSave(saved);
+            close();
+          } catch (err) {
+            setError(err.message);
+            setSaving(false);
+          }
+        }
 
-        <form onSubmit={handleSubmit} className="p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] space-y-4">
-          <div>
-            <label className="block text-xs text-secondary mb-1.5">Nombre</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="ej: Alquiler"
-              className="w-full bg-muted border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-white/30"
-              required
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
+        return (
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs text-secondary mb-1.5">Importe (€)</label>
+              <label className="block text-xs text-secondary mb-1.5">Nombre</label>
               <input
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="0.00"
-                min="0.01"
-                step="0.01"
-                className="w-full bg-muted border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-white/30"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="ej: Alquiler"
+                className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-border-strong"
                 required
               />
             </div>
-            <div>
-              <label className="block text-xs text-secondary mb-1.5">Frecuencia</label>
-              <select
-                value={frequency}
-                onChange={(e) => setFrequency(e.target.value)}
-                className="w-full bg-muted border border-border rounded-lg px-3 py-2.5 text-sm text-primary focus:outline-none focus:border-white/30"
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs text-secondary mb-1.5">Importe (€)</label>
+                <input
+                  type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder="0.00"
+                  min="0.01"
+                  step="0.01"
+                  className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-border-strong"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-secondary mb-1.5">Frecuencia</label>
+                <select
+                  value={frequency}
+                  onChange={(e) => setFrequency(e.target.value)}
+                  className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary focus:outline-none focus:border-border-strong"
+                >
+                  <option value="once">Una vez</option>
+                  <option value="weekly">Semanal</option>
+                  <option value="monthly">Mensual</option>
+                  <option value="yearly">Anual</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs text-secondary mb-1.5">Categoría</label>
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary focus:outline-none focus:border-border-strong"
+                >
+                  {categories.map((c) => (
+                    <option key={c.name} value={c.name}>{c.emoji} {c.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs text-secondary mb-1.5">
+                  {frequency === 'once' ? 'Fecha' : 'Próxima fecha'}
+                </label>
+                <input
+                  type="date"
+                  value={nextDate}
+                  onChange={(e) => setNextDate(e.target.value)}
+                  className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary focus:outline-none focus:border-border-strong"
+                  required
+                />
+              </div>
+            </div>
+
+            {error && <p className="text-xs text-danger">{error}</p>}
+
+            <div className="flex gap-3 pt-1">
+              <button
+                type="button"
+                onClick={close}
+                className="flex-1 px-4 py-2.5 rounded-md bg-elevated border border-border text-sm font-medium text-primary transition-colors duration-150"
               >
-                <option value="once">Una vez</option>
-                <option value="weekly">Semanal</option>
-                <option value="monthly">Mensual</option>
-                <option value="yearly">Anual</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs text-secondary mb-1.5">Categoría</label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full bg-muted border border-border rounded-lg px-3 py-2.5 text-sm text-primary focus:outline-none focus:border-white/30"
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                disabled={saving}
+                className="flex-1 px-4 py-2.5 rounded-md bg-blue text-white font-semibold text-sm transition-colors duration-150 disabled:opacity-50"
               >
-                {categories.map((c) => (
-                  <option key={c.name} value={c.name}>{c.emoji} {c.name}</option>
-                ))}
-              </select>
+                {saving ? 'Guardando...' : isEdit ? 'Guardar' : 'Crear'}
+              </button>
             </div>
-            <div>
-              <label className="block text-xs text-secondary mb-1.5">
-                {frequency === 'once' ? 'Fecha' : 'Próxima fecha'}
-              </label>
-              <input
-                type="date"
-                value={nextDate}
-                onChange={(e) => setNextDate(e.target.value)}
-                className="w-full bg-muted border border-border rounded-lg px-3 py-2.5 text-sm text-primary focus:outline-none focus:border-white/30"
-                required
-              />
-            </div>
-          </div>
-
-          {error && <p className="text-xs text-danger">{error}</p>}
-
-          <div className="flex gap-3 pt-1">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 px-4 py-2.5 rounded-md bg-elevated border border-border text-sm font-medium text-primary transition-colors duration-150"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              disabled={saving}
-              className="flex-1 px-4 py-2.5 rounded-md bg-blue text-white font-semibold text-sm transition-colors duration-150 disabled:opacity-50"
-            >
-              {saving ? 'Guardando...' : isEdit ? 'Guardar' : 'Crear'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+          </form>
+        );
+      }}
+    </BottomSheet>
   );
 }

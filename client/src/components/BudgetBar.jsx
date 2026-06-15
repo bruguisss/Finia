@@ -8,7 +8,7 @@ function formatEur(n) {
   return new Intl.NumberFormat('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) + ' €';
 }
 
-export default function BudgetBar({ budget, onUpdate, onDelete, last = false }) {
+export default function BudgetBar({ budget, onUpdate, onDelete, index = 0, last = false }) {
   const { getCategory } = useCategories();
   const [editing, setEditing] = useState(false);
   const [limit, setLimit] = useState(budget.monthly_limit);
@@ -46,7 +46,10 @@ export default function BudgetBar({ budget, onUpdate, onDelete, last = false }) 
   }
 
   return (
-    <div className={`py-3 ${!last ? 'border-b border-white/[0.05]' : ''}`}>
+    <div
+      className={`py-3 animate-fade-in-up-sm ${!last ? 'border-b border-white/[0.05]' : ''}`}
+      style={{ animationDelay: `${Math.min(index, 8) * 30}ms` }}
+    >
       <div className="flex items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-2 min-w-0">
           <span className="text-base shrink-0">{emoji}</span>

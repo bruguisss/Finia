@@ -19,7 +19,7 @@ function isOverdue(debt) {
   return debt.date_due < new Date().toISOString().slice(0, 10);
 }
 
-export default function DebtCard({ debt, onEdit, onUpdate, onDelete }) {
+export default function DebtCard({ debt, onEdit, onUpdate, onDelete, index = 0 }) {
   const [payAmount, setPayAmount] = useState('');
   const [paying, setPaying] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -57,7 +57,10 @@ export default function DebtCard({ debt, onEdit, onUpdate, onDelete }) {
   }
 
   return (
-    <div className="bg-surface border border-border rounded-2xl p-5 transition-colors duration-150">
+    <div
+      className="bg-surface border border-border rounded-2xl p-5 transition-colors duration-150 animate-fade-in-up-sm"
+      style={{ animationDelay: `${Math.min(index, 8) * 30}ms` }}
+    >
       <div className="flex items-start justify-between mb-2">
         <div className="min-w-0">
           <p className="text-subhead font-medium text-primary truncate">{debt.person}</p>

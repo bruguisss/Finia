@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Header from '../components/Header.jsx';
 import { useCategories, DEFAULT_COLOR } from '../context/CategoriesContext.jsx';
 import { useCachedData } from '../context/DataContext.jsx';
+import PullToRefresh from '../components/PullToRefresh.jsx';
 import {
   getMonthlyTrend, getTransactions, getSummary, getBudgets, getPlannedExpenseOccurrences,
 } from '../api.js';
@@ -153,7 +154,7 @@ export default function Analytics() {
   const isMobile = useIsMobile();
   const [month, setMonth] = useState(getCurrentMonth());
 
-  const { data: progressResult, loading: progressLoading } = useCachedData(`analytics-progress:${month}`, useCallback(async () => {
+  const { data: progressResult, loading: progressLoading, refresh: refreshProgress } = useCachedData(`analytics-progress:${month}`, useCallback(async () => {
     const [summary, budgetsData, prevSummary, occurrences] = await Promise.all([
       getSummary(month),
       getBudgets(month),
@@ -163,7 +164,7 @@ export default function Analytics() {
     return { summary, budgets: budgetsData, prevDailyTotals: prevSummary.dailyTotals, plannedOccurrences: occurrences };
   }, [month]));
 
-  const { data: trendResult, loading: trendLoading } = useCachedData('analytics-trend', useCallback(async () => {
+  const { data: trendResult, loading: trendLoading, refresh: refreshTrend } = useCachedData('analytics-trend', useCallback(async () => {
     const [trendData, txRes] = await Promise.all([
       getMonthlyTrend(),
       getTransactions({ type: 'debit', limit: 500, offset: 0 }),
@@ -216,9 +217,11 @@ export default function Analytics() {
   }));
 
   return (
-    <div className="pt-3 space-y-6">
+    <div className="pt-3">
       <Header title="Análisis" />
 
+      <PullToRefresh onRefresh={() => Promise.all([refreshProgress(), refreshTrend()])}>
+      <div className="space-y-6">
       {/* Monthly spending progress */}
       <div className="bg-surface border border-border rounded-2xl p-5">
         <div className="flex items-center justify-between gap-3 mb-4">
@@ -423,6 +426,8 @@ export default function Analytics() {
           </div>
         )}
       </div>
+      </div>
+      </PullToRefresh>
     </div>
   );
 }

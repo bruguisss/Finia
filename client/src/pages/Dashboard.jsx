@@ -3,6 +3,7 @@ import { Area, AreaChart, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { ChevronLeft, ChevronRight, Receipt } from 'lucide-react';
 import Header from '../components/Header.jsx';
 import TransactionCard from '../components/TransactionCard.jsx';
+import PullToRefresh from '../components/PullToRefresh.jsx';
 import { useIsMobile } from '../hooks/useIsMobile.js';
 import { useCachedData } from '../context/DataContext.jsx';
 import { getSummary } from '../api.js';
@@ -67,7 +68,7 @@ export default function Dashboard({ onNavigate }) {
   const isMobile = useIsMobile();
   const [month, setMonth] = useState(getCurrentMonth());
 
-  const { data, loading } = useCachedData(`dashboard:${month}`, useCallback(() => getSummary(month), [month]));
+  const { data, loading, refresh } = useCachedData(`dashboard:${month}`, useCallback(() => getSummary(month), [month]));
 
   const heroData = data ? buildHeroData(month, data.dailyTotals) : [];
   const balanceColor = (data?.balance ?? 0) >= 0 ? COLORS.green : COLORS.red;
@@ -77,6 +78,7 @@ export default function Dashboard({ onNavigate }) {
     <div className="pt-3">
       <Header variant="home" title="Albert Brugué" subtitle="Finanzas personales" />
 
+      <PullToRefresh onRefresh={refresh}>
       {/* Month selector */}
       <div className="flex items-center justify-center gap-4 mt-2 mb-4">
         <button
@@ -191,6 +193,7 @@ export default function Dashboard({ onNavigate }) {
           </div>
         )}
       </div>
+      </PullToRefresh>
     </div>
   );
 }

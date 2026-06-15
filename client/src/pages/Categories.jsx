@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Pencil, Trash2, X, Plus } from 'lucide-react';
+import { Pencil, Trash2, Plus } from 'lucide-react';
 import Header from '../components/Header.jsx';
+import PullToRefresh from '../components/PullToRefresh.jsx';
+import BottomSheet from '../components/BottomSheet.jsx';
 import ConfirmDialog from '../components/ConfirmDialog.jsx';
 import { useCategories } from '../context/CategoriesContext.jsx';
 import { createCategory, updateCategory, deleteCategory } from '../api.js';
@@ -37,29 +39,6 @@ export default function Categories() {
     setModalOpen(true);
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    if (!name.trim() || !emoji.trim()) {
-      setError('Rellena todos los campos');
-      return;
-    }
-    setSaving(true);
-    setError(null);
-    try {
-      if (editing) {
-        await updateCategory(editing.id, { name: name.trim(), color, emoji: emoji.trim() });
-      } else {
-        await createCategory({ name: name.trim(), color, emoji: emoji.trim() });
-      }
-      await refresh();
-      setModalOpen(false);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setSaving(false);
-    }
-  }
-
   async function handleDelete() {
     try {
       await deleteCategory(deleteTarget.id);
@@ -75,6 +54,7 @@ export default function Categories() {
     <div className="pt-3 space-y-5">
       <Header title="Categorías" />
 
+      <PullToRefresh onRefresh={refresh}>
       <div className="flex justify-end">
         <button
           onClick={openCreate}
@@ -97,12 +77,13 @@ export default function Categories() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {categories.map((cat) => {
+          {categories.map((cat, i) => {
             const isProtected = cat.name === PROTECTED_CATEGORY;
             return (
               <div
                 key={cat.id}
-                className="bg-surface border border-border rounded-2xl p-4 flex items-center justify-between gap-3"
+                className="bg-surface border border-border rounded-2xl p-4 flex items-center justify-between gap-3 animate-fade-in-up-sm"
+                style={{ animationDelay: `${Math.min(i, 8) * 30}ms` }}
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <span
@@ -137,83 +118,95 @@ export default function Categories() {
           })}
         </div>
       )}
+      </PullToRefresh>
 
       {modalOpen && (
-        <div
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm animate-fade-in"
-          onClick={(e) => e.target === e.currentTarget && setModalOpen(false)}
-        >
-          <div
-            style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 'calc(100vw - 32px)', maxWidth: '480px', maxHeight: '90vh', overflowY: 'auto' }}
-            className="bg-surface border border-border rounded-2xl shadow-2xl animate-fade-in"
-          >
-            <div className="flex items-center justify-between p-5 border-b border-border">
-              <h3 className="text-title-3 text-primary">
-                {editing ? 'Editar categoría' : 'Nueva categoría'}
-              </h3>
-              <button onClick={() => setModalOpen(false)} className="text-secondary hover:text-primary transition-colors duration-150">
-                <X size={18} strokeWidth={2} />
-              </button>
-            </div>
-            <form onSubmit={handleSubmit} className="p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] space-y-4">
-              <div>
-                <label className="block text-xs text-secondary mb-1.5">Nombre</label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  disabled={editing?.name === PROTECTED_CATEGORY}
-                  placeholder="ej: Mascotas"
-                  className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-border-strong disabled:opacity-50"
-                  required
-                />
-              </div>
+        <BottomSheet title={editing ? 'Editar categoría' : 'Nueva categoría'} onClose={() => setModalOpen(false)}>
+          {(close) => {
+            async function handleSubmit(e) {
+              e.preventDefault();
+              if (!name.trim() || !emoji.trim()) {
+                setError('Rellena todos los campos');
+                return;
+              }
+              setSaving(true);
+              setError(null);
+              try {
+                if (editing) {
+                  await updateCategory(editing.id, { name: name.trim(), color, emoji: emoji.trim() });
+                } else {
+                  await createCategory({ name: name.trim(), color, emoji: emoji.trim() });
+                }
+                await refresh();
+                close();
+              } catch (err) {
+                setError(err.message);
+              } finally {
+                setSaving(false);
+              }
+            }
 
-              <div className="flex gap-3">
-                <div className="flex-1">
-                  <label className="block text-xs text-secondary mb-1.5">Emoji</label>
+            return (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-xs text-secondary mb-1.5">Nombre</label>
                   <input
                     type="text"
-                    value={emoji}
-                    onChange={(e) => setEmoji(e.target.value)}
-                    placeholder="🏷️"
-                    maxLength={4}
-                    className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-border-strong"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    disabled={editing?.name === PROTECTED_CATEGORY}
+                    placeholder="ej: Mascotas"
+                    className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-border-strong disabled:opacity-50"
                     required
                   />
                 </div>
-                <div className="flex-1">
-                  <label className="block text-xs text-secondary mb-1.5">Color</label>
-                  <input
-                    type="color"
-                    value={color}
-                    onChange={(e) => setColor(e.target.value)}
-                    className="w-full h-[42px] bg-elevated border border-border rounded-lg px-1.5 py-1.5 cursor-pointer"
-                  />
+
+                <div className="flex gap-3">
+                  <div className="flex-1">
+                    <label className="block text-xs text-secondary mb-1.5">Emoji</label>
+                    <input
+                      type="text"
+                      value={emoji}
+                      onChange={(e) => setEmoji(e.target.value)}
+                      placeholder="🏷️"
+                      maxLength={4}
+                      className="w-full bg-elevated border border-border rounded-lg px-3 py-2.5 text-sm text-primary placeholder-secondary focus:outline-none focus:border-border-strong"
+                      required
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <label className="block text-xs text-secondary mb-1.5">Color</label>
+                    <input
+                      type="color"
+                      value={color}
+                      onChange={(e) => setColor(e.target.value)}
+                      className="w-full h-[42px] bg-elevated border border-border rounded-lg px-1.5 py-1.5 cursor-pointer"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              {error && <p className="text-xs text-danger">{error}</p>}
+                {error && <p className="text-xs text-danger">{error}</p>}
 
-              <div className="flex gap-3 pt-1">
-                <button
-                  type="button"
-                  onClick={() => setModalOpen(false)}
-                  className="flex-1 px-4 py-2.5 rounded-md bg-elevated border border-border text-sm font-medium text-primary transition-colors duration-150"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="flex-1 px-4 py-2.5 rounded-md bg-blue text-white font-semibold text-sm transition-colors duration-150 disabled:opacity-50"
-                >
-                  {saving ? 'Guardando...' : editing ? 'Guardar' : 'Crear'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+                <div className="flex gap-3 pt-1">
+                  <button
+                    type="button"
+                    onClick={close}
+                    className="flex-1 px-4 py-2.5 rounded-md bg-elevated border border-border text-sm font-medium text-primary transition-colors duration-150"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={saving}
+                    className="flex-1 px-4 py-2.5 rounded-md bg-blue text-white font-semibold text-sm transition-colors duration-150 disabled:opacity-50"
+                  >
+                    {saving ? 'Guardando...' : editing ? 'Guardar' : 'Crear'}
+                  </button>
+                </div>
+              </form>
+            );
+          }}
+        </BottomSheet>
       )}
 
       {deleteTarget && (

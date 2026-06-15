@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, Target, Handshake, CalendarClock, PiggyBank } from 'lucide-react';
 import Header from '../components/Header.jsx';
+import PullToRefresh from '../components/PullToRefresh.jsx';
 import AlertBanner from '../components/AlertBanner.jsx';
 import BudgetBar from '../components/BudgetBar.jsx';
 import BudgetModal from '../components/BudgetModal.jsx';
@@ -12,6 +13,7 @@ import PlannedExpenseCard from '../components/PlannedExpenseCard.jsx';
 import PlannedExpenseModal from '../components/PlannedExpenseModal.jsx';
 import { useCategories } from '../context/CategoriesContext.jsx';
 import { useCachedData } from '../context/DataContext.jsx';
+import { useSwipeTabs } from '../hooks/useSwipeTabs.js';
 import {
   getBudgets, getGoals, getPlannedExpenses, getDebts, getDebtsSummary,
 } from '../api.js';
@@ -63,6 +65,9 @@ function AddButton({ onClick, children }) {
 
 export default function Plan() {
   const [tab, setTab] = useState('budgets');
+  const activeIndex = TABS.findIndex((t) => t.id === tab);
+  const handleSwipeChange = useCallback((i) => setTab(TABS[i].id), []);
+  const swipeRef = useSwipeTabs({ count: TABS.length, activeIndex, onChange: handleSwipeChange });
 
   return (
     <div className="pt-3">
@@ -83,10 +88,12 @@ export default function Plan() {
         ))}
       </div>
 
-      {tab === 'budgets' && <BudgetsTab />}
-      {tab === 'goals' && <GoalsTab />}
-      {tab === 'debts' && <DebtsTab />}
-      {tab === 'planned' && <PlannedTab />}
+      <div ref={swipeRef} key={tab} className="animate-fade-in">
+        {tab === 'budgets' && <BudgetsTab />}
+        {tab === 'goals' && <GoalsTab />}
+        {tab === 'debts' && <DebtsTab />}
+        {tab === 'planned' && <PlannedTab />}
+      </div>
     </div>
   );
 }
@@ -96,7 +103,7 @@ function BudgetsTab() {
   const [month, setMonth] = useState(getCurrentMonth());
   const [modalOpen, setModalOpen] = useState(false);
 
-  const { data: budgets = [], loading, mutate } = useCachedData(`budgets:${month}`, useCallback(() => getBudgets(month), [month]));
+  const { data: budgets = [], loading, mutate, refresh } = useCachedData(`budgets:${month}`, useCallback(() => getBudgets(month), [month]));
 
   function handleUpdate(updated) {
     mutate((prev) => (prev ?? []).map((b) => b.id === updated.id ? updated : b));
@@ -117,7 +124,7 @@ function BudgetsTab() {
   );
 
   return (
-    <div>
+    <PullToRefresh onRefresh={refresh}>
       <div className="flex items-center justify-between gap-3 mb-3">
         <div className="flex items-center gap-1 bg-elevated border border-border rounded-lg px-1">
           <button onClick={() => setMonth(addMonths(month, -1))} className="w-8 h-8 text-secondary flex items-center justify-center">
@@ -151,7 +158,7 @@ function BudgetsTab() {
       ) : budgets.length > 0 ? (
         <div>
           {budgets.map((b, i) => (
-            <BudgetBar key={b.id} budget={b} onUpdate={handleUpdate} onDelete={handleDelete} last={i === budgets.length - 1} />
+            <BudgetBar key={b.id} budget={b} index={i} onUpdate={handleUpdate} onDelete={handleDelete} last={i === budgets.length - 1} />
           ))}
         </div>
       ) : (
@@ -166,13 +173,13 @@ function BudgetsTab() {
       {modalOpen && (
         <BudgetModal availableCategories={availableCategories} onClose={() => setModalOpen(false)} onSave={handleCreate} />
       )}
-    </div>
+    </PullToRefresh>
   );
 }
 
 function GoalsTab() {
   const [modalOpen, setModalOpen] = useState(false);
-  const { data: result, loading, mutate } = useCachedData('planning', useCallback(async () => {
+  const { data: result, loading, mutate, refresh } = useCachedData('planning', useCallback(async () => {
     const [goalsData, expensesData] = await Promise.all([getGoals(), getPlannedExpenses()]);
     return { goals: goalsData, expenses: expensesData };
   }, []));
@@ -193,7 +200,7 @@ function GoalsTab() {
   }
 
   return (
-    <div>
+    <PullToRefresh onRefresh={refresh}>
       {(loading || goals.length > 0) && (
         <div className="flex justify-end mb-3">
           <AddButton onClick={() => setModalOpen(true)}>+ Nuevo objetivo</AddButton>
@@ -212,8 +219,8 @@ function GoalsTab() {
         </div>
       ) : goals.length > 0 ? (
         <div className="space-y-3">
-          {goals.map((g) => (
-            <GoalCard key={g.id} goal={g} onUpdate={handleUpdate} onDelete={handleDelete} />
+          {goals.map((g, i) => (
+            <GoalCard key={g.id} goal={g} index={i} onUpdate={handleUpdate} onDelete={handleDelete} />
           ))}
         </div>
       ) : (
@@ -228,7 +235,7 @@ function GoalsTab() {
       {modalOpen && (
         <GoalModal onClose={() => setModalOpen(false)} onSave={handleCreate} />
       )}
-    </div>
+    </PullToRefresh>
   );
 }
 
@@ -237,7 +244,7 @@ function DebtsTab() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingDebt, setEditingDebt] = useState(null);
 
-  const { data: result, loading, mutate } = useCachedData(`debts:${statusFilter}`, useCallback(async () => {
+  const { data: result, loading, mutate, refresh } = useCachedData(`debts:${statusFilter}`, useCallback(async () => {
     const [debtsData, summaryData] = await Promise.all([
       getDebts({ status: statusFilter || undefined }),
       getDebtsSummary(),
@@ -287,7 +294,7 @@ function DebtsTab() {
   const owedToMe = debts.filter((d) => d.type === 'owed_to_me');
 
   return (
-    <div>
+    <PullToRefresh onRefresh={refresh}>
       {/* Summary */}
       <div className="grid grid-cols-3 gap-3 mb-4">
         <div>
@@ -335,8 +342,8 @@ function DebtsTab() {
             <div>
               <p className="text-caption text-tertiary uppercase mb-2">Debo</p>
               <div className="space-y-3">
-                {owedByMe.map((d) => (
-                  <DebtCard key={d.id} debt={d} onEdit={openEdit} onUpdate={handleUpdate} onDelete={handleDelete} />
+                {owedByMe.map((d, i) => (
+                  <DebtCard key={d.id} debt={d} index={i} onEdit={openEdit} onUpdate={handleUpdate} onDelete={handleDelete} />
                 ))}
               </div>
             </div>
@@ -345,8 +352,8 @@ function DebtsTab() {
             <div>
               <p className="text-caption text-tertiary uppercase mb-2">Me deben</p>
               <div className="space-y-3">
-                {owedToMe.map((d) => (
-                  <DebtCard key={d.id} debt={d} onEdit={openEdit} onUpdate={handleUpdate} onDelete={handleDelete} />
+                {owedToMe.map((d, i) => (
+                  <DebtCard key={d.id} debt={d} index={i} onEdit={openEdit} onUpdate={handleUpdate} onDelete={handleDelete} />
                 ))}
               </div>
             </div>
@@ -364,7 +371,7 @@ function DebtsTab() {
       {modalOpen && (
         <DebtModal debt={editingDebt} onClose={() => setModalOpen(false)} onSave={handleSave} />
       )}
-    </div>
+    </PullToRefresh>
   );
 }
 
@@ -372,7 +379,7 @@ function PlannedTab() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState(null);
 
-  const { data: result, loading, mutate } = useCachedData('planning', useCallback(async () => {
+  const { data: result, loading, mutate, refresh } = useCachedData('planning', useCallback(async () => {
     const [goalsData, expensesData] = await Promise.all([getGoals(), getPlannedExpenses()]);
     return { goals: goalsData, expenses: expensesData };
   }, []));
@@ -408,7 +415,7 @@ function PlannedTab() {
   }
 
   return (
-    <div>
+    <PullToRefresh onRefresh={refresh}>
       {(loading || expenses.length > 0) && (
         <div className="flex justify-end mb-3">
           <AddButton onClick={openCreate}>+ Nuevo gasto previsto</AddButton>
@@ -445,6 +452,6 @@ function PlannedTab() {
       {modalOpen && (
         <PlannedExpenseModal expense={editingExpense} onClose={() => setModalOpen(false)} onSave={handleSave} />
       )}
-    </div>
+    </PullToRefresh>
   );
 }
