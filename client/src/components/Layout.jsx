@@ -85,8 +85,8 @@ export default function Layout({ children, currentPage, onNavigate }) {
       </div>
 
       {/* Mobile floating glass nav */}
-      <nav className="md:hidden fixed left-3 right-3 z-20 flex items-center justify-around gap-1 px-2 py-2 rounded-[28px] bg-white/[0.07] backdrop-blur-2xl backdrop-saturate-150 border border-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.08)] overflow-hidden" style={{ bottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
-        <div className="absolute inset-0 rounded-[28px] bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none" />
+      <nav className="md:hidden fixed left-3 right-3 z-20 flex items-center justify-around gap-1 px-2 py-2 rounded-t-3xl bg-white/5 backdrop-blur-2xl backdrop-saturate-200 backdrop-brightness-110 border-t border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.08)] overflow-hidden" style={{ bottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
+        <div className="absolute inset-0 rounded-t-3xl bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none" />
         {MOBILE_NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const active = currentPage === item.id;
@@ -94,8 +94,8 @@ export default function Layout({ children, currentPage, onNavigate }) {
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`relative flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 rounded-xl text-[11px] font-medium transition-colors duration-150 ${
-                active ? 'text-primary bg-white/10' : 'text-secondary'
+              className={`relative flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 text-[11px] font-medium transition-all duration-200 ease-in-out ${
+                active ? 'text-white bg-white/10 backdrop-blur-[20px] border border-white/[0.15] rounded-[14px] px-4' : 'text-white/40'
               }`}
             >
               <Icon size={18} strokeWidth={2} />
@@ -105,8 +105,8 @@ export default function Layout({ children, currentPage, onNavigate }) {
         })}
         <button
           onClick={() => setMoreSheetOpen(true)}
-          className={`relative flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 rounded-xl text-[11px] font-medium transition-colors duration-150 ${
-            MORE_PAGES.includes(currentPage) ? 'text-primary bg-white/10' : 'text-secondary'
+          className={`relative flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 text-[11px] font-medium transition-all duration-200 ease-in-out ${
+            MORE_PAGES.includes(currentPage) ? 'text-white bg-white/10 backdrop-blur-[20px] border border-white/[0.15] rounded-[14px] px-4' : 'text-white/40'
           }`}
         >
           <MoreHorizontal size={18} strokeWidth={2} />
