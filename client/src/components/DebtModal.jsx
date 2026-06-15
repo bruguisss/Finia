@@ -46,10 +46,13 @@ export default function DebtModal({ debt, onClose, onSave }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/60 backdrop-blur-sm md:p-4 animate-fade-in"
+      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm animate-fade-in"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-surface border border-border rounded-t-2xl md:rounded-lg w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto animate-slide-up md:animate-scale-in">
+      <div
+        style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 'calc(100vw - 32px)', maxWidth: '480px', maxHeight: '90vh', overflowY: 'auto' }}
+        className="bg-surface border border-border rounded-2xl shadow-2xl animate-fade-in"
+      >
         <div className="flex items-center justify-between p-5 border-b border-border">
           <h3 className="text-base font-semibold text-primary tracking-tight">
             {isEditing ? 'Editar deuda' : 'Nueva deuda'}

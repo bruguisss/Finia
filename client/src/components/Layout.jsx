@@ -33,6 +33,18 @@ export default function Layout({ children, currentPage, onNavigate }) {
 
   return (
     <div className="flex h-screen overflow-hidden bg-base text-primary">
+      {/* Top fade gradient (mobile) */}
+      <div
+        aria-hidden="true"
+        className="md:hidden fixed top-0 left-0 right-0 h-20 z-10 bg-gradient-to-b from-base to-transparent pointer-events-none"
+      />
+
+      {/* Bottom fade gradient (mobile) */}
+      <div
+        aria-hidden="true"
+        className="md:hidden fixed bottom-0 left-0 right-0 h-[100px] z-10 bg-gradient-to-t from-base to-transparent pointer-events-none"
+      />
+
       {/* Desktop sidebar - flush panel, separated by subtle shadow only */}
       <div className="hidden md:flex flex-col w-60 shrink-0 bg-base shadow-[4px_0_24px_-12px_rgba(0,0,0,0.7)]">
         <Sidebar currentPage={currentPage} onNavigate={onNavigate} onUpload={() => setUploadOpen(true)} />
@@ -73,7 +85,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
       </div>
 
       {/* Mobile floating glass nav */}
-      <nav className="md:hidden fixed left-3 right-3 z-40 flex items-center justify-around gap-1 px-2 py-2 rounded-[28px] bg-white/[0.07] backdrop-blur-2xl backdrop-saturate-150 border border-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.08)] overflow-hidden" style={{ bottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
+      <nav className="md:hidden fixed left-3 right-3 z-20 flex items-center justify-around gap-1 px-2 py-2 rounded-[28px] bg-white/[0.07] backdrop-blur-2xl backdrop-saturate-150 border border-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.08)] overflow-hidden" style={{ bottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
         <div className="absolute inset-0 rounded-[28px] bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none" />
         {MOBILE_NAV_ITEMS.map((item) => {
           const Icon = item.icon;
