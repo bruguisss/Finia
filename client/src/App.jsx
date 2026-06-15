@@ -8,6 +8,8 @@ import Budgets from './pages/Budgets.jsx';
 import Planning from './pages/Planning.jsx';
 import Debts from './pages/Debts.jsx';
 import Categories from './pages/Categories.jsx';
+import More from './pages/More.jsx';
+import Settings from './pages/Settings.jsx';
 import { CategoriesProvider } from './context/CategoriesContext.jsx';
 import { DataProvider } from './context/DataContext.jsx';
 
@@ -28,11 +30,13 @@ export default function App() {
   const pages = {
     dashboard: <Dashboard onNavigate={setPage} />,
     transactions: <Transactions />,
+    plan: <Planning />,
+    more: <More onNavigate={setPage} />,
     analytics: <Analytics />,
     budgets: <Budgets />,
-    planning: <Planning />,
     debts: <Debts />,
     categories: <Categories />,
+    settings: <Settings onNavigate={setPage} />,
   };
 
   return (
