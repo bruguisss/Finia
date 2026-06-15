@@ -63,13 +63,17 @@ async function migrate() {
       name TEXT NOT NULL,
       amount DOUBLE PRECISION NOT NULL,
       category TEXT DEFAULT 'Sin categoría',
-      frequency TEXT CHECK(frequency IN ('once','monthly','yearly')) NOT NULL DEFAULT 'monthly',
+      frequency TEXT CHECK(frequency IN ('once','monthly','weekly','yearly')) NOT NULL DEFAULT 'monthly',
       next_date TEXT NOT NULL,
       active BOOLEAN DEFAULT true,
       notes TEXT,
       created_at TIMESTAMP DEFAULT NOW()
     );
   `);
+
+  // Allow 'weekly' frequency on tables created before it was added to the CHECK constraint
+  await pool.query(`ALTER TABLE planned_expenses DROP CONSTRAINT IF EXISTS planned_expenses_frequency_check;`);
+  await pool.query(`ALTER TABLE planned_expenses ADD CONSTRAINT planned_expenses_frequency_check CHECK (frequency IN ('once','monthly','weekly','yearly'));`);
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS categories (

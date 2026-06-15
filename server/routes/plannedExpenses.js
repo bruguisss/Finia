@@ -18,6 +18,19 @@ function getOccurrenceDates(expense, month) {
     const day = Math.min(nextDay, daysInMonth);
     return [`${month}-${String(day).padStart(2, '0')}`];
   }
+  if (expense.frequency === 'weekly') {
+    const start = new Date(`${expense.next_date.slice(0, 10)}T00:00:00Z`);
+    const occurrences = [];
+    for (let day = 1; day <= daysInMonth; day++) {
+      const current = new Date(Date.UTC(y, m - 1, day));
+      if (current < start) continue;
+      const diffDays = Math.round((current - start) / 86400000);
+      if (diffDays % 7 === 0) {
+        occurrences.push(`${month}-${String(day).padStart(2, '0')}`);
+      }
+    }
+    return occurrences;
+  }
   if (expense.frequency === 'yearly') {
     if (nextMonthNum !== m || nextMonth > month) return [];
     const day = Math.min(nextDay, daysInMonth);
@@ -68,8 +81,8 @@ router.post('/', async (req, res) => {
     if (!name || !amount || !next_date) {
       return res.status(400).json({ error: 'name, amount and next_date are required' });
     }
-    if (frequency && !['once', 'monthly', 'yearly'].includes(frequency)) {
-      return res.status(400).json({ error: "frequency must be 'once', 'monthly' or 'yearly'" });
+    if (frequency && !['once', 'monthly', 'weekly', 'yearly'].includes(frequency)) {
+      return res.status(400).json({ error: "frequency must be 'once', 'monthly', 'weekly' or 'yearly'" });
     }
 
     const result = await pool.query(

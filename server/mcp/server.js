@@ -246,6 +246,53 @@ function createMcpServer() {
     };
   }));
 
+  server.registerTool('add_recurring_payment', {
+    title: 'Añadir pago recurrente',
+    description: 'Añade un pago recurrente (gasto planificado) a Finia',
+    inputSchema: {
+      description: z.string().describe('Descripción del pago recurrente'),
+      amount: z.number().describe('Importe del pago'),
+      category: z.string().optional().describe('Categoría (opcional)'),
+      frequency: z.enum(['monthly', 'weekly', 'yearly']).describe('Frecuencia del pago'),
+      next_date: z.string().describe('Próxima fecha en formato YYYY-MM-DD'),
+    },
+  }, safeTool(async ({ description, amount, category, frequency, next_date }) => {
+    const result = await pool.query(`
+      INSERT INTO planned_expenses (name, amount, category, frequency, next_date)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING *
+    `, [description, Math.abs(amount), category || 'Sin categoría', frequency, next_date]);
+
+    const p = result.rows[0];
+    const frequencyLabels = { monthly: 'mensual', weekly: 'semanal', yearly: 'anual' };
+    return {
+      content: [{
+        type: 'text',
+        text: `Pago recurrente añadido: "${p.name}" — ${parseFloat(p.amount).toFixed(2)}€ (${frequencyLabels[p.frequency]}) en la categoría "${p.category}", próxima fecha ${p.next_date}.`,
+      }],
+    };
+  }));
+
+  server.registerTool('get_recurring_payments', {
+    title: 'Listar pagos recurrentes',
+    description: 'Lista los pagos recurrentes registrados en Finia',
+    inputSchema: {},
+  }, safeTool(async () => {
+    const result = await pool.query('SELECT * FROM planned_expenses ORDER BY next_date');
+
+    if (result.rows.length === 0) {
+      return { content: [{ type: 'text', text: 'No hay pagos recurrentes registrados.' }] };
+    }
+
+    const frequencyLabels = { once: 'una vez', monthly: 'mensual', weekly: 'semanal', yearly: 'anual' };
+    const lines = result.rows.map((p) => {
+      const estado = p.active ? '' : ' (inactivo)';
+      return `- ID ${p.id} | ${p.name} | ${parseFloat(p.amount).toFixed(2)}€ | ${frequencyLabels[p.frequency] || p.frequency} | próxima fecha ${p.next_date} | ${p.category}${estado}`;
+    });
+
+    return { content: [{ type: 'text', text: `Pagos recurrentes:\n${lines.join('\n')}` }] };
+  }));
+
   return server;
 }
 

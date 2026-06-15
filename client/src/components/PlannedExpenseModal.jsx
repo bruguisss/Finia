@@ -92,6 +92,7 @@ export default function PlannedExpenseModal({ expense, onClose, onSave }) {
                 className="w-full bg-muted border border-border rounded-lg px-3 py-2.5 text-sm text-primary focus:outline-none focus:border-white/30"
               >
                 <option value="once">Una vez</option>
+                <option value="weekly">Semanal</option>
                 <option value="monthly">Mensual</option>
                 <option value="yearly">Anual</option>
               </select>
