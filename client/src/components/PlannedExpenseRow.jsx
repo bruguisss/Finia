@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Repeat, Calendar, Pencil, Trash2 } from 'lucide-react';
 import CategoryBadge from './CategoryBadge.jsx';
+import ConfirmDialog from './ConfirmDialog.jsx';
 import { updatePlannedExpense, deletePlannedExpense } from '../api.js';
 
 function formatEur(n) {
@@ -18,6 +19,8 @@ const FREQUENCY_LABELS = {
 };
 
 export default function PlannedExpenseRow({ expense, onEdit, onUpdate, onDelete }) {
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
   async function handleToggleActive() {
     try {
       const updated = await updatePlannedExpense(expense.id, { active: !expense.active });
@@ -27,8 +30,8 @@ export default function PlannedExpenseRow({ expense, onEdit, onUpdate, onDelete 
     }
   }
 
-  async function handleDelete() {
-    if (!confirm(`¿Eliminar "${expense.name}"?`)) return;
+  async function confirmDelete() {
+    setConfirmOpen(false);
     try {
       await deletePlannedExpense(expense.id);
       onDelete(expense.id);
@@ -38,6 +41,7 @@ export default function PlannedExpenseRow({ expense, onEdit, onUpdate, onDelete 
   }
 
   return (
+    <>
     <tr className={`border-b border-white/[0.04] hover:bg-white/[0.03] transition-colors duration-150 group h-10 ${!expense.active ? 'opacity-50' : ''}`}>
       <td className="px-4 text-[13px] text-primary">{expense.name}</td>
       <td className="px-4"><CategoryBadge category={expense.category} /></td>
@@ -66,11 +70,21 @@ export default function PlannedExpenseRow({ expense, onEdit, onUpdate, onDelete 
           <button onClick={() => onEdit(expense)} className="text-secondary hover:text-primary p-1.5 rounded-md hover:bg-white/[0.06]">
             <Pencil size={13} strokeWidth={2} />
           </button>
-          <button onClick={handleDelete} className="text-secondary hover:text-danger p-1.5 rounded-md hover:bg-white/[0.06]">
+          <button onClick={() => setConfirmOpen(true)} className="text-secondary hover:text-danger p-1.5 rounded-md hover:bg-white/[0.06]">
             <Trash2 size={13} strokeWidth={2} />
           </button>
         </div>
       </td>
     </tr>
+
+    {confirmOpen && (
+      <ConfirmDialog
+        title="Eliminar gasto previsto"
+        message={`¿Eliminar "${expense.name}"? Esta acción no se puede deshacer.`}
+        onConfirm={confirmDelete}
+        onCancel={() => setConfirmOpen(false)}
+      />
+    )}
+    </>
   );
 }

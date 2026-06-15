@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Pencil, Trash2 } from 'lucide-react';
+import ConfirmDialog from './ConfirmDialog.jsx';
 import { useCategories, DEFAULT_COLOR, DEFAULT_EMOJI } from '../context/CategoriesContext.jsx';
 import { updateBudget, deleteBudget } from '../api.js';
 
@@ -12,6 +13,7 @@ export default function BudgetBar({ budget, onUpdate, onDelete }) {
   const [editing, setEditing] = useState(false);
   const [limit, setLimit] = useState(budget.monthly_limit);
   const [saving, setSaving] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const { category, monthly_limit, spent = 0, percentage = 0 } = budget;
   const cat = getCategory(category);
@@ -33,8 +35,8 @@ export default function BudgetBar({ budget, onUpdate, onDelete }) {
     }
   }
 
-  async function handleDelete() {
-    if (!confirm(`¿Eliminar presupuesto de ${category}?`)) return;
+  async function confirmDelete() {
+    setConfirmOpen(false);
     try {
       await deleteBudget(budget.id);
       onDelete(budget.id);
@@ -63,7 +65,7 @@ export default function BudgetBar({ budget, onUpdate, onDelete }) {
           <button onClick={() => setEditing(!editing)} className="text-secondary hover:text-primary transition-colors duration-150">
             <Pencil size={13} strokeWidth={2} />
           </button>
-          <button onClick={handleDelete} className="text-secondary hover:text-danger transition-colors duration-150">
+          <button onClick={() => setConfirmOpen(true)} className="text-secondary hover:text-danger transition-colors duration-150">
             <Trash2 size={13} strokeWidth={2} />
           </button>
         </div>
@@ -97,6 +99,15 @@ export default function BudgetBar({ budget, onUpdate, onDelete }) {
             {saving ? '...' : 'Guardar'}
           </button>
         </div>
+      )}
+
+      {confirmOpen && (
+        <ConfirmDialog
+          title="Eliminar presupuesto"
+          message={`¿Eliminar el presupuesto de ${category}? Esta acción no se puede deshacer.`}
+          onConfirm={confirmDelete}
+          onCancel={() => setConfirmOpen(false)}
+        />
       )}
     </div>
   );

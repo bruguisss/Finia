@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { useCategories } from '../context/CategoriesContext.jsx';
+import { useInvalidateData } from '../context/DataContext.jsx';
 import { createTransaction } from '../api.js';
 
 function getToday() {
@@ -9,6 +10,7 @@ function getToday() {
 
 export default function AddTransactionModal({ onClose, onSwitchToUpload }) {
   const { categories } = useCategories();
+  const invalidateData = useInvalidateData();
   const [type, setType] = useState('debit');
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
@@ -33,7 +35,8 @@ export default function AddTransactionModal({ onClose, onSwitchToUpload }) {
         type,
         category,
       });
-      window.location.reload();
+      invalidateData();
+      onClose();
     } catch (err) {
       setError(err.message);
       setSaving(false);

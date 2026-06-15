@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Pencil, Trash2, PiggyBank, TrendingDown, Plus } from 'lucide-react';
+import ConfirmDialog from './ConfirmDialog.jsx';
 import { updateGoal, deleteGoal } from '../api.js';
 
 function formatEur(n) {
@@ -15,6 +16,7 @@ export default function GoalCard({ goal, onUpdate, onDelete }) {
   const [target, setTarget] = useState(goal.target_amount);
   const [contribution, setContribution] = useState('');
   const [saving, setSaving] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const { id, name, type, target_amount, current_amount, target_date, percentage = 0 } = goal;
   const isSavings = type === 'savings';
@@ -53,8 +55,8 @@ export default function GoalCard({ goal, onUpdate, onDelete }) {
     }
   }
 
-  async function handleDelete() {
-    if (!confirm(`¿Eliminar el objetivo "${name}"?`)) return;
+  async function confirmDelete() {
+    setConfirmOpen(false);
     try {
       await deleteGoal(id);
       onDelete(id);
@@ -87,7 +89,7 @@ export default function GoalCard({ goal, onUpdate, onDelete }) {
           <button onClick={() => setEditing(!editing)} className="text-secondary hover:text-primary transition-colors duration-150">
             <Pencil size={13} strokeWidth={2} />
           </button>
-          <button onClick={handleDelete} className="text-secondary hover:text-danger transition-colors duration-150">
+          <button onClick={() => setConfirmOpen(true)} className="text-secondary hover:text-danger transition-colors duration-150">
             <Trash2 size={13} strokeWidth={2} />
           </button>
         </div>
@@ -140,6 +142,15 @@ export default function GoalCard({ goal, onUpdate, onDelete }) {
             Aporte
           </button>
         </form>
+      )}
+
+      {confirmOpen && (
+        <ConfirmDialog
+          title="Eliminar objetivo"
+          message={`¿Eliminar el objetivo "${name}"? Esta acción no se puede deshacer.`}
+          onConfirm={confirmDelete}
+          onCancel={() => setConfirmOpen(false)}
+        />
       )}
     </div>
   );

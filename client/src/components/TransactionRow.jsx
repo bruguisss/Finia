@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Trash2 } from 'lucide-react';
 import CategoryBadge from './CategoryBadge.jsx';
+import ConfirmDialog from './ConfirmDialog.jsx';
 import { useCategories } from '../context/CategoriesContext.jsx';
 import { updateTransactionCategory, deleteTransaction } from '../api.js';
 
@@ -17,6 +18,7 @@ export default function TransactionRow({ transaction, onUpdate, onDelete }) {
   const { categories } = useCategories();
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   async function handleCategoryChange(e) {
     const newCat = e.target.value;
@@ -32,8 +34,8 @@ export default function TransactionRow({ transaction, onUpdate, onDelete }) {
     }
   }
 
-  async function handleDelete() {
-    if (!confirm('¿Eliminar esta transacción?')) return;
+  async function confirmDelete() {
+    setConfirmOpen(false);
     try {
       await deleteTransaction(transaction.id);
       onDelete(transaction.id);
@@ -45,6 +47,7 @@ export default function TransactionRow({ transaction, onUpdate, onDelete }) {
   const isDebit = transaction.type === 'debit';
 
   return (
+    <>
     <tr className="border-b border-white/[0.04] hover:bg-white/[0.03] transition-colors duration-150 group h-10">
       <td className="px-4 text-[13px] text-secondary whitespace-nowrap">
         {formatDate(transaction.date)}
@@ -79,12 +82,22 @@ export default function TransactionRow({ transaction, onUpdate, onDelete }) {
       </td>
       <td className="px-4 text-right">
         <button
-          onClick={handleDelete}
+          onClick={() => setConfirmOpen(true)}
           className="opacity-0 group-hover:opacity-100 text-secondary hover:text-danger transition-all duration-150 p-1.5 rounded-md hover:bg-white/[0.06]"
         >
           <Trash2 size={14} strokeWidth={2} />
         </button>
       </td>
     </tr>
+
+    {confirmOpen && (
+      <ConfirmDialog
+        title="Eliminar transacción"
+        message="¿Eliminar esta transacción? Esta acción no se puede deshacer."
+        onConfirm={confirmDelete}
+        onCancel={() => setConfirmOpen(false)}
+      />
+    )}
+    </>
   );
 }

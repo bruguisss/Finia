@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Repeat, Calendar, Pencil, Trash2 } from 'lucide-react';
 import CategoryAvatar from './CategoryAvatar.jsx';
+import ConfirmDialog from './ConfirmDialog.jsx';
 import { updatePlannedExpense, deletePlannedExpense } from '../api.js';
 
 function formatEur(n) {
@@ -18,6 +19,8 @@ const FREQUENCY_LABELS = {
 };
 
 export default function PlannedExpenseCard({ expense, onEdit, onUpdate, onDelete, index = 0 }) {
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
   async function handleToggleActive() {
     try {
       const updated = await updatePlannedExpense(expense.id, { active: !expense.active });
@@ -27,8 +30,8 @@ export default function PlannedExpenseCard({ expense, onEdit, onUpdate, onDelete
     }
   }
 
-  async function handleDelete() {
-    if (!confirm(`¿Eliminar "${expense.name}"?`)) return;
+  async function confirmDelete() {
+    setConfirmOpen(false);
     try {
       await deletePlannedExpense(expense.id);
       onDelete(expense.id);
@@ -65,12 +68,21 @@ export default function PlannedExpenseCard({ expense, onEdit, onUpdate, onDelete
             <button onClick={() => onEdit(expense)} className="text-secondary hover:text-primary p-1.5 rounded-md">
               <Pencil size={13} strokeWidth={2} />
             </button>
-            <button onClick={handleDelete} className="text-secondary hover:text-danger p-1.5 rounded-md">
+            <button onClick={() => setConfirmOpen(true)} className="text-secondary hover:text-danger p-1.5 rounded-md">
               <Trash2 size={13} strokeWidth={2} />
             </button>
           </div>
         </div>
       </div>
+
+      {confirmOpen && (
+        <ConfirmDialog
+          title="Eliminar gasto previsto"
+          message={`¿Eliminar "${expense.name}"? Esta acción no se puede deshacer.`}
+          onConfirm={confirmDelete}
+          onCancel={() => setConfirmOpen(false)}
+        />
+      )}
     </div>
   );
 }

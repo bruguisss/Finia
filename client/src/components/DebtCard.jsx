@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Pencil, Trash2 } from 'lucide-react';
+import ConfirmDialog from './ConfirmDialog.jsx';
 import { updateDebt, deleteDebt } from '../api.js';
 
 const STATUS_LABELS = { pending: 'Pendiente', partial: 'Parcial', paid: 'Pagada' };
@@ -21,6 +22,7 @@ function isOverdue(debt) {
 export default function DebtCard({ debt, onEdit, onUpdate, onDelete }) {
   const [payAmount, setPayAmount] = useState('');
   const [paying, setPaying] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const isOwedByMe = debt.type === 'owed_by_me';
   const remaining = debt.amount - debt.amount_paid;
@@ -44,8 +46,8 @@ export default function DebtCard({ debt, onEdit, onUpdate, onDelete }) {
     }
   }
 
-  async function handleDelete() {
-    if (!confirm(`¿Eliminar deuda de ${debt.person}?`)) return;
+  async function confirmDelete() {
+    setConfirmOpen(false);
     try {
       await deleteDebt(debt.id);
       onDelete(debt.id);
@@ -65,7 +67,7 @@ export default function DebtCard({ debt, onEdit, onUpdate, onDelete }) {
           <button onClick={() => onEdit(debt)} className="text-secondary hover:text-primary transition-colors duration-150">
             <Pencil size={13} strokeWidth={2} />
           </button>
-          <button onClick={handleDelete} className="text-secondary hover:text-danger transition-colors duration-150">
+          <button onClick={() => setConfirmOpen(true)} className="text-secondary hover:text-danger transition-colors duration-150">
             <Trash2 size={13} strokeWidth={2} />
           </button>
         </div>
@@ -129,6 +131,15 @@ export default function DebtCard({ debt, onEdit, onUpdate, onDelete }) {
             {paying ? '...' : 'Abonar'}
           </button>
         </form>
+      )}
+
+      {confirmOpen && (
+        <ConfirmDialog
+          title="Eliminar deuda"
+          message={`¿Eliminar la deuda de ${debt.person}? Esta acción no se puede deshacer.`}
+          onConfirm={confirmDelete}
+          onCancel={() => setConfirmOpen(false)}
+        />
       )}
     </div>
   );
