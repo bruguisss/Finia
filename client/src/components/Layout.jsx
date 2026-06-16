@@ -41,7 +41,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
       {/* Bottom fade gradient (mobile) */}
       <div
         aria-hidden="true"
-        className="md:hidden fixed bottom-0 left-0 right-0 h-[100px] z-10 bg-gradient-to-t from-base to-transparent pointer-events-none"
+        className="md:hidden fixed bottom-0 left-0 right-0 h-[180px] z-10 bg-gradient-to-t from-base to-transparent pointer-events-none"
       />
 
       {/* Desktop sidebar - flush panel, separated by subtle shadow only */}
