@@ -100,6 +100,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
           '--gr-bg-end': 'rgba(14,14,16,0.58)',
           '--gr-chromatic-blue': 'rgba(0,180,255,0.07)',
           '--gr-chromatic-pink': 'rgba(255,100,200,0.05)',
+          animation: 'none',
         }}
       >
         {MOBILE_NAV_ITEMS.map((item) => {
