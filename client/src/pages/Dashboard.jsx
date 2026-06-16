@@ -202,77 +202,79 @@ export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) 
       <div className="space-y-6">
         {/* Monthly overview - no card */}
         <div>
-          {/* Month selector */}
-          <div className="flex items-center justify-center gap-3 mb-4">
+          {/* Hero balance */}
+          {loading ? (
+            <div className="skeleton h-20 mx-auto max-w-[220px] mb-5" />
+          ) : (
+            <div className="text-center mb-5">
+              <p className="text-[11px] font-medium text-tertiary uppercase tracking-wider mb-1">Disponible</p>
+              <p className="font-numeric text-5xl font-semibold tracking-[-0.02em] tabular-nums text-primary">
+                {formatEur(data.balance)}
+              </p>
+              <p className="font-numeric text-[17px] font-semibold text-secondary mt-1.5">
+                Gastado: {formatEur(progress.cumulativeAtToday)}
+              </p>
+            </div>
+          )}
+
+          {/* Month selector — directly above chart */}
+          <div className="flex items-center justify-center gap-3 mb-3">
             <button
               onClick={() => setMonth(addMonths(month, -1))}
-              className="w-7 h-7 rounded-md bg-muted border border-white/10 text-primary hover:bg-[#555555] transition-colors duration-150 flex items-center justify-center"
+              className="w-7 h-7 rounded-md bg-muted border border-border text-primary hover:bg-black/[0.08] dark:hover:bg-white/[0.12] transition-colors duration-150 flex items-center justify-center"
             >
               <ChevronLeft size={14} strokeWidth={2} />
             </button>
-            <span className="text-xs font-medium text-tertiary capitalize">{formatMonth(month)}</span>
+            <span className="text-xs font-medium text-secondary capitalize">{formatMonth(month)}</span>
             <button
               onClick={() => setMonth(addMonths(month, 1))}
               disabled={month >= getCurrentMonth()}
-              className="w-7 h-7 rounded-md bg-muted border border-white/10 text-primary hover:bg-[#555555] transition-colors duration-150 flex items-center justify-center disabled:opacity-30"
+              className="w-7 h-7 rounded-md bg-muted border border-border text-primary hover:bg-black/[0.08] dark:hover:bg-white/[0.12] transition-colors duration-150 flex items-center justify-center disabled:opacity-30"
             >
               <ChevronRight size={14} strokeWidth={2} />
             </button>
           </div>
 
+          {/* Chart - edge-to-edge on mobile */}
           {loading ? (
-            <div className="skeleton h-64" />
+            <div className="skeleton h-[220px]" />
           ) : (
-            <>
-              {/* Hero balance */}
-              <div className="text-center mb-5">
-                <p className="text-[11px] font-medium text-tertiary uppercase tracking-wider mb-1">Disponible</p>
-                <p className="font-numeric text-5xl font-semibold tracking-[-0.02em] tabular-nums text-primary">
-                  {formatEur(data.balance)}
-                </p>
-                <p className="font-numeric text-[17px] font-semibold text-secondary mt-1.5">
-                  Gastado: {formatEur(progress.cumulativeAtToday)}
-                </p>
-              </div>
-
-              {/* Chart - edge-to-edge on mobile */}
-              <div className="-mx-5 md:mx-0">
-                <ResponsiveContainer width="100%" height={isMobile ? 220 : 260}>
-                  <ComposedChart data={progress.data} margin={{ top: 5, right: 16, left: 0, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="spendGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#FF4D4D" stopOpacity={0.08} />
-                        <stop offset="95%" stopColor="#FF4D4D" stopOpacity={0} />
-                      </linearGradient>
-                      <pattern id="projectionHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                        <rect width="6" height="6" fill="transparent" />
-                        <line x1="0" y1="0" x2="0" y2="6" stroke={overBudget ? '#FF4D4D' : '#8A8A8A'} strokeWidth="1" strokeOpacity="0.25" />
-                      </pattern>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
-                    <XAxis dataKey="day" tick={{ fill: 'var(--chart-tick)', fontSize: 11 }} axisLine={false} tickLine={false} interval={isMobile ? 6 : 2} />
-                    <YAxis tick={{ fill: 'var(--chart-tick)', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v)}€`} tickCount={5} />
-                    <Tooltip content={<ProgressTooltip isMobile={isMobile} />} />
-                    {progress.currentDay < progress.daysInMonth && (
-                      <ReferenceArea x1={progress.currentDay} x2={progress.daysInMonth} fill="url(#projectionHatch)" stroke="none" />
-                    )}
-                    {totalBudget > 0 && (
-                      <Line type="monotone" dataKey="budget" stroke="#8A8A8A" strokeWidth={1.5} strokeDasharray="4 4" dot={false} isAnimationActive={!isMobile} />
-                    )}
-                    <Area type="monotone" dataKey="actual" stroke="#FF4D4D" fill="url(#spendGrad)" strokeWidth={2} dot={false} connectNulls isAnimationActive={!isMobile} />
-                    {progress.currentDay < progress.daysInMonth && (
-                      <Line type="monotone" dataKey="projected" stroke={overBudget ? '#FF4D4D' : '#8A8A8A'} strokeWidth={1.5} strokeDasharray="4 4" dot={false} connectNulls isAnimationActive={!isMobile} />
-                    )}
-                    {progress.currentDay < progress.daysInMonth && progress.plannedRemaining > 0 && (
-                      <Line type="monotone" dataKey="scheduled" stroke="#FFAA00" strokeWidth={1.5} strokeDasharray="2 3" dot={false} connectNulls isAnimationActive={!isMobile} />
-                    )}
-                    {progress.currentDay < progress.daysInMonth && (
-                      <ReferenceLine x={progress.currentDay} stroke="var(--chart-ref)" strokeDasharray="3 3" label={{ value: 'Hoy', position: 'top', fill: 'var(--chart-tick)', fontSize: 11 }} />
-                    )}
-                  </ComposedChart>
-                </ResponsiveContainer>
-              </div>
-            </>
+            <div className="-mx-5 md:mx-0">
+              <ResponsiveContainer width="100%" height={isMobile ? 220 : 260}>
+                <ComposedChart data={progress.data} margin={{ top: 5, right: 16, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="spendGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#FF4D4D" stopOpacity={0.08} />
+                      <stop offset="95%" stopColor="#FF4D4D" stopOpacity={0} />
+                    </linearGradient>
+                    <pattern id="projectionHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                      <rect width="6" height="6" fill="transparent" />
+                      <line x1="0" y1="0" x2="0" y2="6" stroke={overBudget ? '#FF4D4D' : '#8A8A8A'} strokeWidth="1" strokeOpacity="0.25" />
+                    </pattern>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
+                  <XAxis dataKey="day" tick={{ fill: 'var(--chart-tick)', fontSize: 11 }} axisLine={false} tickLine={false} interval={isMobile ? 6 : 2} />
+                  <YAxis tick={{ fill: 'var(--chart-tick)', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v)}€`} tickCount={5} />
+                  <Tooltip content={<ProgressTooltip isMobile={isMobile} />} />
+                  {progress.currentDay < progress.daysInMonth && (
+                    <ReferenceArea x1={progress.currentDay} x2={progress.daysInMonth} fill="url(#projectionHatch)" stroke="none" />
+                  )}
+                  {totalBudget > 0 && (
+                    <Line type="monotone" dataKey="budget" stroke="#8A8A8A" strokeWidth={1.5} strokeDasharray="4 4" dot={false} isAnimationActive={!isMobile} />
+                  )}
+                  <Area type="monotone" dataKey="actual" stroke="#FF4D4D" fill="url(#spendGrad)" strokeWidth={2} dot={false} connectNulls isAnimationActive={!isMobile} />
+                  {progress.currentDay < progress.daysInMonth && (
+                    <Line type="monotone" dataKey="projected" stroke={overBudget ? '#FF4D4D' : '#8A8A8A'} strokeWidth={1.5} strokeDasharray="4 4" dot={false} connectNulls isAnimationActive={!isMobile} />
+                  )}
+                  {progress.currentDay < progress.daysInMonth && progress.plannedRemaining > 0 && (
+                    <Line type="monotone" dataKey="scheduled" stroke="#FFAA00" strokeWidth={1.5} strokeDasharray="2 3" dot={false} connectNulls isAnimationActive={!isMobile} />
+                  )}
+                  {progress.currentDay < progress.daysInMonth && (
+                    <ReferenceLine x={progress.currentDay} stroke="var(--chart-ref)" strokeDasharray="3 3" label={{ value: 'Hoy', position: 'top', fill: 'var(--chart-tick)', fontSize: 11 }} />
+                  )}
+                </ComposedChart>
+              </ResponsiveContainer>
+            </div>
           )}
         </div>
 
