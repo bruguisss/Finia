@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useTheme } from '../context/ThemeContext.jsx';
 
 export default function SplashScreen({ fadingOut }) {
   const [entered, setEntered] = useState(false);
+  const { isDark } = useTheme();
 
   useEffect(() => {
     const raf = requestAnimationFrame(() => setEntered(true));
@@ -12,7 +14,7 @@ export default function SplashScreen({ fadingOut }) {
     <div
       className="fixed inset-0 z-[9999] flex items-center justify-center"
       style={{
-        backgroundColor: '#000000',
+        backgroundColor: isDark ? '#000000' : '#FFFFFF',
         opacity: fadingOut ? 0 : entered ? 1 : 0,
         transitionProperty: 'opacity',
         transitionDuration: fadingOut ? '300ms' : '400ms',
@@ -20,7 +22,7 @@ export default function SplashScreen({ fadingOut }) {
       }}
     >
       <img
-        src="/icons/logo-dark-bg.png"
+        src={isDark ? '/icons/logo-dark-bg.png' : '/icons/logo-transparent.png'}
         alt="Finia"
         width={220}
         height={220}
