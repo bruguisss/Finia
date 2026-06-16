@@ -132,13 +132,6 @@ export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) 
   const isMobile = useIsMobile();
   const [month, setMonth] = useState(getCurrentMonth());
   const [profileOpen, setProfileOpen] = useState(false);
-  const [chartReady, setChartReady] = useState(false);
-
-  // Defer chart render to after first paint so navigation feels instant
-  React.useEffect(() => {
-    const id = requestAnimationFrame(() => setChartReady(true));
-    return () => cancelAnimationFrame(id);
-  }, []);
 
   const { data: result, loading } = useCachedData(`dashboard:${month}`, useCallback(async () => {
     const [summary, budgetsData, prevSummary, occurrences] = await Promise.all([
@@ -244,8 +237,8 @@ export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) 
             </button>
           </div>
 
-          {/* Chart - edge-to-edge on mobile, deferred to not block navigation paint */}
-          {loading || !chartReady ? (
+          {/* Chart - edge-to-edge on mobile */}
+          {loading ? (
             <div className="skeleton h-[220px]" />
           ) : (
             <div className="-mx-5 md:mx-0">

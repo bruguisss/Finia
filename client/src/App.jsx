@@ -16,7 +16,6 @@ export default function App() {
   const [page, setPage] = useState('dashboard');
   const [showSplash, setShowSplash] = useState(true);
   const [splashFadingOut, setSplashFadingOut] = useState(false);
-  const navigate = (newPage) => setPage(newPage);
 
   useEffect(() => {
     const fadeTimer = setTimeout(() => setSplashFadingOut(true), 1800);
@@ -28,7 +27,7 @@ export default function App() {
   }, []);
 
   const pages = {
-    dashboard: <Dashboard onNavigate={navigate} />,
+    dashboard: <Dashboard onNavigate={setPage} />,
     transactions: <Transactions />,
     analytics: <Analytics />,
     budgets: <Budgets />,
@@ -41,12 +40,6 @@ export default function App() {
     <ThemeProvider>
     <DataProvider>
       <CategoriesProvider>
-        {/* Mesh gradient orbs — z:-1 stays behind all content, no stacking context issues */}
-        <div aria-hidden="true" style={{ position: 'fixed', inset: 0, zIndex: -1, pointerEvents: 'none', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', width: '75vw', height: '75vw', maxWidth: 400, maxHeight: 400, top: '-10%', right: '-15%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,107,53,0.30) 0%, transparent 70%)', filter: 'blur(70px)' }} />
-          <div style={{ position: 'absolute', width: '65vw', height: '65vw', maxWidth: 340, maxHeight: 340, bottom: '10%', left: '-15%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,107,53,0.20) 0%, transparent 70%)', filter: 'blur(80px)' }} />
-          <div style={{ position: 'absolute', width: '55vw', height: '55vw', maxWidth: 280, maxHeight: 280, top: '38%', left: '15%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,150,80,0.10) 0%, transparent 70%)', filter: 'blur(100px)' }} />
-        </div>
         <svg aria-hidden="true" style={{ display: 'none', position: 'absolute', width: 0, height: 0 }}>
           <defs>
             <filter id="glass-refract" x="-10%" y="-10%" width="120%" height="120%">
@@ -60,7 +53,7 @@ export default function App() {
           </defs>
         </svg>
         {showSplash && <SplashScreen fadingOut={splashFadingOut} />}
-        <Layout currentPage={page} onNavigate={navigate}>
+        <Layout currentPage={page} onNavigate={setPage}>
           {pages[page] || pages.dashboard}
         </Layout>
       </CategoriesProvider>

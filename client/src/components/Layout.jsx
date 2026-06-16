@@ -101,7 +101,6 @@ export default function Layout({ children, currentPage, onNavigate }) {
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              style={{ touchAction: 'manipulation' }}
               className={`relative flex items-center justify-center gap-2 transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] ${
                 active ? 'flex-[2] bg-[#1c1c1e] dark:bg-white/[0.18] text-white rounded-[20px] px-5 py-2.5' : 'flex-1 text-[#1c1c1e]/45 dark:text-white/40 py-2.5'
               }`}
@@ -113,7 +112,6 @@ export default function Layout({ children, currentPage, onNavigate }) {
         })}
         <button
           onClick={() => setMoreSheetOpen(true)}
-          style={{ touchAction: 'manipulation' }}
           className={`relative flex items-center justify-center gap-2 transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] ${
             MORE_PAGES.includes(currentPage) ? 'flex-[2] bg-[#1c1c1e] dark:bg-white/[0.18] text-white rounded-[20px] px-5 py-2.5' : 'flex-1 text-[#1c1c1e]/45 dark:text-white/40 py-2.5'
           }`}

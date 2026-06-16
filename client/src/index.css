@@ -100,22 +100,18 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  html {
-    background-color: var(--color-base);
-  }
-
   html, body {
     overflow-x: hidden;
     max-width: 100vw;
+    background-color: var(--color-base);
   }
 
   body {
-    background-color: transparent;
     color: var(--color-primary);
   }
 
   #root {
-    background-color: transparent;
+    background-color: var(--color-base);
   }
 
   button, a, [role="button"], summary, select, label[for] {
