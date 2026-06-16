@@ -40,13 +40,13 @@ export default function App() {
       <CategoriesProvider>
         <svg aria-hidden="true" style={{ display: 'none', position: 'absolute', width: 0, height: 0 }}>
           <defs>
-            <filter id="glass-refract">
-              <feTurbulence type="fractalNoise" baseFrequency="0.015 0.012" numOctaves="2" seed="42" result="noise" />
-              <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" xChannelSelector="R" yChannelSelector="G" />
+            <filter id="glass-refract" x="-10%" y="-10%" width="120%" height="120%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.012 0.008" numOctaves="3" seed="42" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="28" xChannelSelector="R" yChannelSelector="G" />
             </filter>
-            <filter id="glass-refract-strong">
-              <feTurbulence type="fractalNoise" baseFrequency="0.015 0.012" numOctaves="2" seed="42" result="noise" />
-              <feDisplacementMap in="SourceGraphic" in2="noise" scale="20" xChannelSelector="R" yChannelSelector="G" />
+            <filter id="glass-refract-strong" x="-10%" y="-10%" width="120%" height="120%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.012 0.008" numOctaves="3" seed="42" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="48" xChannelSelector="R" yChannelSelector="G" />
             </filter>
           </defs>
         </svg>

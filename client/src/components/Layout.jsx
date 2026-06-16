@@ -96,13 +96,13 @@ export default function Layout({ children, currentPage, onNavigate }) {
           '--gr-radius': '26px',
           '--gr-blur': '40px',
           '--gr-saturation': '2.2',
-          '--gr-bg-start': 'rgba(20,20,22,0.25)',
-          '--gr-bg-end': 'rgba(14,14,16,0.20)',
+          '--gr-bg-start': 'rgba(20,20,22,0.52)',
+          '--gr-bg-end': 'rgba(14,14,16,0.48)',
           '--gr-chromatic-blue': 'rgba(0,180,255,0.10)',
           '--gr-chromatic-pink': 'rgba(255,100,200,0.08)',
           backdropFilter: 'url(#glass-refract) blur(40px) saturate(220%) brightness(1.12)',
           WebkitBackdropFilter: 'url(#glass-refract) blur(40px) saturate(220%) brightness(1.12)',
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(20,20,22,0.25) 40%, rgba(14,14,16,0.20) 100%)',
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(20,20,22,0.52) 40%, rgba(14,14,16,0.48) 100%)',
           animation: 'none',
         }}
       >
