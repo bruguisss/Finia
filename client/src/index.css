@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700;800&display=swap');
 
+/* ─── Brand accent (constant across light/dark) ─────────────────── */
+:root {
+  --brand-tertiary: #FF6B35;
+  --brand-tertiary-dim: rgba(255, 107, 53, 0.12);
+  --brand-tertiary-hover: #E55A25;
+}
+
 /* ─── Theme tokens ──────────────────────────────────────────────── */
 :root {
   --color-base: #F2F2F7;

@@ -166,7 +166,8 @@ export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) 
       >
         <button
           onClick={() => setProfileOpen(true)}
-          className="w-10 h-10 rounded-full bg-black/[0.07] dark:bg-white/[0.1] flex items-center justify-center text-[13px] font-semibold text-primary shrink-0"
+          className="w-10 h-10 rounded-full flex items-center justify-center text-[13px] font-semibold shrink-0"
+          style={{ background: 'var(--brand-tertiary-dim)', color: 'var(--brand-tertiary)' }}
         >
           AB
         </button>
@@ -185,7 +186,8 @@ export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) 
         </button>
         <button
           onClick={onAddTransaction}
-          className="w-10 h-10 rounded-full bg-black/[0.06] dark:bg-white/[0.1] flex items-center justify-center text-primary shrink-0"
+          className="w-10 h-10 rounded-full flex items-center justify-center text-white shrink-0 active:brightness-90"
+          style={{ background: 'var(--brand-tertiary)' }}
         >
           <Plus size={18} strokeWidth={2} />
         </button>

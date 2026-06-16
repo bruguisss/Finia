@@ -16,7 +16,7 @@ export default function SplashScreen({ fadingOut }) {
         transitionDuration: fadingOut ? '300ms' : '400ms',
       }}
     >
-      <span style={{ fontSize: '48px', fontWeight: 700, letterSpacing: '-0.04em', color: '#000000', marginBottom: '8px' }}>
+      <span style={{ fontSize: '48px', fontWeight: 700, letterSpacing: '-0.04em', color: 'var(--brand-tertiary)', marginBottom: '8px' }}>
         F
       </span>
       <p style={{ fontSize: '13px', color: 'rgba(60,60,67,0.4)' }}>
