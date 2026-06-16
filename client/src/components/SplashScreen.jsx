@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext.jsx';
+import AnimatedLogo from './AnimatedLogo.jsx';
 
 export default function SplashScreen({ fadingOut }) {
   const [entered, setEntered] = useState(false);
@@ -21,13 +22,9 @@ export default function SplashScreen({ fadingOut }) {
         transitionTimingFunction: 'ease',
       }}
     >
-      <img
-        src={isDark ? '/icons/logo-dark-bg.png' : '/icons/logo-transparent.png'}
-        alt="Finia"
-        width={220}
-        height={220}
-        style={{ display: 'block', userSelect: 'none', pointerEvents: 'none' }}
-        draggable={false}
+      <AnimatedLogo
+        size={220}
+        color={isDark ? '#ffffff' : '#000000'}
       />
     </div>
   );
