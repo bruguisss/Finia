@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Sun, Moon, Smartphone } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext.jsx';
 
@@ -10,6 +10,17 @@ const OPTIONS = [
 
 export default function ProfileSheet({ onClose }) {
   const { preference, setTheme } = useTheme();
+
+  useEffect(() => {
+    const main = document.querySelector('main');
+    if (!main) return;
+    const savedScrollTop = main.scrollTop;
+    main.style.overflowY = 'hidden';
+    return () => {
+      main.style.overflowY = '';
+      main.scrollTop = savedScrollTop;
+    };
+  }, []);
 
   return (
     <>
