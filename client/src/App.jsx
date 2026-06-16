@@ -38,6 +38,18 @@ export default function App() {
   return (
     <DataProvider>
       <CategoriesProvider>
+        <svg aria-hidden="true" style={{ display: 'none', position: 'absolute', width: 0, height: 0 }}>
+          <defs>
+            <filter id="glass-refract">
+              <feTurbulence type="fractalNoise" baseFrequency="0.015 0.012" numOctaves="2" seed="42" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+            <filter id="glass-refract-strong">
+              <feTurbulence type="fractalNoise" baseFrequency="0.015 0.012" numOctaves="2" seed="42" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="20" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+          </defs>
+        </svg>
         {showSplash && <SplashScreen fadingOut={splashFadingOut} />}
         <Layout currentPage={page} onNavigate={setPage}>
           {pages[page] || pages.dashboard}
