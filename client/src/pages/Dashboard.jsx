@@ -244,8 +244,9 @@ export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) 
                 <ComposedChart data={progress.data} margin={{ top: 5, right: 16, left: 0, bottom: 0 }}>
                   <defs>
                     <linearGradient id="spendGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#FF4D4D" stopOpacity={0.08} />
-                      <stop offset="95%" stopColor="#FF4D4D" stopOpacity={0} />
+                      <stop offset="0%" stopColor="#FF4D4D" stopOpacity={0.45} />
+                      <stop offset="70%" stopColor="#FF4D4D" stopOpacity={0.12} />
+                      <stop offset="100%" stopColor="#FF4D4D" stopOpacity={0} />
                     </linearGradient>
                     <pattern id="projectionHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
                       <rect width="6" height="6" fill="transparent" />
@@ -262,7 +263,7 @@ export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) 
                   {totalBudget > 0 && (
                     <Line type="monotone" dataKey="budget" stroke="#8A8A8A" strokeWidth={1.5} strokeDasharray="4 4" dot={false} isAnimationActive={!isMobile} />
                   )}
-                  <Area type="monotone" dataKey="actual" stroke="#FF4D4D" fill="url(#spendGrad)" strokeWidth={2} dot={false} connectNulls isAnimationActive={!isMobile} />
+                  <Area type="monotone" dataKey="actual" stroke="#FF3B30" fill="url(#spendGrad)" strokeWidth={2.5} dot={false} connectNulls isAnimationActive={!isMobile} />
                   {progress.currentDay < progress.daysInMonth && (
                     <Line type="monotone" dataKey="projected" stroke={overBudget ? '#FF4D4D' : '#8A8A8A'} strokeWidth={1.5} strokeDasharray="4 4" dot={false} connectNulls isAnimationActive={!isMobile} />
                   )}
