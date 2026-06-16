@@ -100,13 +100,17 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  html, body {
-    overflow-x: hidden;
-    max-width: 100vw;
+  html {
     background-color: var(--color-base);
   }
 
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
   body {
+    background-color: transparent;
     color: var(--color-primary);
   }
 
