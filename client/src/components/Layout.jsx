@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useRef } from 'react';
-import { LayoutGrid, Receipt, BarChart3, Target, HandCoins, Tags, Upload, Plus, Flag, MoreHorizontal } from 'lucide-react';
+import { LayoutGrid, Receipt, BarChart3, Target, HandCoins, Tags, Upload, Flag, MoreHorizontal } from 'lucide-react';
 import Sidebar from './Sidebar.jsx';
 import UploadZone from './UploadZone.jsx';
 import AddTransactionModal from './AddTransactionModal.jsx';
@@ -37,11 +37,6 @@ export default function Layout({ children, currentPage, onNavigate }) {
 
   return (
     <div className="flex h-screen overflow-hidden bg-base text-primary">
-      {/* Top fade gradient (mobile) */}
-      <div
-        aria-hidden="true"
-        className="md:hidden fixed top-0 left-0 right-0 h-20 z-40 bg-gradient-to-b from-base to-transparent pointer-events-none"
-      />
 
       {/* Bottom fade gradient (mobile) */}
       <div
@@ -123,15 +118,6 @@ export default function Layout({ children, currentPage, onNavigate }) {
         </button>
       </nav>
 
-      {/* Mobile floating glass FAB */}
-      <button
-        onClick={() => setAddTxOpen(true)}
-        className="md:hidden fixed right-4 z-40 w-14 h-14 rounded-full flex items-center justify-center bg-white/[0.09] backdrop-blur-2xl backdrop-saturate-150 border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.1)] text-primary overflow-hidden"
-        style={{ bottom: 'calc(6.5rem + env(safe-area-inset-bottom))' }}
-      >
-        <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/[0.1] to-transparent pointer-events-none" />
-        <Plus size={24} strokeWidth={2.5} className="relative" />
-      </button>
 
       {moreSheetOpen && (
         <MobileMoreSheet

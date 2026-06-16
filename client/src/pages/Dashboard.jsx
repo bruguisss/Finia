@@ -235,7 +235,7 @@ export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) 
               {/* Chart - edge-to-edge on mobile */}
               <div className="-mx-5 md:mx-0">
                 <ResponsiveContainer width="100%" height={isMobile ? 220 : 260}>
-                  <ComposedChart data={progress.data} margin={{ top: 5, right: 5, left: 0, bottom: 0 }}>
+                  <ComposedChart data={progress.data} margin={{ top: 5, right: 16, left: 0, bottom: 0 }}>
                     <defs>
                       <linearGradient id="spendGrad" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor="#FF4D4D" stopOpacity={0.08} />
