@@ -1,6 +1,5 @@
 import React, { useState, useLayoutEffect, useRef } from 'react';
 import { LayoutGrid, Receipt, BarChart3, Target, HandCoins, Tags, Upload, Plus, Flag, MoreHorizontal } from 'lucide-react';
-import { Glass } from 'glass-refraction';
 import Sidebar from './Sidebar.jsx';
 import UploadZone from './UploadZone.jsx';
 import AddTransactionModal from './AddTransactionModal.jsx';
@@ -88,19 +87,9 @@ export default function Layout({ children, currentPage, onNavigate }) {
       </div>
 
       {/* Mobile floating glass nav island */}
-      <Glass
-        as="nav"
-        className="md:hidden fixed left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 w-[calc(100%-48px)] max-w-[380px] px-2 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
-        style={{
-          bottom: 'calc(24px + env(safe-area-inset-bottom))',
-          '--gr-radius': '26px',
-          '--gr-blur': '50px',
-          '--gr-saturation': '2',
-          '--gr-bg-start': 'rgba(20,20,22,0.6)',
-          '--gr-bg-end': 'rgba(15,15,17,0.55)',
-          '--gr-chromatic-blue': 'rgba(0,180,255,0.06)',
-          '--gr-chromatic-pink': 'rgba(255,100,200,0.045)',
-        }}
+      <nav
+        className="md:hidden fixed left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 w-[calc(100%-48px)] max-w-[380px] px-2 py-2 rounded-[26px] bg-[rgba(20,20,22,0.55)] border border-white/[0.1] shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
+        style={{ bottom: 'calc(24px + env(safe-area-inset-bottom))', backdropFilter: 'blur(50px) saturate(200%)', WebkitBackdropFilter: 'blur(50px) saturate(200%)' }}
       >
         {MOBILE_NAV_ITEMS.map((item) => {
           const Icon = item.icon;
@@ -127,7 +116,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
           <MoreHorizontal size={20} strokeWidth={2} />
           {MORE_PAGES.includes(currentPage) && <span className="text-[13px] font-medium whitespace-nowrap">Más</span>}
         </button>
-      </Glass>
+      </nav>
 
 
       {moreSheetOpen && (

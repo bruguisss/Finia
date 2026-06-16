@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { GlassFilters } from 'glass-refraction';
 import Layout from './components/Layout.jsx';
 import SplashScreen from './components/SplashScreen.jsx';
 import Dashboard from './pages/Dashboard.jsx';
@@ -39,7 +38,6 @@ export default function App() {
   return (
     <DataProvider>
       <CategoriesProvider>
-        <GlassFilters scale={10} strongScale={20} />
         {showSplash && <SplashScreen fadingOut={splashFadingOut} />}
         <Layout currentPage={page} onNavigate={setPage}>
           {pages[page] || pages.dashboard}
