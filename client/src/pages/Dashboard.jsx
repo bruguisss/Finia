@@ -158,8 +158,8 @@ export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) 
     <div>
       {/* Mobile top bar - fixed */}
       <div
-        className="md:hidden fixed top-0 inset-x-0 z-50 flex items-center gap-3 px-4 bg-base"
-        style={{ paddingTop: 'max(12px, env(safe-area-inset-top))', paddingBottom: '12px' }}
+        className="md:hidden fixed top-0 inset-x-0 z-50 flex items-center gap-3 px-4"
+        style={{ paddingTop: 'max(12px, env(safe-area-inset-top))', paddingBottom: '28px', background: 'linear-gradient(to bottom, #000000 45%, transparent 100%)' }}
       >
         <button
           onClick={onOpenMore}
@@ -188,7 +188,7 @@ export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) 
         </button>
       </div>
       {/* Spacer for fixed mobile header */}
-      <div className="md:hidden h-[64px]" />
+      <div className="md:hidden h-[80px]" />
 
       {/* Desktop title */}
       <div className="hidden md:block mb-6">
