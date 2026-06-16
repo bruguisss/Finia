@@ -36,7 +36,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
   }, [currentPage]);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-base text-primary">
+    <div className="flex h-screen overflow-hidden text-primary relative z-[1]">
 
       {/* Bottom fade gradient (mobile) */}
       <div

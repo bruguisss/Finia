@@ -40,6 +40,12 @@ export default function App() {
     <ThemeProvider>
     <DataProvider>
       <CategoriesProvider>
+        {/* Mesh gradient orbs */}
+        <div aria-hidden="true" style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', width: '70vw', height: '70vw', maxWidth: 380, maxHeight: 380, top: '-8%', right: '-12%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,107,53,0.22) 0%, transparent 70%)', filter: 'blur(72px)' }} />
+          <div style={{ position: 'absolute', width: '60vw', height: '60vw', maxWidth: 320, maxHeight: 320, bottom: '12%', left: '-12%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,107,53,0.14) 0%, transparent 70%)', filter: 'blur(80px)' }} />
+          <div style={{ position: 'absolute', width: '50vw', height: '50vw', maxWidth: 260, maxHeight: 260, top: '40%', left: '20%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,150,80,0.07) 0%, transparent 70%)', filter: 'blur(100px)' }} />
+        </div>
         <svg aria-hidden="true" style={{ display: 'none', position: 'absolute', width: 0, height: 0 }}>
           <defs>
             <filter id="glass-refract" x="-10%" y="-10%" width="120%" height="120%">
