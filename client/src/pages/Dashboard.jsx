@@ -224,10 +224,10 @@ export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) 
               {/* Hero balance */}
               <div className="text-center mb-5">
                 <p className="text-[11px] font-medium text-tertiary uppercase tracking-wider mb-1">Disponible</p>
-                <p className={`text-5xl font-semibold tracking-[-0.02em] tabular-nums ${data.balance >= 0 ? 'text-success' : 'text-danger'}`}>
+                <p className={`font-numeric text-5xl font-semibold tracking-[-0.02em] tabular-nums ${data.balance >= 0 ? 'text-success' : 'text-danger'}`}>
                   {formatEur(data.balance)}
                 </p>
-                <p className="text-[17px] font-semibold text-secondary mt-1.5">
+                <p className="font-numeric text-[17px] font-semibold text-secondary mt-1.5">
                   Gastado: {formatEur(progress.cumulativeAtToday)}
                 </p>
               </div>
