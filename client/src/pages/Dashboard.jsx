@@ -6,6 +6,7 @@ import {
 import { ChevronLeft, ChevronRight, Receipt, Search, BarChart3, Plus } from 'lucide-react';
 import StatCard from '../components/StatCard.jsx';
 import TransactionCard from '../components/TransactionCard.jsx';
+import ProfileSheet from '../components/ProfileSheet.jsx';
 import { useIsMobile } from '../hooks/useIsMobile.js';
 import { useCachedData } from '../context/DataContext.jsx';
 import { getSummary, getBudgets, getPlannedExpenseOccurrences } from '../api.js';
@@ -130,6 +131,7 @@ function buildSpendingProgress(month, dailyTotals, totalBudget, prevMonthDailyTo
 export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) {
   const isMobile = useIsMobile();
   const [month, setMonth] = useState(getCurrentMonth());
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const { data: result, loading } = useCachedData(`dashboard:${month}`, useCallback(async () => {
     const [summary, budgetsData, prevSummary, occurrences] = await Promise.all([
@@ -155,34 +157,36 @@ export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) 
   const overBudget = progress?.projectedTotal != null && totalBudget > 0 && progress.projectedTotal > totalBudget;
 
   return (
+    <>
     <div>
       {/* Mobile top bar - fixed */}
       <div
         className="md:hidden fixed top-0 inset-x-0 z-50 flex items-center gap-3 px-4"
-        style={{ paddingTop: 'max(12px, env(safe-area-inset-top))', paddingBottom: '28px', background: 'linear-gradient(to bottom, #F2F2F7 65%, transparent 100%)' }}
+        style={{ paddingTop: 'max(12px, env(safe-area-inset-top))', paddingBottom: '28px', background: 'linear-gradient(to bottom, var(--header-base) 65%, transparent 100%)' }}
       >
         <button
           onClick={onOpenMore}
-          className="w-10 h-10 rounded-full bg-black/[0.07] flex items-center justify-center text-[13px] font-semibold text-primary shrink-0"
+          onClick={() => setProfileOpen(true)}
+          className="w-10 h-10 rounded-full bg-black/[0.07] dark:bg-white/[0.1] flex items-center justify-center text-[13px] font-semibold text-primary shrink-0"
         >
           AB
         </button>
         <button
           onClick={() => onNavigate('transactions')}
-          className="flex-1 h-[38px] rounded-[20px] bg-black/[0.05] flex items-center gap-2 px-3.5 text-sm text-tertiary"
+          className="flex-1 h-[38px] rounded-[20px] bg-black/[0.05] dark:bg-white/[0.08] flex items-center gap-2 px-3.5 text-sm text-tertiary"
         >
           <Search size={15} strokeWidth={2} className="shrink-0" />
           <span className="truncate">Buscar en Finia...</span>
         </button>
         <button
           onClick={() => onNavigate('analytics')}
-          className="w-10 h-10 rounded-full bg-black/[0.06] flex items-center justify-center text-primary shrink-0"
+          className="w-10 h-10 rounded-full bg-black/[0.06] dark:bg-white/[0.1] flex items-center justify-center text-primary shrink-0"
         >
           <BarChart3 size={18} strokeWidth={2} />
         </button>
         <button
           onClick={onAddTransaction}
-          className="w-10 h-10 rounded-full bg-black/[0.06] flex items-center justify-center text-primary shrink-0"
+          className="w-10 h-10 rounded-full bg-black/[0.06] dark:bg-white/[0.1] flex items-center justify-center text-primary shrink-0"
         >
           <Plus size={18} strokeWidth={2} />
         </button>
@@ -246,9 +250,9 @@ export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) 
                         <line x1="0" y1="0" x2="0" y2="6" stroke={overBudget ? '#FF4D4D' : '#8A8A8A'} strokeWidth="1" strokeOpacity="0.25" />
                       </pattern>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
-                    <XAxis dataKey="day" tick={{ fill: 'rgba(60,60,67,0.5)', fontSize: 11 }} axisLine={false} tickLine={false} interval={isMobile ? 6 : 2} />
-                    <YAxis tick={{ fill: 'rgba(60,60,67,0.5)', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v)}€`} tickCount={5} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
+                    <XAxis dataKey="day" tick={{ fill: 'var(--chart-tick)', fontSize: 11 }} axisLine={false} tickLine={false} interval={isMobile ? 6 : 2} />
+                    <YAxis tick={{ fill: 'var(--chart-tick)', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v)}€`} tickCount={5} />
                     <Tooltip content={<ProgressTooltip isMobile={isMobile} />} />
                     {progress.currentDay < progress.daysInMonth && (
                       <ReferenceArea x1={progress.currentDay} x2={progress.daysInMonth} fill="url(#projectionHatch)" stroke="none" />
@@ -264,7 +268,7 @@ export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) 
                       <Line type="monotone" dataKey="scheduled" stroke="#FFAA00" strokeWidth={1.5} strokeDasharray="2 3" dot={false} connectNulls isAnimationActive={!isMobile} />
                     )}
                     {progress.currentDay < progress.daysInMonth && (
-                      <ReferenceLine x={progress.currentDay} stroke="rgba(0,0,0,0.18)" strokeDasharray="3 3" label={{ value: 'Hoy', position: 'top', fill: 'rgba(60,60,67,0.5)', fontSize: 11 }} />
+                      <ReferenceLine x={progress.currentDay} stroke="var(--chart-ref)" strokeDasharray="3 3" label={{ value: 'Hoy', position: 'top', fill: 'var(--chart-tick)', fontSize: 11 }} />
                     )}
                   </ComposedChart>
                 </ResponsiveContainer>
@@ -336,5 +340,8 @@ export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) 
         </div>
       </div>
     </div>
+
+    {profileOpen && <ProfileSheet onClose={() => setProfileOpen(false)} />}
+    </>
   );
 }

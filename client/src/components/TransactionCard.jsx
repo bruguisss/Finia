@@ -45,7 +45,7 @@ export default function TransactionCard({ transaction, onUpdate, onDelete, index
   return (
     <>
     <div
-      className="flex items-center gap-3 px-4 py-3 active:bg-black/[0.04] transition-colors duration-100 animate-fade-in-up-sm"
+      className="flex items-center gap-3 px-4 py-3 active:bg-black/[0.04] dark:active:bg-white/[0.04] transition-colors duration-100 animate-fade-in-up-sm"
       style={{ animationDelay: `${Math.min(index, 8) * 30}ms` }}
     >
       <CategoryAvatar category={transaction.category} />

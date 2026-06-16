@@ -86,7 +86,7 @@ export default function Analytics() {
         ) : (
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={barData} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
               <XAxis dataKey="month" tick={{ fill: '#8A8A8A', fontSize: 12 }} axisLine={false} tickLine={false} interval={isMobile ? 1 : 0} />
               <YAxis tick={{ fill: '#8A8A8A', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} tickCount={isMobile ? 3 : 5} />
               <Tooltip
@@ -109,7 +109,7 @@ export default function Analytics() {
         ) : (
           <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={stackedData} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
               <XAxis dataKey="month" tick={{ fill: '#8A8A8A', fontSize: 12 }} axisLine={false} tickLine={false} interval={isMobile ? 1 : 0} />
               <YAxis tick={{ fill: '#8A8A8A', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}€`} tickCount={isMobile ? 3 : 5} />
               <Tooltip
@@ -155,7 +155,7 @@ export default function Analytics() {
         ) : topMerchants.length > 0 ? (
           <div className="divide-y divide-white/[0.04]">
             {topMerchants.map((m, i) => (
-              <div key={m.description} className="flex items-center gap-4 px-5 h-10 hover:bg-black/[0.04] transition-colors duration-150">
+              <div key={m.description} className="flex items-center gap-4 px-5 h-10 hover:bg-black/[0.04] dark:hover:bg-white/[0.03] transition-colors duration-150">
                 <span className="text-[13px] text-secondary w-6 shrink-0 tabular-nums">{i + 1}</span>
                 <span className="text-[13px] text-primary flex-1 truncate">{m.description}</span>
                 <span className="text-xs text-secondary">{m.count} veces</span>

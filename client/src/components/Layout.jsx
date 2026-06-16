@@ -88,23 +88,10 @@ export default function Layout({ children, currentPage, onNavigate }) {
 
       {/* Mobile floating glass nav island */}
       <nav
-        className="glass md:hidden left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 w-[calc(100%-48px)] max-w-[380px] px-2 py-2 shadow-[0_4px_24px_rgba(0,0,0,0.10)]"
+        className="glass glass-nav md:hidden left-1/2 z-20 flex items-center gap-1 w-[calc(100%-48px)] max-w-[380px] px-2 py-2"
         style={{
-          position: 'fixed',
           bottom: 'calc(24px + env(safe-area-inset-bottom))',
           transform: 'translateX(-50%)',
-          '--gr-radius': '26px',
-          '--gr-blur': '40px',
-          '--gr-saturation': '1.6',
-          '--gr-bg-start': 'rgba(255,255,255,0.82)',
-          '--gr-bg-end': 'rgba(248,248,252,0.76)',
-          '--gr-chromatic-blue': 'rgba(0,100,255,0.05)',
-          '--gr-chromatic-pink': 'rgba(255,60,180,0.04)',
-          backdropFilter: 'url(#glass-refract) blur(40px) saturate(160%) brightness(1.02)',
-          WebkitBackdropFilter: 'url(#glass-refract) blur(40px) saturate(160%) brightness(1.02)',
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(248,248,252,0.82) 100%)',
-          boxShadow: '0 0 0 0.5px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 24px rgba(0,0,0,0.10)',
-          animation: 'none',
         }}
       >
         {MOBILE_NAV_ITEMS.map((item) => {
@@ -115,7 +102,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
               key={item.id}
               onClick={() => onNavigate(item.id)}
               className={`relative flex items-center justify-center gap-2 transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-                active ? 'flex-[2] bg-[#1c1c1e] text-white rounded-[20px] px-5 py-2.5' : 'flex-1 text-[#1c1c1e]/45 py-2.5'
+                active ? 'flex-[2] bg-[#1c1c1e] dark:bg-white/[0.18] text-white rounded-[20px] px-5 py-2.5' : 'flex-1 text-[#1c1c1e]/45 dark:text-white/40 py-2.5'
               }`}
             >
               <Icon size={20} strokeWidth={2} />
@@ -126,7 +113,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
         <button
           onClick={() => setMoreSheetOpen(true)}
           className={`relative flex items-center justify-center gap-2 transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-            MORE_PAGES.includes(currentPage) ? 'flex-[2] bg-[#1c1c1e] text-white rounded-[20px] px-5 py-2.5' : 'flex-1 text-[#1c1c1e]/45 py-2.5'
+            MORE_PAGES.includes(currentPage) ? 'flex-[2] bg-[#1c1c1e] dark:bg-white/[0.18] text-white rounded-[20px] px-5 py-2.5' : 'flex-1 text-[#1c1c1e]/45 dark:text-white/40 py-2.5'
           }`}
         >
           <MoreHorizontal size={20} strokeWidth={2} />

@@ -10,6 +10,7 @@ import Debts from './pages/Debts.jsx';
 import Categories from './pages/Categories.jsx';
 import { CategoriesProvider } from './context/CategoriesContext.jsx';
 import { DataProvider } from './context/DataContext.jsx';
+import { ThemeProvider } from './context/ThemeContext.jsx';
 
 export default function App() {
   const [page, setPage] = useState('dashboard');
@@ -36,6 +37,7 @@ export default function App() {
   };
 
   return (
+    <ThemeProvider>
     <DataProvider>
       <CategoriesProvider>
         <svg aria-hidden="true" style={{ display: 'none', position: 'absolute', width: 0, height: 0 }}>
@@ -56,5 +58,6 @@ export default function App() {
         </Layout>
       </CategoriesProvider>
     </DataProvider>
+    </ThemeProvider>
   );
 }

@@ -1,5 +1,81 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700;800&display=swap');
 
+/* ─── Theme tokens ──────────────────────────────────────────────── */
+:root {
+  --color-base: #F2F2F7;
+  --color-surface: #FFFFFF;
+  --color-elevated: #FFFFFF;
+  --color-muted: #E5E5EA;
+  --color-border: rgba(60,60,67,0.12);
+  --color-border-hover: rgba(60,60,67,0.22);
+  --color-primary: #000000;
+  --color-secondary: rgba(60,60,67,0.6);
+  --color-tertiary: rgba(60,60,67,0.3);
+  --color-accent: #1C1C1E;
+  --color-accent-hover: #3A3A3C;
+  --color-accent-dim: #8E8E93;
+  --color-success: 0 196 154;
+  --color-danger: 224 48 48;
+  --color-warning: 224 144 0;
+  --chart-grid: rgba(0,0,0,0.06);
+  --chart-tick: rgba(60,60,67,0.5);
+  --chart-ref: rgba(0,0,0,0.18);
+  --header-base: #F2F2F7;
+  --btn-glass: rgba(0,0,0,0.07);
+  --scrollbar-thumb: rgba(0,0,0,0.15);
+  --scrollbar-thumb-hover: rgba(0,0,0,0.25);
+  --focus-color: #000000;
+  --skeleton-bg: #D8D8DC;
+}
+
+.dark {
+  --color-base: #000000;
+  --color-surface: #0F0F0F;
+  --color-elevated: #1A1A1A;
+  --color-muted: #242424;
+  --color-border: rgba(255,255,255,0.1);
+  --color-border-hover: rgba(255,255,255,0.2);
+  --color-primary: #FFFFFF;
+  --color-secondary: #8A8A8A;
+  --color-tertiary: #555555;
+  --color-accent: #FFFFFF;
+  --color-accent-hover: #E5E5E5;
+  --color-accent-dim: #B0B0B0;
+  --color-success: 0 212 168;
+  --color-danger: 255 77 77;
+  --color-warning: 255 170 0;
+  --chart-grid: rgba(255,255,255,0.06);
+  --chart-tick: #8A8A8A;
+  --chart-ref: rgba(255,255,255,0.2);
+  --header-base: #000000;
+  --btn-glass: rgba(255,255,255,0.1);
+  --scrollbar-thumb: rgba(255,255,255,0.1);
+  --scrollbar-thumb-hover: rgba(255,255,255,0.18);
+  --focus-color: #FFFFFF;
+  --skeleton-bg: #1A1A1A;
+}
+
+/* ─── Nav glass — overrides glass-refraction .glass via higher specificity ── */
+.glass.glass-nav {
+  position: fixed;
+  --gr-radius: 26px;
+  --gr-chromatic-blue: rgba(0,100,255,0.05);
+  --gr-chromatic-pink: rgba(255,60,180,0.04);
+  background: linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(248,248,252,0.82) 100%);
+  backdrop-filter: url(#glass-refract) blur(40px) saturate(160%) brightness(1.02);
+  -webkit-backdrop-filter: url(#glass-refract) blur(40px) saturate(160%) brightness(1.02);
+  box-shadow: 0 0 0 0.5px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 24px rgba(0,0,0,0.10);
+  animation: none !important;
+}
+.dark .glass.glass-nav {
+  --gr-chromatic-blue: rgba(0,180,255,0.10);
+  --gr-chromatic-pink: rgba(255,100,200,0.08);
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(20,20,22,0.52) 40%, rgba(14,14,16,0.48) 100%);
+  backdrop-filter: url(#glass-refract) blur(40px) saturate(220%) brightness(1.12);
+  -webkit-backdrop-filter: url(#glass-refract) blur(40px) saturate(220%) brightness(1.12);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -20,15 +96,15 @@
   html, body {
     overflow-x: hidden;
     max-width: 100vw;
-    background-color: #000000;
+    background-color: var(--color-base);
   }
 
   body {
-    color: #FFFFFF;
+    color: var(--color-primary);
   }
 
   #root {
-    background-color: #F2F2F7;
+    background-color: var(--color-base);
   }
 
   button, a, [role="button"], summary, select, label[for] {
@@ -56,13 +132,13 @@
     height: 6px;
   }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.25); }
+  ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
 }
 
 @media (hover: hover) and (pointer: fine) {
   :focus-visible {
-    outline: 2px solid #000000;
+    outline: 2px solid var(--focus-color);
     outline-offset: 1px;
   }
 }
@@ -73,12 +149,12 @@
   }
 
   .amount-positive {
-    color: #00D4A8;
+    color: rgb(var(--color-success));
     font-variant-numeric: tabular-nums;
   }
 
   .amount-negative {
-    color: #FF4D4D;
+    color: rgb(var(--color-danger));
     font-variant-numeric: tabular-nums;
   }
 }
@@ -90,7 +166,7 @@
 }
 
 .skeleton {
-  background-color: #D8D8DC;
+  background-color: var(--skeleton-bg);
   border-radius: 4px;
   animation: skeleton-pulse 1.5s ease-in-out infinite;
 }
