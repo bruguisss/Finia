@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useRef } from 'react';
-import { LayoutGrid, Receipt, BarChart3, Target, HandCoins, Tags, Upload, Flag, MoreHorizontal } from 'lucide-react';
+import { LayoutGrid, Receipt, BarChart3, Target, HandCoins, Tags, Upload, Plus, Flag, MoreHorizontal } from 'lucide-react';
 import Sidebar from './Sidebar.jsx';
 import UploadZone from './UploadZone.jsx';
 import AddTransactionModal from './AddTransactionModal.jsx';
