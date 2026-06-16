@@ -40,7 +40,7 @@ export default function Layout({ children, currentPage, onNavigate }) {
       {/* Top fade gradient (mobile) */}
       <div
         aria-hidden="true"
-        className="md:hidden fixed top-0 left-0 right-0 h-20 z-10 bg-gradient-to-b from-base to-transparent pointer-events-none"
+        className="md:hidden fixed top-0 left-0 right-0 h-20 z-40 bg-gradient-to-b from-base to-transparent pointer-events-none"
       />
 
       {/* Bottom fade gradient (mobile) */}
@@ -93,8 +93,8 @@ export default function Layout({ children, currentPage, onNavigate }) {
 
       {/* Mobile floating glass nav island */}
       <nav
-        className="md:hidden fixed left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 w-[calc(100%-48px)] max-w-[380px] px-2 py-2 rounded-[26px] bg-[rgba(18,18,18,0.85)] backdrop-blur-[40px] border border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
-        style={{ bottom: 'calc(24px + env(safe-area-inset-bottom))' }}
+        className="md:hidden fixed left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 w-[calc(100%-48px)] max-w-[380px] px-2 py-2 rounded-[26px] bg-[rgba(20,20,22,0.55)] border border-white/[0.1] shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
+        style={{ bottom: 'calc(24px + env(safe-area-inset-bottom))', backdropFilter: 'blur(50px) saturate(200%)', WebkitBackdropFilter: 'blur(50px) saturate(200%)' }}
       >
         {MOBILE_NAV_ITEMS.map((item) => {
           const Icon = item.icon;
