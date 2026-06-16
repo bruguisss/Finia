@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useTransition } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout.jsx';
 import SplashScreen from './components/SplashScreen.jsx';
 import Dashboard from './pages/Dashboard.jsx';
@@ -16,9 +16,7 @@ export default function App() {
   const [page, setPage] = useState('dashboard');
   const [showSplash, setShowSplash] = useState(true);
   const [splashFadingOut, setSplashFadingOut] = useState(false);
-  const [, startTransition] = useTransition();
-
-  const navigate = (newPage) => startTransition(() => setPage(newPage));
+  const navigate = (newPage) => setPage(newPage);
 
   useEffect(() => {
     const fadeTimer = setTimeout(() => setSplashFadingOut(true), 1800);
