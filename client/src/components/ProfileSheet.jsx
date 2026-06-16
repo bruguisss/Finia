@@ -40,7 +40,7 @@ export default function ProfileSheet({ onClose }) {
                 className={`flex-1 flex flex-col items-center gap-1.5 py-3 rounded-xl transition-all duration-200 ${
                   preference === value
                     ? 'bg-surface shadow-sm text-primary'
-                    : 'text-secondary'
+                    : 'text-tertiary hover:text-secondary'
                 }`}
               >
                 <Icon size={18} strokeWidth={2} />
@@ -49,7 +49,7 @@ export default function ProfileSheet({ onClose }) {
             ))}
           </div>
 
-          <div style={{ paddingBottom: 'max(24px, env(safe-area-inset-bottom))' }} />
+          <div style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 104px)' }} />
         </div>
       </div>
     </>

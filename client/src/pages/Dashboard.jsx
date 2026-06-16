@@ -165,7 +165,6 @@ export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) 
         style={{ paddingTop: 'max(12px, env(safe-area-inset-top))', paddingBottom: '28px', background: 'linear-gradient(to bottom, var(--header-base) 65%, transparent 100%)' }}
       >
         <button
-          onClick={onOpenMore}
           onClick={() => setProfileOpen(true)}
           className="w-10 h-10 rounded-full bg-black/[0.07] dark:bg-white/[0.1] flex items-center justify-center text-[13px] font-semibold text-primary shrink-0"
         >
@@ -228,7 +227,7 @@ export default function Dashboard({ onNavigate, onAddTransaction, onOpenMore }) 
               {/* Hero balance */}
               <div className="text-center mb-5">
                 <p className="text-[11px] font-medium text-tertiary uppercase tracking-wider mb-1">Disponible</p>
-                <p className={`font-numeric text-5xl font-semibold tracking-[-0.02em] tabular-nums ${data.balance >= 0 ? 'text-success' : 'text-danger'}`}>
+                <p className="font-numeric text-5xl font-semibold tracking-[-0.02em] tabular-nums text-primary">
                   {formatEur(data.balance)}
                 </p>
                 <p className="font-numeric text-[17px] font-semibold text-secondary mt-1.5">
