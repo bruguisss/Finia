@@ -103,7 +103,7 @@ export default function AnimatedLogo({ size = 200, color = '#000000', className 
         fill="none"
         stroke="#ff6b35"
         strokeWidth="18"
-        d="M -0.000188942 8.999248 L 1860.890596 8.999248"
+        d="M 1860.890596 8.999248 L -0.000188942 8.999248"
       />
     </svg>
   );

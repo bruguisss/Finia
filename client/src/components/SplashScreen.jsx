@@ -23,7 +23,7 @@ export default function SplashScreen({ fadingOut }) {
       }}
     >
       <AnimatedLogo
-        size={220}
+        size={160}
         color={isDark ? '#ffffff' : '#000000'}
       />
     </div>
